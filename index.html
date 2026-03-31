@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eduwave Academy | Personalized Education for Every Child</title>
-    <meta name="description" content="Eduwave Academy provides personalized tuition from Class K to Class 12 across all subjects, along with specialized weekend Abacus classes. Friendly environment with an excellent track record.">
+    <meta name="description"
+        content="Eduwave Academy provides personalized tuition from Class K to Class 12 across all subjects, along with specialized weekend Abacus classes. Friendly environment with an excellent track record.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <!-- Navigation -->
@@ -19,13 +23,23 @@
                 <div class="logo-wrapper">
                     <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <!-- Book Icon -->
-                        <path d="M15 25C15 25 35 20 50 25C65 20 85 25 85 25V75C85 75 65 70 50 75C35 70 15 75 15 75V25Z" fill="none" stroke="#2A7B9A" stroke-width="6" stroke-linejoin="round"/>
-                        <path d="M50 25V75" stroke="#2A7B9A" stroke-width="4" stroke-linecap="round"/>
-                        <path d="M25 35H40M25 45H40M25 55H40" stroke="#2A7B9A" stroke-width="3" stroke-linecap="round"/>
-                        <path d="M60 35H75M60 45H75M60 55H75" stroke="#2A7B9A" stroke-width="3" stroke-linecap="round"/>
-                        <!-- Pencil -->
-                        <path d="M65 15L85 35L80 40L60 20L65 15Z" fill="#2A7B9A"/>
-                        <path d="M60 20L55 25L50 35L60 30L65 25" fill="#2A7B9A"/>
+                    <svg class="logo-svg" viewBox="00 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Solid Teal Book -->
+                        <path d="M5 30 L 5 80 C 5 80 25 70 50 80 C 75 70 95 80 95 80 L 95 35 L 95 30 C 95 30 75 20 50 30 C 25 20 5 30 5 30 Z" fill="#2A7B9A"/>
+                        <path d="M50 30 V 80" stroke="white" stroke-width="2"/>
+                        <!-- White lines on left page -->
+                        <path d="M15 45 H 40 M15 55 H 40 M15 65 H 40" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                        <!-- White lines on right page -->
+                        <path d="M60 45 H 85 M60 55 H 85 M60 65 H 85" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                        <!-- Pencil Overlay -->
+                        <g transform="translate(85, 20) rotate(135)">
+                            <!-- Pencil Body -->
+                            <rect x="0" y="0" width="35" height="14" rx="4" fill="#2A7B9A" stroke="white" stroke-width="2"/>
+                            <!-- Pencil Point -->
+                            <path d="M35 0 L 45 7 L 35 14 Z" fill="white"/>
+                            <!-- Pencil Tip -->
+                            <path d="M42 5 L 45 7 L 42 9 Z" fill="#2A7B9A"/>
+                        </g>
                     </svg>
                     <div class="logo-text-group">
                         <span class="logo-brand">EDUWAVE</span>
@@ -41,7 +55,7 @@
                 <a href="#" id="open-login-btn">Parent Login</a>
             </div>
             <a href="#contact" class="nav-cta">Enroll Now</a>
-            
+
             <!-- Mobile Menu Toggle -->
             <button class="mobile-menu-btn" aria-label="Toggle Menu">
                 <span></span>
@@ -66,7 +80,8 @@
         <div class="hero-content reveal">
             <h1 class="hero-title">A Personalized Touch to <span class="text-gradient">Every Child's Future</span></h1>
             <p class="hero-subtitle">
-                Guiding students from Class K to Class 12 to academic excellence across all subjects with our friendly, proven methodology. Weekend Abacus classes available!
+                Guiding students from Class K to Class 12 to academic excellence across all subjects with our friendly,
+                proven methodology. Weekend Abacus classes available!
             </p>
             <div class="hero-buttons">
                 <a href="#programs" class="btn btn-primary">Explore Programs</a>
@@ -96,11 +111,13 @@
     <section id="about" class="about section">
         <div class="container grids-2">
             <div class="about-image reveal">
-                <img src="images/friendly-teacher.jpeg" alt="Friendly teacher helping a student" class="rounded-image" id="about-dynamic-img" />
+                <img src="images/friendly-teacher.jpeg" alt="Friendly teacher helping a student" class="rounded-image"
+                    id="about-dynamic-img" />
             </div>
             <div class="about-text reveal delay-1">
                 <h2 class="section-title">Why Choose <span class="text-gradient">Eduwave?</span></h2>
-                <p class="section-desc">At Eduwave, we believe that education is not a one-size-fits-all approach. Every child is unique, and they deserve an environment that adapts to their learning pace.</p>
+                <p class="section-desc">At Eduwave, we believe that education is not a one-size-fits-all approach. Every
+                    child is unique, and they deserve an environment that adapts to their learning pace.</p>
                 <ul class="feature-list">
                     <li>
                         <span class="icon">🏆</span>
@@ -136,14 +153,17 @@
                 <p class="section-desc">Comprehensive tuition tailored for different age groups and needs.</p>
             </div>
             <div class="programs-slider-wrapper">
-                <button class="slider-arrow slider-arrow-left" id="prog-prev" aria-label="Previous Program">&#8592;</button>
+                <button class="slider-arrow slider-arrow-left" id="prog-prev"
+                    aria-label="Previous Program">&#8592;</button>
                 <div class="programs-cards" id="programs-slider">
                     <!-- Program 1 -->
                     <div class="program-card reveal">
                         <div class="card-icon">📚</div>
                         <h3 class="card-title">Comprehensive Tuition</h3>
                         <div class="card-badge">Class K to Class 12</div>
-                        <p class="card-desc">Expert guidance across <strong>all subjects</strong>. Whether your child needs help with Mathematics, Science, English, or any other core subject, our tailored curriculum ensures complete understanding and confidence for their exams.</p>
+                        <p class="card-desc">Expert guidance across <strong>all subjects</strong>. Whether your child
+                            needs help with Mathematics, Science, English, or any other core subject, our tailored
+                            curriculum ensures complete understanding and confidence for their exams.</p>
                         <a href="#contact" class="btn btn-outline">Learn More</a>
                     </div>
                     <!-- Program 2 -->
@@ -151,7 +171,9 @@
                         <div class="card-icon">🧮</div>
                         <h3 class="card-title">Abacus Training</h3>
                         <div class="card-badge">Weekend Classes</div>
-                        <p class="card-desc">Boost cognitive development, concentration, and mental arithmetic speed with our fun and engaging weekend Abacus sessions. Perfect for young learners aiming to sharpen their minds alongside standard studies.</p>
+                        <p class="card-desc">Boost cognitive development, concentration, and mental arithmetic speed
+                            with our fun and engaging weekend Abacus sessions. Perfect for young learners aiming to
+                            sharpen their minds alongside standard studies.</p>
                         <a href="#contact" class="btn btn-primary">Join Abacus Class</a>
                     </div>
                     <!-- Program 3 -->
@@ -159,7 +181,9 @@
                         <div class="card-icon">🧠</div>
                         <h3 class="card-title">Vedic Maths</h3>
                         <div class="card-badge">Special Program</div>
-                        <p class="card-desc">Master ancient techniques to perform complex mental calculations at lightning speeds. Enhance mathematical intuition, improve problem-solving skills, and eliminate the fear of numbers playfully.</p>
+                        <p class="card-desc">Master ancient techniques to perform complex mental calculations at
+                            lightning speeds. Enhance mathematical intuition, improve problem-solving skills, and
+                            eliminate the fear of numbers playfully.</p>
                         <a href="#contact" class="btn btn-outline">Learn More</a>
                     </div>
                     <!-- Program 4 -->
@@ -167,11 +191,13 @@
                         <div class="card-icon">☀️</div>
                         <h3 class="card-title">Summer Program</h3>
                         <div class="card-badge">Holiday Special</div>
-                        <p class="card-desc">Keep minds active with Brain development, Vocabulary enhancement, real-life math skills, Vedic maths, and an Abacus crash course over the summer!</p>
+                        <p class="card-desc">Keep minds active with Brain development, Vocabulary enhancement, real-life
+                            math skills, Vedic maths, and an Abacus crash course over the summer!</p>
                         <a href="#contact" class="btn btn-primary">Join Summer Camp</a>
                     </div>
                 </div>
-                <button class="slider-arrow slider-arrow-right" id="prog-next" aria-label="Next Program">&#8594;</button>
+                <button class="slider-arrow slider-arrow-right" id="prog-next"
+                    aria-label="Next Program">&#8594;</button>
             </div>
         </div>
     </section>
@@ -204,7 +230,12 @@
                 <!-- Testimonial 1 -->
                 <div class="testimonial-card glass-card reveal">
                     <div class="quote-icon">"</div>
-                    <p class="testimonial-text">My child, RUDRA BHARDWAJ had a great learning time at Eduwave Academy. Preeti mam is very kind and helpful. She helped the child in each and every situation, the child was able to gain mental clarity and also enabled the child to be confident enough to perform well in the exams. Took care of the child like a mother cares for her own child, provided more than enough study material throughout the session. Thank you for being a great mentor. She works really hard ❤️</p>
+                    <p class="testimonial-text">My child, RUDRA BHARDWAJ had a great learning time at Eduwave Academy.
+                        Preeti mam is very kind and helpful. She helped the child in each and every situation, the child
+                        was able to gain mental clarity and also enabled the child to be confident enough to perform
+                        well in the exams. Took care of the child like a mother cares for her own child, provided more
+                        than enough study material throughout the session. Thank you for being a great mentor. She works
+                        really hard ❤️</p>
                     <div class="testimonial-author">
                         <div class="author-avatar">S</div>
                         <div class="author-info">
@@ -216,7 +247,9 @@
                 <!-- Testimonial 3 (Manvit's Mother) -->
                 <div class="testimonial-card glass-card reveal delay-1">
                     <div class="quote-icon">"</div>
-                    <p class="testimonial-text">My kid learnt Abacus hence I want to share my review. My experience about abacus classes is excellent. The trainers are certified and very friendly to kids. Classes are fun learning.</p>
+                    <p class="testimonial-text">My kid learnt Abacus hence I want to share my review. My experience
+                        about abacus classes is excellent. The trainers are certified and very friendly to kids. Classes
+                        are fun learning.</p>
                     <div class="testimonial-author">
                         <div class="author-avatar">M</div>
                         <div class="author-info">
@@ -226,11 +259,12 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="share-experience reveal delay-3">
                 <p>Are you an Eduwave parent? We would love to hear your story!</p>
                 <!-- Using a simple mailto link for MVP -->
-                <a href="mailto:studywitheduwaveacademy@gmail.com?subject=My%20Eduwave%20Testimonial" class="btn btn-secondary">Share Your Experience</a>
+                <a href="mailto:studywitheduwaveacademy@gmail.com?subject=My%20Eduwave%20Testimonial"
+                    class="btn btn-secondary">Share Your Experience</a>
             </div>
         </div>
     </section>
@@ -242,12 +276,16 @@
                 <a href="#" class="logo footer-logo">
                     <div class="logo-wrapper">
                         <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15 25C15 25 35 20 50 25C65 20 85 25 85 25V75C85 75 65 70 50 75C35 70 15 75 15 75V25Z" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linejoin="round"/>
-                            <path d="M50 25V75" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
-                            <path d="M25 35H40M25 45H40M25 55H40" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
-                            <path d="M60 35H75M60 45H75M60 55H75" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
-                            <path d="M65 15L85 35L80 40L60 20L65 15Z" fill="#FFFFFF"/>
-                            <path d="M60 20L55 25L50 35L60 30L65 25" fill="#FFFFFF"/>
+                            <!-- White Book for dark background -->
+                            <path d="M5 30 L 5 80 C 5 80 25 70 50 80 C 75 70 95 80 95 80 L 95 35 L 95 30 C 95 30 75 20 50 30 C 25 20 5 30 5 30 Z" fill="white"/>
+                            <path d="M50 30 V 80" stroke="#2A7B9A" stroke-width="2"/>
+                            <path d="M15 45 H 40 M15 55 H 40 M15 65 H 40" stroke="#2A7B9A" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M60 45 H 85 M60 55 H 85 M60 65 H 85" stroke="#2A7B9A" stroke-width="3" stroke-linecap="round"/>
+                            <g transform="translate(85, 20) rotate(135)">
+                                <rect x="0" y="0" width="35" height="14" rx="4" fill="white" stroke="#2A7B9A" stroke-width="2"/>
+                                <path d="M35 0 L 45 7 L 35 14 Z" fill="#2A7B9A"/>
+                                <path d="M42 5 L 45 7 L 42 9 Z" fill="white"/>
+                            </g>
                         </svg>
                         <div class="logo-text-group">
                             <span class="logo-brand white-text">EDUWAVE</span>
@@ -255,7 +293,8 @@
                         </div>
                     </div>
                 </a>
-                <p>Nurturing young minds from Class K to Class 12 with personalized tuition and weekend Abacus classes in a friendly environment.</p>
+                <p>Nurturing young minds from Class K to Class 12 with personalized tuition and weekend Abacus classes
+                    in a friendly environment.</p>
             </div>
             <div class="footer-links">
                 <h3>Quick Links</h3>
@@ -285,7 +324,7 @@
     <div id="login-modal" class="modal-overlay hidden">
         <div class="modal-content glass-card">
             <button class="close-modal-btn" aria-label="Close Modal">&times;</button>
-            
+
             <div id="login-form-container">
                 <div class="modal-header">
                     <div class="logo-icon modal-icon">🌊</div>
@@ -300,11 +339,12 @@
                     </div>
                     <div class="form-group">
                         <label for="parent-password">Password or Parent ID</label>
-                        <input type="password" id="parent-password" name="password" placeholder="Enter password" required>
+                        <input type="password" id="parent-password" name="password" placeholder="Enter password"
+                            required>
                     </div>
-                    
+
                     <div id="login-error" class="error-message hidden"></div>
-                    
+
                     <button type="submit" class="btn btn-primary full-width" id="login-submit-btn">
                         <span class="btn-text" id="login-btn-text">Secure Login</span>
                         <span class="loading-spinner hidden" id="login-spinner"></span>
@@ -315,12 +355,16 @@
             <div id="login-success-container" class="hidden text-center">
                 <div class="success-icon">✅</div>
                 <h3>Access Approved!</h3>
-                <p>Welcome back! You have been granted access to your dedicated resource folder.</p>
-                <a href="#" id="folder-link-btn" class="btn btn-secondary full-width" target="_blank">Open Google Drive Folder</a>
+                <p id="folder-success-message">Welcome back! You have been granted access to your dedicated resource materials.</p>
+                
+                <div id="folder-links-list" class="folder-grid-vertical">
+                    <!-- Multiple folder buttons will be injected here via JavaScript -->
+                </div>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

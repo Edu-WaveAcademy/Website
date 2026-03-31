@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // --- Mobile Menu Toggle ---
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const mobileMenu = document.querySelector('.mobile-menu');
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Sticky Navbar ---
     const navbar = document.getElementById('navbar');
-    
+
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: "0px 0px -50px 0px"
     };
 
-    const revealObserver = new IntersectionObserver(function(entries, observer) {
+    const revealObserver = new IntersectionObserver(function (entries, observer) {
         entries.forEach(entry => {
             if (!entry.isIntersecting) {
                 return;
@@ -56,12 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
     revealElements.forEach(el => {
         revealObserver.observe(el);
     });
-    
+
     // --- Hero Video Sequence Logic (Crossfade) ---
     const v1 = document.getElementById('hero-video-1');
     const v2 = document.getElementById('hero-video-2');
     const heroMuteBtn = document.getElementById('hero-video-mute-btn');
-    
+
     if (v1 && v2 && heroMuteBtn) {
         const videoSources = [
             'Eduwave_Academy_Dream_Video_Generated.mp4',
@@ -74,29 +74,29 @@ document.addEventListener('DOMContentLoaded', () => {
         let isMuted = true;
 
         const setupNextVideo = () => {
-             const nextIndex = (currentVideoIndex + 1) % videoSources.length;
-             nextVideo.src = videoSources[nextIndex];
-             nextVideo.pause(); // Prevent unexpected playing when loading new source
-             nextVideo.load();
+            const nextIndex = (currentVideoIndex + 1) % videoSources.length;
+            nextVideo.src = videoSources[nextIndex];
+            nextVideo.pause(); // Prevent unexpected playing when loading new source
+            nextVideo.load();
         };
 
         const handleVideoEnd = () => {
-            nextVideo.muted = isMuted; 
+            nextVideo.muted = isMuted;
             nextVideo.play().catch(e => console.log('Autoplay prevented:', e));
-            
+
             // Crossfade transitions
             nextVideo.classList.add('active');
             activeVideo.classList.remove('active');
-            
+
             currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
-            
+
             // Swap active references
             const temp = activeVideo;
             activeVideo = nextVideo;
             nextVideo = temp;
-            
+
             // Setup the next video in sequence after transition finishes
-            setTimeout(setupNextVideo, 1500); 
+            setTimeout(setupNextVideo, 1500);
         };
 
         v1.addEventListener('ended', handleVideoEnd);
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Load the second video in background
         setupNextVideo();
-        
+
         // Start playing the first video manually (since autoplay attribute was removed)
         v1.play().catch(e => console.log('Autoplay prevented:', e));
 
@@ -112,10 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
             isMuted = !isMuted;
             v1.muted = isMuted;
             v2.muted = isMuted;
-            
+
             const iconMuted = heroMuteBtn.querySelector('.icon-muted');
             const iconUnmuted = heroMuteBtn.querySelector('.icon-unmuted');
-            
+
             if (isMuted) {
                 iconMuted.classList.remove('hidden');
                 iconUnmuted.classList.add('hidden');
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Image loading fallbacks to show a nice color until image loads
     const images = document.querySelectorAll('img');
     images.forEach(img => {
-        if(img.complete) {
+        if (img.complete) {
             img.classList.add('loaded');
         } else {
             img.addEventListener('load', () => {
@@ -152,18 +152,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         progPrev.addEventListener('click', () => {
             const cardWidth = getCardWidth();
-            
+
             if (progSlider.scrollLeft <= 5) {
                 // Move last card to the beginning
                 const lastCard = progSlider.lastElementChild;
-                
+
                 // Temporarily disable smooth scroll and snap
                 progSlider.style.scrollBehavior = 'auto';
                 progSlider.style.scrollSnapType = 'none';
-                
+
                 progSlider.prepend(lastCard);
                 progSlider.scrollLeft += cardWidth; // Compensate visually
-                
+
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => {
                         // Restore CSS behavior
@@ -181,17 +181,17 @@ document.addEventListener('DOMContentLoaded', () => {
         progNext.addEventListener('click', () => {
             const cardWidth = getCardWidth();
             const maxScroll = progSlider.scrollWidth - progSlider.clientWidth;
-            
+
             if (Math.ceil(progSlider.scrollLeft) >= maxScroll - 5) {
                 // Move first card to the end
                 const firstCard = progSlider.firstElementChild;
-                
+
                 progSlider.style.scrollBehavior = 'auto';
                 progSlider.style.scrollSnapType = 'none';
-                
+
                 progSlider.appendChild(firstCard);
                 progSlider.scrollLeft -= cardWidth; // Compensate visually
-                
+
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => {
                         progSlider.style.scrollBehavior = '';
@@ -216,10 +216,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginSpinner = document.getElementById('login-spinner');
     const loginFormContainer = document.getElementById('login-form-container');
     const loginSuccessContainer = document.getElementById('login-success-container');
-    const folderLinkBtn = document.getElementById('folder-link-btn');
+    const folderLinksList = document.getElementById('folder-links-list');
 
     // Apps Script Deployment URL
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGqjY8IbHBsYGYKd--IHUXVV7cZUeaSCB_efvE_2YlHstMz-xZp34AfUe-ixjBvGWd/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8GD9PKay653s7Qe0npK_x_ToPJb3_Z-76JtCJLSDACBIW4okSrO0dxkmShu3HzRXj/exec';
 
     function openModal() {
         loginModal.classList.remove('hidden');
@@ -228,6 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loginError.classList.add('hidden');
         loginFormContainer.classList.remove('hidden');
         loginSuccessContainer.classList.add('hidden');
+        folderLinksList.innerHTML = ''; // Clear old links
     }
 
     function closeModal() {
@@ -236,18 +237,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (openLoginBtn) openLoginBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-    if (mobileLoginBtn) mobileLoginBtn.addEventListener('click', (e) => { 
-        e.preventDefault(); 
+    if (mobileLoginBtn) mobileLoginBtn.addEventListener('click', (e) => {
+        e.preventDefault();
         // close mobile menu first
         if (mobileMenuBtn && mobileMenu) {
             mobileMenuBtn.classList.remove('active');
             mobileMenu.classList.remove('active');
         }
-        openModal(); 
+        openModal();
     });
-    
+
     if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-    
+
     // Close on outside click
     if (loginModal) loginModal.addEventListener('click', (e) => {
         if (e.target === loginModal) closeModal();
@@ -256,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const email = document.getElementById('parent-email').value;
             const password = document.getElementById('parent-password').value;
 
@@ -279,10 +280,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (response.ok && data.status === 200) {
-                    // Success!
+                    // Success! Support for multiple folders
                     loginFormContainer.classList.add('hidden');
                     loginSuccessContainer.classList.remove('hidden');
-                    folderLinkBtn.href = data.folderLink;
+
+                    folderLinksList.innerHTML = ''; // Ensure container is empty
+
+                    if (data.folders && data.folders.length > 0) {
+                        data.folders.forEach(folder => {
+                            const btnContainer = document.createElement('div');
+                            btnContainer.className = 'folder-btn-container';
+
+                            const btnTitle = document.createElement('span');
+                            btnTitle.className = 'folder-btn-title';
+                            btnTitle.textContent = folder.name || 'Resource Folder';
+
+                            const btnLink = document.createElement('a');
+                            btnLink.href = folder.link;
+                            btnLink.className = 'btn btn-secondary full-width';
+                            btnLink.target = '_blank';
+                            btnLink.textContent = 'Open Drive Folder';
+
+                            btnContainer.appendChild(btnTitle);
+                            btnContainer.appendChild(btnLink);
+                            folderLinksList.appendChild(btnContainer);
+                        });
+                    } else if (data.folderLink) {
+                        // Fallback for old single folder response
+                        const btnLink = document.createElement('a');
+                        btnLink.href = data.folderLink;
+                        btnLink.className = 'btn btn-secondary full-width';
+                        btnLink.target = '_blank';
+                        btnLink.textContent = 'Open Google Drive Folder';
+                        folderLinksList.appendChild(btnLink);
+                    }
                 } else {
                     // Show error from Apps Script
                     loginError.textContent = data.message || "Login failed. Please verify credentials.";
