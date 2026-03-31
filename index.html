@@ -327,7 +327,26 @@
 
             <div id="login-form-container">
                 <div class="modal-header">
-                    <div class="logo-icon modal-icon">🌊</div>
+                    <div class="logo-wrapper modal-logo">
+                        <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Solid Teal Book -->
+                            <path d="M5 30 L 5 80 C 5 80 25 70 50 80 C 75 70 95 80 95 80 L 95 35 L 95 30 C 95 30 75 20 50 30 C 25 20 5 30 5 30 Z" fill="#2A7B9A"/>
+                            <path d="M50 30 V 80" stroke="white" stroke-width="2"/>
+                            <!-- White lines on left page -->
+                            <path d="M15 45 H 40 M15 55 H 40 M15 65 H 40" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                            <!-- White lines on right page -->
+                            <path d="M60 45 H 85 M60 55 H 85 M60 65 H 85" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                            <!-- Pencil Overlay -->
+                            <g transform="translate(85, 20) rotate(135)">
+                                <!-- Pencil Body -->
+                                <rect x="0" y="0" width="35" height="14" rx="4" fill="#2A7B9A" stroke="white" stroke-width="2"/>
+                                <!-- Pencil Point -->
+                                <path d="M35 0 L 45 7 L 35 14 Z" fill="white"/>
+                                <!-- Pencil Tip -->
+                                <path d="M42 5 L 45 7 L 42 9 Z" fill="#2A7B9A"/>
+                            </g>
+                        </svg>
+                    </div>
                     <h2 class="modal-title">Parent <span class="text-gradient">Portal</span></h2>
                     <p class="modal-subtitle">Access your child's exclusive learning material.</p>
                 </div>
