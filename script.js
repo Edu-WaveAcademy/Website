@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const folderLinksList = document.getElementById('folder-links-list');
 
     // Apps Script Deployment URL
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8GD9PKay653s7Qe0npK_x_ToPJb3_Z-76JtCJLSDACBIW4okSrO0dxkmShu3HzRXj/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyO8mKJwB3m7yjTW9KFplYAudbCUTHcEX-0w1FpRoLDfpYUIfVy53h6Zf6H3esGpd37/exec';
 
     function openModal() {
         loginModal.classList.remove('hidden');
