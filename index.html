@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eduwave Academy | Personalized Education for Every Child</title>
-    <meta name="description" content="Eduwave Academy provides personalized tuition for classes 2 to 12 across all subjects, along with specialized weekend Abacus classes. Friendly environment with an excellent track record.">
+    <meta name="description" content="Eduwave Academy provides personalized tuition from Class K to Class 12 across all subjects, along with specialized weekend Abacus classes. Friendly environment with an excellent track record.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,8 +16,22 @@
     <nav id="navbar">
         <div class="nav-container">
             <a href="#" class="logo">
-                <span class="logo-icon">🌊</span>
-                Eduwave
+                <div class="logo-wrapper">
+                    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Book Icon -->
+                        <path d="M15 25C15 25 35 20 50 25C65 20 85 25 85 25V75C85 75 65 70 50 75C35 70 15 75 15 75V25Z" fill="none" stroke="#2A7B9A" stroke-width="6" stroke-linejoin="round"/>
+                        <path d="M50 25V75" stroke="#2A7B9A" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M25 35H40M25 45H40M25 55H40" stroke="#2A7B9A" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M60 35H75M60 45H75M60 55H75" stroke="#2A7B9A" stroke-width="3" stroke-linecap="round"/>
+                        <!-- Pencil -->
+                        <path d="M65 15L85 35L80 40L60 20L65 15Z" fill="#2A7B9A"/>
+                        <path d="M60 20L55 25L50 35L60 30L65 25" fill="#2A7B9A"/>
+                    </svg>
+                    <div class="logo-text-group">
+                        <span class="logo-brand">EDUWAVE</span>
+                        <span class="logo-tagline">vision beyond the books...</span>
+                    </div>
+                </div>
             </a>
             <div class="nav-links">
                 <a href="#about">About</a>
@@ -52,7 +66,7 @@
         <div class="hero-content reveal">
             <h1 class="hero-title">A Personalized Touch to <span class="text-gradient">Every Child's Future</span></h1>
             <p class="hero-subtitle">
-                Guiding students from Classes 2 to 12 to academic excellence across all subjects with our friendly, proven methodology. Weekend Abacus classes available!
+                Guiding students from Class K to Class 12 to academic excellence across all subjects with our friendly, proven methodology. Weekend Abacus classes available!
             </p>
             <div class="hero-buttons">
                 <a href="#programs" class="btn btn-primary">Explore Programs</a>
@@ -61,8 +75,17 @@
         </div>
         <div class="hero-image-wrapper reveal delay-1">
             <div class="hero-image-placeholder glass-card" id="hero-img-container">
-                <!-- Image will be injected here via CSS background or img tag -->
-                <img src="images/hero-study.png" alt="Happy students learning at Eduwave" id="hero-dynamic-img" />
+                <!-- Dual video sequence for smooth crossfade -->
+                <video id="hero-video-1" muted playsinline preload="auto" class="hero-video active">
+                    <source src="Eduwave_Academy_Dream_Video_Generated.mp4" type="video/mp4">
+                </video>
+                <video id="hero-video-2" muted playsinline preload="auto" class="hero-video">
+                    <!-- Source injected via JS -->
+                </video>
+                <button id="hero-video-mute-btn" class="video-mute-btn" aria-label="Toggle Mute">
+                    <span class="icon-muted">🔇</span>
+                    <span class="icon-unmuted hidden">🔊</span>
+                </button>
             </div>
             <div class="floating-badge badge-1">🌟 Excellent Track Record</div>
             <div class="floating-badge badge-2">🤝 Friendly Nature</div>
@@ -73,7 +96,7 @@
     <section id="about" class="about section">
         <div class="container grids-2">
             <div class="about-image reveal">
-                <img src="images/friendly-teacher.png" alt="Friendly teacher helping a student" class="rounded-image" id="about-dynamic-img" />
+                <img src="images/friendly-teacher.jpeg" alt="Friendly teacher helping a student" class="rounded-image" id="about-dynamic-img" />
             </div>
             <div class="about-text reveal delay-1">
                 <h2 class="section-title">Why Choose <span class="text-gradient">Eduwave?</span></h2>
@@ -112,23 +135,43 @@
                 <h2 class="section-title">Our <span class="text-gradient">Programs</span></h2>
                 <p class="section-desc">Comprehensive tuition tailored for different age groups and needs.</p>
             </div>
-            <div class="grids-2 programs-cards">
-                <!-- Program 1 -->
-                <div class="program-card reveal">
-                    <div class="card-icon">📚</div>
-                    <h3 class="card-title">Comprehensive Tuition</h3>
-                    <div class="card-badge">Classes 2 to 12</div>
-                    <p class="card-desc">Expert guidance across <strong>all subjects</strong>. Whether your child needs help with Mathematics, Science, English, or any other core subject, our tailored curriculum ensures complete understanding and confidence for their exams.</p>
-                    <a href="#contact" class="btn btn-outline">Learn More</a>
+            <div class="programs-slider-wrapper">
+                <button class="slider-arrow slider-arrow-left" id="prog-prev" aria-label="Previous Program">&#8592;</button>
+                <div class="programs-cards" id="programs-slider">
+                    <!-- Program 1 -->
+                    <div class="program-card reveal">
+                        <div class="card-icon">📚</div>
+                        <h3 class="card-title">Comprehensive Tuition</h3>
+                        <div class="card-badge">Class K to Class 12</div>
+                        <p class="card-desc">Expert guidance across <strong>all subjects</strong>. Whether your child needs help with Mathematics, Science, English, or any other core subject, our tailored curriculum ensures complete understanding and confidence for their exams.</p>
+                        <a href="#contact" class="btn btn-outline">Learn More</a>
+                    </div>
+                    <!-- Program 2 -->
+                    <div class="program-card highlight reveal delay-1">
+                        <div class="card-icon">🧮</div>
+                        <h3 class="card-title">Abacus Training</h3>
+                        <div class="card-badge">Weekend Classes</div>
+                        <p class="card-desc">Boost cognitive development, concentration, and mental arithmetic speed with our fun and engaging weekend Abacus sessions. Perfect for young learners aiming to sharpen their minds alongside standard studies.</p>
+                        <a href="#contact" class="btn btn-primary">Join Abacus Class</a>
+                    </div>
+                    <!-- Program 3 -->
+                    <div class="program-card reveal delay-2">
+                        <div class="card-icon">🧠</div>
+                        <h3 class="card-title">Vedic Maths</h3>
+                        <div class="card-badge">Special Program</div>
+                        <p class="card-desc">Master ancient techniques to perform complex mental calculations at lightning speeds. Enhance mathematical intuition, improve problem-solving skills, and eliminate the fear of numbers playfully.</p>
+                        <a href="#contact" class="btn btn-outline">Learn More</a>
+                    </div>
+                    <!-- Program 4 -->
+                    <div class="program-card highlight reveal delay-3">
+                        <div class="card-icon">☀️</div>
+                        <h3 class="card-title">Summer Program</h3>
+                        <div class="card-badge">Holiday Special</div>
+                        <p class="card-desc">Keep minds active with Brain development, Vocabulary enhancement, real-life math skills, Vedic maths, and an Abacus crash course over the summer!</p>
+                        <a href="#contact" class="btn btn-primary">Join Summer Camp</a>
+                    </div>
                 </div>
-                <!-- Program 2 -->
-                <div class="program-card highlight reveal delay-1">
-                    <div class="card-icon">🧮</div>
-                    <h3 class="card-title">Abacus Training</h3>
-                    <div class="card-badge">Weekend Classes</div>
-                    <p class="card-desc">Boost cognitive development, concentration, and mental arithmetic speed with our fun and engaging weekend Abacus sessions. Perfect for young learners aiming to sharpen their minds alongside standard studies.</p>
-                    <a href="#contact" class="btn btn-primary">Join Abacus Class</a>
-                </div>
+                <button class="slider-arrow slider-arrow-right" id="prog-next" aria-label="Next Program">&#8594;</button>
             </div>
         </div>
     </section>
@@ -141,11 +184,11 @@
                 <p class="section-desc">A glimpse into our classrooms and the joyful learning experience.</p>
             </div>
             <div class="gallery-grid reveal delay-1">
-                <!-- We will dynamically load these with real/generated images later -->
-                <div class="gallery-item"><img src="images/gallery-1.png" alt="Classroom activity" /></div>
-                <div class="gallery-item"><img src="images/gallery-2.png" alt="Abacus training" /></div>
-                <div class="gallery-item"><img src="images/gallery-3.png" alt="Happy student" /></div>
-                <div class="gallery-item wide"><img src="images/gallery-4.png" alt="Group study" /></div>
+                <div class="gallery-item wide"><img src="images/gallery-1.jpeg" alt="Classroom learning" /></div>
+                <div class="gallery-item"><img src="images/gallery-2.jpeg" alt="Abacus session" /></div>
+                <div class="gallery-item"><img src="images/gallery-3.jpeg" alt="Student success" /></div>
+                <div class="gallery-item"><img src="images/gallery-4.jpeg" alt="Interactive teaching" /></div>
+                <div class="gallery-item"><img src="images/gallery-5.jpeg" alt="Group activity" /></div>
             </div>
         </div>
     </section>
@@ -161,36 +204,24 @@
                 <!-- Testimonial 1 -->
                 <div class="testimonial-card glass-card reveal">
                     <div class="quote-icon">"</div>
-                    <p class="testimonial-text">Eduwave has been a game-changer for my daughter. The personalized attention she receives here has completely transformed her confidence. The teachers are incredibly friendly and approachable!</p>
+                    <p class="testimonial-text">My child, RUDRA BHARDWAJ had a great learning time at Eduwave Academy. Preeti mam is very kind and helpful. She helped the child in each and every situation, the child was able to gain mental clarity and also enabled the child to be confident enough to perform well in the exams. Took care of the child like a mother cares for her own child, provided more than enough study material throughout the session. Thank you for being a great mentor. She works really hard ❤️</p>
                     <div class="testimonial-author">
-                        <div class="author-avatar">P</div>
+                        <div class="author-avatar">S</div>
                         <div class="author-info">
-                            <h4>Priya Sharma</h4>
-                            <span>Parent of Class 8 Student</span>
+                            <h4>Sukhpreet</h4>
+                            <span>Mother of Rudra Bhardwaj</span>
                         </div>
                     </div>
                 </div>
-                <!-- Testimonial 2 -->
+                <!-- Testimonial 3 (Manvit's Mother) -->
                 <div class="testimonial-card glass-card reveal delay-1">
                     <div class="quote-icon">"</div>
-                    <p class="testimonial-text">The weekend Abacus classes are fantastic! My son actually looks forward to learning math now. The track record of this academy speaks for itself, highly recommended for any parent.</p>
+                    <p class="testimonial-text">My kid learnt Abacus hence I want to share my review. My experience about abacus classes is excellent. The trainers are certified and very friendly to kids. Classes are fun learning.</p>
                     <div class="testimonial-author">
-                        <div class="author-avatar">A</div>
+                        <div class="author-avatar">M</div>
                         <div class="author-info">
-                            <h4>Amit Patel</h4>
-                            <span>Parent of Class 4 Student</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- Testimonial 3 -->
-                <div class="testimonial-card glass-card reveal delay-2">
-                    <div class="quote-icon">"</div>
-                    <p class="testimonial-text">Finding tutors for Class 12 Science subjects is hard, but Eduwave handles everything beautifully. Their methodology ensures that complex concepts are broken down perfectly.</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">V</div>
-                        <div class="author-info">
-                            <h4>Vandana Iyer</h4>
-                            <span>Parent of Class 12 Student</span>
+                            <h4>Manvit's Mother</h4>
+                            <span>Parent of Abacus Student</span>
                         </div>
                     </div>
                 </div>
@@ -199,7 +230,7 @@
             <div class="share-experience reveal delay-3">
                 <p>Are you an Eduwave parent? We would love to hear your story!</p>
                 <!-- Using a simple mailto link for MVP -->
-                <a href="mailto:contact@eduwaveacademy.com?subject=My%20Eduwave%20Testimonial" class="btn btn-secondary">Share Your Experience</a>
+                <a href="mailto:studywitheduwaveacademy@gmail.com?subject=My%20Eduwave%20Testimonial" class="btn btn-secondary">Share Your Experience</a>
             </div>
         </div>
     </section>
@@ -209,10 +240,22 @@
         <div class="container footer-grid">
             <div class="footer-brand">
                 <a href="#" class="logo footer-logo">
-                    <span class="logo-icon">🌊</span>
-                    Eduwave
+                    <div class="logo-wrapper">
+                        <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 25C15 25 35 20 50 25C65 20 85 25 85 25V75C85 75 65 70 50 75C35 70 15 75 15 75V25Z" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linejoin="round"/>
+                            <path d="M50 25V75" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M25 35H40M25 45H40M25 55H40" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M60 35H75M60 45H75M60 55H75" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M65 15L85 35L80 40L60 20L65 15Z" fill="#FFFFFF"/>
+                            <path d="M60 20L55 25L50 35L60 30L65 25" fill="#FFFFFF"/>
+                        </svg>
+                        <div class="logo-text-group">
+                            <span class="logo-brand white-text">EDUWAVE</span>
+                            <span class="logo-tagline white-text">vision beyond the books...</span>
+                        </div>
+                    </div>
                 </a>
-                <p>Nurturing young minds from Classes 2 to 12 with personalized tuition and weekend Abacus classes in a friendly environment.</p>
+                <p>Nurturing young minds from Class K to Class 12 with personalized tuition and weekend Abacus classes in a friendly environment.</p>
             </div>
             <div class="footer-links">
                 <h3>Quick Links</h3>
@@ -226,9 +269,10 @@
             <div class="footer-contact">
                 <h3>Contact Us</h3>
                 <ul>
-                    <li>📞 +91 98765 43210</li>
-                    <li>✉️ hello@eduwaveacademy.com</li>
-                    <li>📍 123 Education Hub, New Delhi, India</li>
+                    <li>📞 Priti Ma'am: 98182 32274, 78387 84022</li>
+                    <li>📞 Pooja Ma'am: 98735 66921</li>
+                    <li>✉️ studywitheduwaveacademy@gmail.com</li>
+                    <li>📍 C-3/31 A 2nd Floor Rajouri Garden, New Delhi, India, 110027</li>
                 </ul>
             </div>
         </div>

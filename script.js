@@ -57,6 +57,75 @@ document.addEventListener('DOMContentLoaded', () => {
         revealObserver.observe(el);
     });
     
+    // --- Hero Video Sequence Logic (Crossfade) ---
+    const v1 = document.getElementById('hero-video-1');
+    const v2 = document.getElementById('hero-video-2');
+    const heroMuteBtn = document.getElementById('hero-video-mute-btn');
+    
+    if (v1 && v2 && heroMuteBtn) {
+        const videoSources = [
+            'Eduwave_Academy_Dream_Video_Generated.mp4',
+            'EduWave_Academy_Brand_Film_Generated.mp4',
+            'Smooth_Video_Editing_Request.mp4'
+        ];
+        let currentVideoIndex = 0;
+        let activeVideo = v1;
+        let nextVideo = v2;
+        let isMuted = true;
+
+        const setupNextVideo = () => {
+             const nextIndex = (currentVideoIndex + 1) % videoSources.length;
+             nextVideo.src = videoSources[nextIndex];
+             nextVideo.pause(); // Prevent unexpected playing when loading new source
+             nextVideo.load();
+        };
+
+        const handleVideoEnd = () => {
+            nextVideo.muted = isMuted; 
+            nextVideo.play().catch(e => console.log('Autoplay prevented:', e));
+            
+            // Crossfade transitions
+            nextVideo.classList.add('active');
+            activeVideo.classList.remove('active');
+            
+            currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
+            
+            // Swap active references
+            const temp = activeVideo;
+            activeVideo = nextVideo;
+            nextVideo = temp;
+            
+            // Setup the next video in sequence after transition finishes
+            setTimeout(setupNextVideo, 1500); 
+        };
+
+        v1.addEventListener('ended', handleVideoEnd);
+        v2.addEventListener('ended', handleVideoEnd);
+
+        // Load the second video in background
+        setupNextVideo();
+        
+        // Start playing the first video manually (since autoplay attribute was removed)
+        v1.play().catch(e => console.log('Autoplay prevented:', e));
+
+        heroMuteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            v1.muted = isMuted;
+            v2.muted = isMuted;
+            
+            const iconMuted = heroMuteBtn.querySelector('.icon-muted');
+            const iconUnmuted = heroMuteBtn.querySelector('.icon-unmuted');
+            
+            if (isMuted) {
+                iconMuted.classList.remove('hidden');
+                iconUnmuted.classList.add('hidden');
+            } else {
+                iconMuted.classList.add('hidden');
+                iconUnmuted.classList.remove('hidden');
+            }
+        });
+    }
+
     // Image loading fallbacks to show a nice color until image loads
     const images = document.querySelectorAll('img');
     images.forEach(img => {
@@ -68,6 +137,73 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // --- Programs Slider Logic ---
+    const progSlider = document.getElementById('programs-slider');
+    const progPrev = document.getElementById('prog-prev');
+    const progNext = document.getElementById('prog-next');
+
+    if (progSlider && progPrev && progNext) {
+        const getCardWidth = () => {
+            const card = progSlider.querySelector('.program-card');
+            const gap = parseFloat(getComputedStyle(progSlider).gap) || 32;
+            return card.offsetWidth + gap;
+        };
+
+        progPrev.addEventListener('click', () => {
+            const cardWidth = getCardWidth();
+            
+            if (progSlider.scrollLeft <= 5) {
+                // Move last card to the beginning
+                const lastCard = progSlider.lastElementChild;
+                
+                // Temporarily disable smooth scroll and snap
+                progSlider.style.scrollBehavior = 'auto';
+                progSlider.style.scrollSnapType = 'none';
+                
+                progSlider.prepend(lastCard);
+                progSlider.scrollLeft += cardWidth; // Compensate visually
+                
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        // Restore CSS behavior
+                        progSlider.style.scrollBehavior = '';
+                        progSlider.style.scrollSnapType = '';
+                        // Smoothly scroll back
+                        progSlider.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+                    });
+                });
+            } else {
+                progSlider.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+            }
+        });
+
+        progNext.addEventListener('click', () => {
+            const cardWidth = getCardWidth();
+            const maxScroll = progSlider.scrollWidth - progSlider.clientWidth;
+            
+            if (Math.ceil(progSlider.scrollLeft) >= maxScroll - 5) {
+                // Move first card to the end
+                const firstCard = progSlider.firstElementChild;
+                
+                progSlider.style.scrollBehavior = 'auto';
+                progSlider.style.scrollSnapType = 'none';
+                
+                progSlider.appendChild(firstCard);
+                progSlider.scrollLeft -= cardWidth; // Compensate visually
+                
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        progSlider.style.scrollBehavior = '';
+                        progSlider.style.scrollSnapType = '';
+                        progSlider.scrollBy({ left: cardWidth, behavior: 'smooth' });
+                    });
+                });
+            } else {
+                progSlider.scrollBy({ left: cardWidth, behavior: 'smooth' });
+            }
+        });
+    }
 
     // --- Parent Login Modal Logic ---
     const openLoginBtn = document.getElementById('open-login-btn');
