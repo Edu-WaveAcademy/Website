@@ -46,7 +46,7 @@ Copy the logged value into the `Accounts` sheet, then remove the temporary call.
 
 The admin endpoints require a header/payload parameter `adminKey`. The default key in `Code.gs` is:
 ```javascript
-const ADMIN_KEY = 'eduwave-admin-secret-2026';
+const ADMIN_KEY = 'Diwish.1';
 ```
 Be sure to update this key inside `Code.gs` before deploying to production.
 
@@ -76,3 +76,4 @@ Be sure to update this key inside `Code.gs` before deploying to production.
 6. Set execution to your Google account.
 7. Set access to `Anyone`.
 8. Copy the web app URL into `script.js` by replacing `YOUR_APPS_SCRIPT_WEB_APP_URL`.
+

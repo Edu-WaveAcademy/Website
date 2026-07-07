@@ -12,7 +12,7 @@ const SHEET_NAMES = {
 const SESSION_TTL_MINUTES = 180;
 const MAX_FAILED_ATTEMPTS = 6;
 const SCRIPT_TZ = Session.getScriptTimeZone() || 'Asia/Kolkata';
-const ADMIN_KEY = 'eduwave-admin-secret-2026'; // Simple secret key for trial phase admin authorization
+const ADMIN_KEY = 'Diwish.1'; // Simple secret key for trial phase admin authorization
 
 /**
  * Custom menu when opening the Google Sheet
@@ -690,3 +690,4 @@ function hashPassword_(plainPassword) {
   const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, plainPassword, Utilities.Charset.UTF_8);
   return digest.map(function (byte) { const value = (byte < 0 ? byte + 256 : byte).toString(16); return value.length === 1 ? '0' + value : value; }).join('');
 }
+
