@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
+    const API_BASE_URL = 'https://script.google.com/macros/s/AKfycbwpS3BpSmucrWce68DrXalG0Bc_1KWfNX2gZDU51kYACCmZ_24EbxUicsAM9dwNfbsQ/exec';
     const DEMO_MODE = API_BASE_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL';
     const SESSION_STORAGE_KEY = 'eduwavePortalSession';
 
