@@ -1,25 +1,18 @@
-# Eduwave Trial Implementation Notes
+# Eduwave Portal Status
 
-## What was implemented
+## Live backend
+The Google Apps Script web app is deployed at the URL in `script.js`. The portal schema is present in the existing spreadsheet as `Portal_*` tabs. The old `Settings` tab was not changed.
 
-- redesigned the site around Home, Programs, Trial Class, Student Portal, Fee Info, About, FAQ, and Contact
-- replaced the old folder-link login modal with a portal login and dashboard shell
-- added a payment-note submission flow for manual UPI verification
-- added an admin workflow preview modal
-- removed visible broken character encoding text
-- fixed the duplicated navbar SVG structure
-- added a free-stack Apps Script backend scaffold
+## Completed verification
+- Parent demo dashboard: assignment, exam, and fee notifications appear on login.
+- Resource preview: an assigned Google Sheet renders as a watermarked table in the portal.
+- Admin demo: Drive index, resource publishing, and child assignment complete through the GUI.
 
-## Frontend config
+## Before production parent/admin Google login
+1. Create a Google OAuth Web client ID in the Google Cloud project owned by `studywitheduwaveacademy@gmail.com`.
+2. Add `https://edu-waveacademy.github.io` as an authorised JavaScript origin.
+3. Set Apps Script property `GOOGLE_CLIENT_ID` to that client ID.
+4. Replace `YOUR_GOOGLE_CLIENT_ID` in `script.js` with the same client ID.
+5. Deploy the GitHub Pages branch only after the above is configured.
 
-Replace this placeholder in `script.js`:
-
-```javascript
-const API_BASE_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
-```
-
-Until that value is replaced, the site runs in demo mode for login and trial flows.
-
-## Honest limitation
-
-This implementation now has the correct free-stack architecture, but true read-only Drive and Sheet rendering still depends on how the legacy content is organized. That next step belongs in Apps Script proxy endpoints.
+The Apps Script URL is public by design; it is not a secret. Google ID-token validation and the parent-to-child mapping enforce access.
