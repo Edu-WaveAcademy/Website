@@ -15,7 +15,7 @@ function init(){
  document.addEventListener('keydown',e=>{if(e.key==='Escape')$$('dialog[open]').forEach(d=>d.close())});
 }
 function open(id){$('#'+id).showModal()}
-function clean(s){return String(s||'').replace(/[&<>'"]/g,c=>({'&':'&','<':'<','>':'>',"'":''','"':'"'}[c]))}
+function clean(s){return String(s||'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function date(v){if(!v)return'Not set';const d=new Date(v);return isNaN(d)?v:d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}
 function setStatus(el,text='',type=''){el.textContent=text;el.className='form-status '+type}
 function device(){let id=localStorage.getItem('eduwave_device');if(!id){id=crypto.randomUUID?crypto.randomUUID():Date.now()+'';localStorage.setItem('eduwave_device',id)}return id}
