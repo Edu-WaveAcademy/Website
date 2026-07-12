@@ -21,8 +21,61 @@ function setStatus(el,text='',type=''){el.textContent=text;el.className='form-st
 function device(){let id=localStorage.getItem('eduwave_device');if(!id){id=crypto.randomUUID?crypto.randomUUID():Date.now()+'';localStorage.setItem('eduwave_device',id)}return id}
 async function api(action,payload={}){if(state.demoMode)return demo(action,payload);if(CONFIG.apiUrl.startsWith('YOUR_'))throw new Error('The portal API URL has not been configured.');const r=await fetch(CONFIG.apiUrl,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,...payload})});const data=await r.json();if(!data.ok)throw new Error(data.message||'Request failed');return data.data}
 async function trial(e){e.preventDefault();const form=e.currentTarget,target=$('#trial-status');if(!form.reportValidity())return;setStatus(target,'Sending your request...');try{await api('submitTrial',Object.fromEntries(new FormData(form)));form.reset();setStatus(target,DEMO?'Trial request saved in the demo queue.':'Request received. The academy will confirm a slot.','success')}catch(err){setStatus(target,err.message,'error')}}
-function googleStart(flow){state.pendingFlow=flow;const target=flow==='parent'?$('#portal-auth-status'):$('#admin-auth-status');if(DEMO){setStatus(target,'Add the Apps Script URL and Google client ID to enable the approved-account sign-in. The demo below exercises the complete portal.');return}if(!window.google){const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;s.onload=showGoogle;document.head.append(s)}else showGoogle()}
-function showGoogle(){google.accounts.id.initialize({client_id:CONFIG.googleClientId,callback:googleDone,auto_select:false,cancel_on_tap_outside:true});google.accounts.id.prompt()}
+function googleStart(flow){
+  state.pendingFlow=flow;
+  const target=flow==='parent'?$('#portal-auth-status'):$('#admin-auth-status');
+  const host=flow==='parent'?$('#portal-dialog'):$('#admin-dialog');
+  if(DEMO){setStatus(target,'Add the Apps Script URL and Google client ID to enable the approved-account sign-in. The demo below exercises the complete portal.');return}
+  // If the GIS button slot already exists, don't render it twice.
+  if(host.querySelector('#google-signin-slot')){setStatus(target,'');return}
+  if(!window.google){
+    setStatus(target,'Loading Google sign-in…');
+    const s=document.createElement('script');
+    s.src='https://accounts.google.com/gsi/client';
+    s.async=true;
+    s.defer=true;
+    s.onload=()=>showGoogle(host,target);
+    s.onerror=()=>setStatus(target,'Could not reach accounts.google.com. Check the network and try again.','error');
+    document.head.append(s);
+  } else showGoogle(host,target);
+}
+function showGoogle(host,target){
+  try{
+    google.accounts.id.initialize({
+      client_id:CONFIG.googleClientId,
+      callback:googleDone,
+      auto_select:false,
+      cancel_on_tap_outside:true,
+      use_fedcm_for_prompt:true,
+      error_callback:(err)=>{
+        // Fired when the user dismisses the chooser, the popup is blocked,
+        // or the OAuth client rejects this origin. Surface it.
+        const msg=err&&(err.message||err.type||JSON.stringify(err));
+        if(msg&&/popup|closed|user|abort|cancel/i.test(msg))return; // user-driven dismiss is not an error
+        setStatus(target,'Google sign-in was rejected: '+(msg||'unknown error')+'. Check that '+location.origin+' is listed under Authorized JavaScript origins in the Google Cloud OAuth client.','error');
+      }
+    });
+  }catch(err){setStatus(target,'Google sign-in could not start: '+err.message+'. Check that '+location.origin+' is listed under Authorized JavaScript origins.','error');return}
+  // Render a real, always-visible Sign-In button inside the dialog.
+  // One Tap (id.prompt) is unreliable inside <dialog> + backdrop and is silently suppressed by some browsers.
+  const slot=document.createElement('div');
+  slot.id='google-signin-slot';
+  slot.style.cssText='display:flex;justify-content:center;margin:.4rem 0 .8rem';
+  host.querySelector('.auth-view').appendChild(slot);
+  google.accounts.id.renderButton(slot,{type:'standard',theme:'outline',size:'large',text:'continue_with',shape:'pill',logo_alignment:'left',width:320});
+  // Watchdog: if the user clicks and Google never returns a credential,
+  // surface a diagnostic after a few seconds instead of staying silent.
+  slot.addEventListener('click',()=>{
+    setStatus(target,'Opening Google sign-in…','success');
+    setTimeout(()=>{
+      // If googleDone hasn't transitioned us past the auth view, complain loudly.
+      if(host.querySelector('#google-signin-slot')){
+        setStatus(target,'No response from Google. The OAuth client may not allow this origin ('+location.origin+'). Add it under Authorized JavaScript origins in Google Cloud Console, or try a different browser.','error');
+      }
+    },5000);
+  },true);
+  setStatus(target,'');
+}
 async function googleDone(res){state.demoMode=false;const flow=state.pendingFlow,target=flow==='parent'?$('#portal-auth-status'):$('#admin-auth-status');setStatus(target,'Checking the approved account...');try{if(flow==='parent')applyParent(await api('googleLogin',{idToken:res.credential,deviceId:device(),deviceLabel:navigator.platform||'Browser'}));else{state.admin={idToken:res.credential,data:await api('adminDashboard',{idToken:res.credential})};applyAdmin()}}catch(err){setStatus(target,err.message,'error')}}
 async function demoLogin(flow){state.demoMode=true;if(flow==='parent')applyParent(await demo('googleLogin',{demo:true,deviceId:device()}));else{state.admin={idToken:'demo-admin',data:await demo('adminDashboard',{demo:true})};applyAdmin()}}
 function applyParent(data){state.sessionId=data.sessionId;state.parent=data.parent;state.dashboard=data.dashboard;state.activeChild=data.dashboard.children[0]?.student_id||'';$('#portal-auth').classList.add('hidden');$('#parent-app').classList.remove('hidden');$('#parent-greeting').textContent=`Hello, ${data.parent.name.split(' ')[0]}`;renderParent();$('#notification-panel').classList.remove('hidden')}
