@@ -1,6 +1,6 @@
 (() => {
 'use strict';
-const CONFIG={apiUrl:'https://script.google.com/macros/s/AKfycbz1LJHQEAZNk-ObztTPVjwwBcV5GZms1uP4AYDSmws1bK62JopArQMRqOy-SFLwQI4m/exec',googleClientId:'626070627425-m3ts9u0ppomue3iq30k16q6n70fgvl3k.apps.googleusercontent.com'};
+const CONFIG={apiUrl:'https://script.google.com/macros/s/AKfycbz1LJHQEAZNk-ObztTPVjwwBcV5GZms1uP4AYDSmws1bK62JopArQMRqOy-SFLwQI4m/exec',googleClientId:'1095668738635-22i312u56jq7bq4ac3l19pqs6t7htasl.apps.googleusercontent.com'};
 const DEMO=CONFIG.googleClientId.startsWith('YOUR_');
 const $=(s,p=document)=>p.querySelector(s),$$=(s,p=document)=>[...p.querySelectorAll(s)];
 const state={sessionId:'',parent:null,dashboard:null,activeChild:'',admin:null,pendingFlow:'',driveItems:[],demoMode:false};
