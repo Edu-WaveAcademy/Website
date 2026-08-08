@@ -28,7 +28,7 @@ No `GOOGLE_CLIENT_ID` property is needed. An old property can be deleted after t
 ## First live test
 
 1. Submit a parent account request from the website.
-2. Sign in through **Academy login** using the code emailed to `studywitheduwaveacademy@gmail.com`.
+2. Sign in through **Academy login** using an address allowlisted in `Portal_Config` and the code sent to that inbox.
 3. Open **Families** and approve the pending parent.
 4. Link or create the child under that approved parent.
 5. Log out and request a parent code using the approved email.
@@ -40,7 +40,9 @@ No `GOOGLE_CLIENT_ID` property is needed. An old property can be deleted after t
 - Login codes are valid for 10 minutes, single-use, and limited to five attempts.
 - Only HMAC values are stored for login codes and sessions.
 - One newer login revokes the previous session for that email.
-- Admin access is allowlisted through `admin_email` in `Portal_Config`.
+- Academy access is allowlisted through `admin_email` and `developer_email` in `Portal_Config`.
+- `studywitheduwaveacademy@gmail.com` is the admin and `diwij.narang2001@gmail.com` is the developer by default.
+- Approved academy addresses are not rendered in the website login dialog.
 - The browser stores the active opaque session in `sessionStorage`, not a reusable password.
 - The master Sheet and Drive folder must remain private.
 

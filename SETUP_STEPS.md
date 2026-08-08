@@ -38,9 +38,10 @@ Open `Portal_Config` and confirm:
 
 ```text
 admin_email | studywitheduwaveacademy@gmail.com
+developer_email | diwij.narang2001@gmail.com
 ```
 
-This account is the only Academy Login account. More addresses can be added later as a comma-separated list.
+Both addresses can use Academy Login. The academy address is recorded as `admin`; the second address is recorded as `developer`. More addresses can be added to either row later as a comma-separated list. The public dialog never displays this allowlist.
 
 ## 4. Redeploy Apps Script
 
@@ -73,6 +74,7 @@ The Google Cloud OAuth client is no longer used. Leave it untouched until email 
 10. Request and enter the code sent to the approved parent email.
 11. Confirm that only linked children, assigned materials, fees, attendance, progress, and notices are visible.
 12. Request another login from a different browser and confirm the older session is rejected.
+13. Repeat Academy Login with `diwij.narang2001@gmail.com` and confirm the dashboard reports the `developer` role.
 
 ## Operational rules
 

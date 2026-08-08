@@ -306,9 +306,9 @@
           <div class="auth-panel-inner">
             <span class="auth-role">ACADEMY ACCESS</span>
             <h2 id="admin-dialog-title">Welcome back to Eduwave.</h2>
-            <p>Academy access is allowlisted. A one-time code will be sent to the administration email.</p>
+            <p>Enter an approved academy account. A one-time code will be sent to its inbox.</p>
             <form id="admin-login-form" class="auth-form">
-              <label class="field"><span>Academy email</span><input name="email" type="email" value="studywitheduwaveacademy@gmail.com" readonly required></label>
+              <label class="field"><span>Academy account</span><input name="email" type="email" autocomplete="email" required placeholder="Enter approved email"></label>
               <button class="button button-ink button-full" type="submit">Email academy login code <span aria-hidden="true">&rarr;</span></button>
             </form>
             <form id="admin-code-form" class="auth-form auth-code-form hidden">
@@ -318,7 +318,7 @@
               <button class="auth-link" type="button" data-reset-auth="admin">Request a new code</button>
             </form>
             <p id="admin-auth-status" class="form-status" role="status" aria-live="polite"></p>
-            <p class="auth-footnote"><span aria-hidden="true"></span> Admin access is restricted to studywitheduwaveacademy@gmail.com and expires after inactivity.</p>
+            <p class="auth-footnote"><span aria-hidden="true"></span> Only allowlisted academy and developer accounts can continue. Sessions expire after inactivity.</p>
           </div>
         </div>
       </section>

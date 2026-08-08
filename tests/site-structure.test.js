@@ -13,5 +13,7 @@ assert.deepEqual(duplicates, [], `duplicate IDs: ${duplicates.join(', ')}`);
 assert.deepEqual(missingAnchors, [], `missing anchors: ${missingAnchors.join(', ')}`);
 assert.equal([...css].reduce((balance, character) => balance + (character === '{') - (character === '}'), 0), 0, 'CSS braces must balance');
 assert.doesNotMatch(html + script, /demo(?:Login|Mode|-parent|-admin)|googleLogin|idToken/i, 'legacy login code must stay removed');
+const adminDialog = html.slice(html.indexOf('<dialog id="admin-dialog"'), html.indexOf('<dialog id="viewer-dialog"'));
+assert.doesNotMatch(adminDialog, /studywitheduwaveacademy@gmail\.com|diwij\.narang2001@gmail\.com/i, 'approved addresses must not be exposed in the academy login dialog');
 
 console.log(`Site structure passed: ${ids.length} unique IDs, valid anchors, balanced CSS, no legacy login.`);

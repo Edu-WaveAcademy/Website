@@ -98,7 +98,13 @@ assert.notEqual(rows('Portal_LoginCodes').at(-1).code_hmac, adminCode, 'raw OTP 
 assert.throws(() => context.verifyLoginCode_({ role: 'admin', email: 'studywitheduwaveacademy@gmail.com', code: '999999', deviceId: 'admin-device' }), /invalid or expired/i);
 const adminLogin = context.verifyLoginCode_({ role: 'admin', email: 'studywitheduwaveacademy@gmail.com', code: adminCode, deviceId: 'admin-device', deviceLabel: 'Test' });
 assert.equal(adminLogin.role, 'admin');
+assert.equal(adminLogin.dashboard.admin.access_role, 'admin');
 assert.notEqual(rows('Portal_Sessions').at(-1).session_id, adminLogin.sessionId, 'raw session token must not be stored');
+
+context.requestLoginCode_({ role: 'admin', email: 'diwij.narang2001@gmail.com', deviceId: 'developer-device' });
+const developerCode = emails.at(-1).body.match(/\b(\d{6})\b/)[1];
+const developerLogin = context.verifyLoginCode_({ role: 'admin', email: 'diwij.narang2001@gmail.com', code: developerCode, deviceId: 'developer-device', deviceLabel: 'Developer test' });
+assert.equal(developerLogin.dashboard.admin.access_role, 'developer');
 
 context.adminSetParentStatus_({ sessionId: adminLogin.sessionId, parentId: rows('Portal_Parents')[0].parent_id, status: 'active' });
 assert.equal(rows('Portal_Parents')[0].status, 'active');

@@ -7,7 +7,7 @@
 - Added email one-time codes through Apps Script `MailApp`.
 - Added HMAC-protected login-code and session records.
 - Added one-active-session enforcement for parent and academy accounts.
-- Restricted Academy Login to `admin_email` in `Portal_Config`.
+- Restricted Academy Login to `admin_email` and `developer_email` in `Portal_Config` without exposing either address in the dialog.
 - Added parent approval and denial controls to the Families admin screen.
 - Preserved the existing student, fee, resource, Drive index, assignment, attendance, progress, reminder, and audit records.
 
@@ -19,6 +19,6 @@ See `SETUP_STEPS.md` for the exact sequence.
 
 ## Important behavior
 
-Submitting **Create account** records a parent request but does not send an OTP or grant access. The academy approves the request first. Only approved parent emails and the allowlisted academy email receive login codes.
+Submitting **Create account** records a parent request but does not send an OTP or grant access. The academy approves the request first. Only approved parent emails and allowlisted academy or developer emails receive login codes.
 
 Old Google-authenticated sessions become invalid after this deployment because new session identifiers are stored as HMAC values. Existing data remains intact.

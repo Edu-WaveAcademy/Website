@@ -15,9 +15,9 @@ No paid host, database, payment gateway, or messaging provider is required for t
 
 ## Authentication
 
-Parents request an account using their email. The request remains pending until approved from **Academy Login > Families**. Approved parents and the allowlisted academy email sign in with a six-digit, single-use email code.
+Parents request an account using their email. The request remains pending until approved from **Academy Login > Families**. Approved parents and allowlisted academy users sign in with a six-digit, single-use email code.
 
-The backend stores HMAC values rather than raw codes or session tokens. One newer login revokes the previous session. Admin requests use the same passwordless flow but are accepted only for addresses listed under `admin_email` in `Portal_Config`.
+The backend stores HMAC values rather than raw codes or session tokens. One newer login revokes the previous session. Academy requests use the same passwordless flow but are accepted only for addresses listed under `admin_email` or `developer_email` in `Portal_Config`. Approved addresses are never shown in the public login dialog.
 
 There is no demo login, Google OAuth client, parent password sheet, or hardcoded admin password.
 
