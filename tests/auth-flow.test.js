@@ -145,6 +145,7 @@ const context = vm.createContext({
   },
   ScriptApp: {
     getProjectTriggers: () => projectTriggers,
+    deleteTrigger: trigger => { const index = projectTriggers.indexOf(trigger); if (index >= 0) projectTriggers.splice(index, 1); },
     newTrigger: handler => ({
       timeBased() { return this; },
       everyHours(hours) { this.hours = hours; return this; },
@@ -155,7 +156,11 @@ const context = vm.createContext({
   MimeType: { GOOGLE_SHEETS: 'application/vnd.google-apps.spreadsheet', GOOGLE_DOCS: 'application/vnd.google-apps.document', PDF: 'application/pdf' }
 });
 
-vm.runInContext(fs.readFileSync('apps-script/Code.gs', 'utf8'), context, { filename: 'Code.gs' });
+const backendCode = fs.readFileSync('apps-script/Code.gs', 'utf8');
+const manifest = JSON.parse(fs.readFileSync('apps-script/appsscript.json', 'utf8'));
+assert.match(backendCode, /ScriptApp\.newTrigger\('refreshMaterialLibrary'\)/, 'backend must install the hourly Drive refresh trigger');
+assert.ok(manifest.oauthScopes.includes('https://www.googleapis.com/auth/script.scriptapp'), 'manifest must authorize trigger management');
+vm.runInContext(backendCode, context, { filename: 'Code.gs' });
 context.setupEduwave();
 assert.equal(context.authorizeEduwaveMail().remainingDailyQuota, 100);
 
@@ -237,9 +242,9 @@ const driveScan = context.adminScanDrive_({ sessionId: adminLogin.sessionId, roo
 assert.equal(driveScan.found, 1, 'folder scan must report usable files rather than technical index rows');
 assert.equal(driveScan.files[0].name, 'existing-worksheet.pdf');
 context.setConfig_('drive_root_id', worksheetFolder.getId());
-context.installMaterialRefreshTrigger_();
+context.installMaterialRefreshTrigger();
 assert.equal(projectTriggers.length, 1, 'hourly material refresh trigger must be installed once');
-context.installMaterialRefreshTrigger_();
+context.installMaterialRefreshTrigger();
 assert.equal(projectTriggers.length, 1, 'material refresh trigger installation must be idempotent');
 context.startMaterialSync_(true);
 const materialSync = context.refreshMaterialLibrary_({ maxMs: 5000, maxFolders: 20 });
@@ -248,6 +253,7 @@ assert.equal(automaticMaterial.auto_added, 'true');
 assert.equal(automaticMaterial.library_path, 'Academy Worksheets');
 assert.equal(materialSync.pendingFolders, 0);
 assert.ok(materialSync.issues.some(issue => issue.name === 'old-material.zip' && /Unsupported format/.test(issue.reason)));
+assert.equal(context.materialSupport_('shared-owner@gmail.com', 'application/pdf', 'shared.pdf', 100, 'pdf', 'studywitheduwaveacademy@gmail.com').allowed, true, 'readable files inside the master archive should not be rejected only because another account owns them');
 folderPicker = context.adminDriveFolders_({ sessionId: adminLogin.sessionId });
 assert.equal(folderPicker.currentFolderId, worksheetFolder.getId());
 assert.equal(folderPicker.folders[0].current, true, 'current master folder must appear first');

@@ -21,6 +21,7 @@ HEADERS[PORTAL.reminders] = ['reminder_id','student_id','type','message','create
 HEADERS[PORTAL.audit] = ['event_id','actor_type','actor_id','event','entity_type','entity_id','detail','created_at'];
 HEADERS[PORTAL.config] = ['key','value','updated_at'];
 const SESSION_IDLE_MINUTES = 60, ADMIN_IDLE_MINUTES = 30, SESSION_ABSOLUTE_HOURS = 12, ADMIN_ABSOLUTE_HOURS = 8, MAX_ACTIVE_SESSIONS = 1, OTP_EXPIRY_MINUTES = 10, OTP_REQUEST_LIMIT = 3, OTP_WINDOW_MINUTES = 15, OTP_MAX_ATTEMPTS = 5, MAX_UPLOAD_BYTES = 8*1024*1024, MAX_BINARY_BYTES = 10*1024*1024, TZ = Session.getScriptTimeZone() || 'Asia/Kolkata';
+const ACADEMY_MATERIAL_ROOT_ID = '0B10ixpQRGkWTfnBQUVhtUHpzNi1qd2ZtMExXVFhHSnJoZ3RyRF81dnJ1Mk5uaXotbllyX3M';
 const STUDENT_UPLOAD_MIMES = ['application/pdf','image/jpeg','image/png'];
 const ACADEMY_UPLOAD_MIMES = STUDENT_UPLOAD_MIMES.concat(['application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/rtf','text/rtf','text/plain']);
 function onOpen(){ SpreadsheetApp.getUi().createMenu('Eduwave Portal').addItem('Create portal tabs safely','setupEduwave').addItem('Set up automatic material library','setupMaterialLibraryAutomation').addItem('Refresh material library now','refreshMaterialLibrary').addItem('Upgrade protected file uploads','upgradeFileUploads').addItem('Authorize login email','authorizeEduwaveMail').addItem('Create this month\'s fee rows','generateMonthlyFees').addToUi(); }
@@ -30,26 +31,28 @@ function authorizeEduwaveMail(){var quota=MailApp.getRemainingDailyQuota();try{S
 function generateMonthlyFees(){var r=generateMonthlyFees_();SpreadsheetApp.getUi().alert('Created '+r.created+' fee row(s) for '+r.month+'.');}
 function setupMaterialLibraryAutomation(){
   [PORTAL.driveIndex,PORTAL.driveSync,PORTAL.resources,PORTAL.config].forEach(ensureHeaders_);
-  if(!getConfig_('drive_root_id'))throw new Error('Choose the academy master Drive folder in the portal first.');
-  installMaterialRefreshTrigger_();
+  setConfigDefault_('material_root_id',ACADEMY_MATERIAL_ROOT_ID);
+  if(!getConfig_('material_root_id'))throw new Error('Configure the academy master Drive folder first.');
+  setConfig_('material_refresh_enabled','true');
+  ensureMaterialRefreshTrigger_();
   startMaterialSync_(true);
-  var result=refreshMaterialLibrary_({maxMs:240000,maxFolders:250});
+  var result=refreshMaterialLibrary_({maxMs:150000,maxFolders:250});
+  logMaterialSyncResult_(result);
   try{SpreadsheetApp.getActive().toast('Automatic material library is active. Ready: '+result.ready+', skipped: '+result.skipped+'.','Eduwave Portal',8);}catch(_){ }
   return result;
 }
 function refreshMaterialLibrary(){
   [PORTAL.driveIndex,PORTAL.driveSync,PORTAL.resources,PORTAL.config].forEach(ensureHeaders_);
-  return refreshMaterialLibrary_({maxMs:240000,maxFolders:250});
+  var result=refreshMaterialLibrary_({maxMs:150000,maxFolders:250});
+  logMaterialSyncResult_(result);
+  return result;
 }
-function installMaterialRefreshTrigger_(){
-  var existing=ScriptApp.getProjectTriggers().filter(function(trigger){return trigger.getHandlerFunction()==='refreshMaterialLibrary';});
-  if(!existing.length)ScriptApp.newTrigger('refreshMaterialLibrary').timeBased().everyHours(1).create();
-  setConfig_('material_refresh_enabled','true');
-  return{installed:true,existing:existing.length>0};
-}
+function installMaterialRefreshTrigger(){var trigger=ensureMaterialRefreshTrigger_();setConfig_('material_refresh_enabled','true');try{SpreadsheetApp.getActive().toast('Hourly material refresh is active.','Eduwave Portal',5);}catch(_){ }return{installed:true,handler:trigger.getHandlerFunction()};}
+function ensureMaterialRefreshTrigger_(){var matches=ScriptApp.getProjectTriggers().filter(function(trigger){return trigger.getHandlerFunction()==='refreshMaterialLibrary';});while(matches.length>1)ScriptApp.deleteTrigger(matches.pop());return matches[0]||ScriptApp.newTrigger('refreshMaterialLibrary').timeBased().everyHours(1).create();}
+function logMaterialSyncResult_(result){console.log(JSON.stringify({status:result.status,rootName:result.rootName,ready:result.ready,skipped:result.skipped,pendingFolders:result.pendingFolders,folderErrors:result.folderErrors,processedFolders:result.processedFolders||0,processedFiles:result.processedFiles||0,addedThisRun:result.addedThisRun||0,skippedThisRun:result.skippedThisRun||0}));}
 function startMaterialSync_(force){
   [PORTAL.driveIndex,PORTAL.driveSync,PORTAL.resources,PORTAL.config].forEach(ensureHeaders_);
-  var rootId=getConfig_('drive_root_id');
+  var rootId=getConfig_('material_root_id')||getConfig_('drive_root_id');
   if(!rootId)throw new Error('Choose the academy master Drive folder first.');
   var pending=rows_(PORTAL.driveSync).filter(function(row){return row.status==='pending';});
   if(pending.length&&!force)return pending[0].run_id;
@@ -72,7 +75,7 @@ function refreshMaterialLibrary_(options){
     if(options.force)startMaterialSync_(true);
     else if(!pending.length&&(!lastComplete||Date.now()-lastComplete>50*60000))startMaterialSync_(true);
     else if(!pending.length)return materialSyncStatus_();
-    var started=Date.now(),deadline=started+maxMs,runId=getConfig_('material_sync_run_id'),allQueue=rows_(PORTAL.driveSync),queue=allQueue.filter(function(row){return row.status==='pending'&&row.run_id===runId;}),seen={},stats={folders:0,files:0,added:0,skipped:0,owner:getConfig_('admin_email'),indexByDrive:{},resourceByDrive:{}};
+    var started=Date.now(),deadline=started+maxMs,runId=getConfig_('material_sync_run_id'),allQueue=rows_(PORTAL.driveSync),queue=allQueue.filter(function(row){return row.status==='pending'&&row.run_id===runId;}),seen={},stats={folders:0,files:0,added:0,skipped:0,owner:getConfig_('admin_email'),indexByDrive:{},resourceByDrive:{},indexAppends:[],resourceAppends:[]};
     rows_(PORTAL.driveIndex).forEach(function(row){stats.indexByDrive[row.drive_id]=row;});
     rows_(PORTAL.resources).forEach(function(row){if(row.drive_id)stats.resourceByDrive[row.drive_id]=row;});
     allQueue.filter(function(row){return row.run_id===runId;}).forEach(function(row){seen[row.folder_id]=true;});
@@ -80,6 +83,7 @@ function refreshMaterialLibrary_(options){
       var entry=queue.shift();
       processMaterialFolder_(entry,runId,queue,seen,deadline,stats);
     }
+    flushMaterialAppends_(stats);
     var remaining=rows_(PORTAL.driveSync).filter(function(row){return row.run_id===runId&&row.status==='pending';}).length;
     setConfig_('material_last_refresh_at',stamp_());
     if(!remaining){setConfig_('material_sync_status','complete');setConfig_('material_sync_completed_at',stamp_());}
@@ -117,13 +121,13 @@ function catalogMaterialFile_(file,folder,path,runId,stats){
   var owner='';
   try{owner=file.getOwner()?file.getOwner().getEmail():'';}catch(_){ }
   var fileId=file.getId(),mime=file.getMimeType(),name=file.getName(),size=Number(file.getSize())||0,kind=driveKind_(mime,name),support=materialSupport_(owner,mime,name,size,kind,stats.owner),old=stats.indexByDrive[fileId],resourceId='';
-  if(support.allowed){var isNew=!stats.resourceByDrive[fileId];resourceId=upsertAutoMaterial_(file,path,kind,stats);if(isNew)stats.added+=1;}else stats.skipped+=1;
+  if(support.allowed){var isNew=!stats.resourceByDrive[fileId];resourceId=upsertAutoMaterial_(file,path,kind,stats);if(isNew)stats.added+=1;}else{var blocked=stats.resourceByDrive[fileId];if(blocked){resourceId=blocked.resource_id;update_(PORTAL.resources,blocked._row,{status:'blocked',updated_at:stamp_()});blocked.status='blocked';}stats.skipped+=1;}
   var values={drive_id:fileId,parent_drive_id:folder.getId(),path:path,name:name,mime_type:mime,kind:kind,owner_email:owner,ownership:email_(owner)===email_(stats.owner)?'academy':'external',size_bytes:String(size),modified_at:stamp_(file.getLastUpdated()),indexed_at:stamp_(),safe_candidate:String(support.allowed),skip_reason:support.reason,resource_id:resourceId,last_seen_at:stamp_(),sync_run_id:runId};
-  if(old){update_(PORTAL.driveIndex,old._row,values);merge_(old,values);}else{append_(PORTAL.driveIndex,values);values._row=sheet_(PORTAL.driveIndex,false).getLastRow();stats.indexByDrive[fileId]=values;}
+  if(old){update_(PORTAL.driveIndex,old._row,values);merge_(old,values);}else{stats.indexAppends.push(values);stats.indexByDrive[fileId]=values;}
   stats.files+=1;
+  if(stats.indexAppends.length>=100)flushMaterialAppends_(stats);
 }
 function materialSupport_(owner,mime,name,size,kind,academyOwner){
-  if(email_(owner)!==email_(academyOwner||getConfig_('admin_email')))return{allowed:false,reason:'Owned by another Google account. Make an academy-owned copy.'};
   if(kind==='video')return{allowed:false,reason:'Video files are not supported in the free trial portal.'};
   if(mime==='application/vnd.google-apps.presentation')return{allowed:false,reason:'Google Slides are not supported yet. Download as PDF or PowerPoint.'};
   if(kind!=='sheet'&&kind!=='doc'&&size>MAX_BINARY_BYTES)return{allowed:false,reason:'File is larger than the 10 MB portal limit.'};
@@ -131,10 +135,11 @@ function materialSupport_(owner,mime,name,size,kind,academyOwner){
   return allowed?{allowed:true,reason:''}:{allowed:false,reason:'Unsupported format ('+(mime||'unknown type')+'). Convert to PDF, image, Word, Excel, PowerPoint, or text.'};
 }
 function upsertAutoMaterial_(file,path,kind,stats){
-  var fileId=file.getId(),old=stats.resourceByDrive[fileId],metadata=inferMaterialMetadata_(path,file.getName()),now=stamp_(),values={drive_id:fileId,title:old&&old.title||metadata.title,subject:old&&old.subject||metadata.subject,class_level:old&&old.class_level||metadata.classLevel,kind:kind,status:old&&old.status||'published',updated_at:now,submission_type:old&&old.submission_type||'file_upload',library_path:path,source:old&&old.source||'drive_auto',auto_added:old&&old.auto_added||'true'};
+  var fileId=file.getId(),old=stats.resourceByDrive[fileId],metadata=inferMaterialMetadata_(path,file.getName()),now=stamp_(),values={drive_id:fileId,title:old&&old.title||metadata.title,subject:old&&old.subject||metadata.subject,class_level:old&&old.class_level||metadata.classLevel,kind:kind,status:old&&old.status&&old.status!=='blocked'?old.status:'published',updated_at:now,submission_type:old&&old.submission_type||'file_upload',library_path:path,source:old&&old.source||'drive_auto',auto_added:old&&old.auto_added||'true'};
   if(old){update_(PORTAL.resources,old._row,values);merge_(old,values);return old.resource_id;}
-  values.resource_id=id_('RES');values.created_at=now;append_(PORTAL.resources,values);values._row=sheet_(PORTAL.resources,false).getLastRow();stats.resourceByDrive[fileId]=values;return values.resource_id;
+  values.resource_id=id_('RES');values.created_at=now;stats.resourceAppends.push(values);stats.resourceByDrive[fileId]=values;return values.resource_id;
 }
+function flushMaterialAppends_(stats){[['resourceAppends',PORTAL.resources],['indexAppends',PORTAL.driveIndex]].forEach(function(pair){var pending=stats[pair[0]];if(!pending.length)return;var name=pair[1],headers=HEADERS[name],target=sheet_(name,false),start=target.getLastRow()+1;target.getRange(start,1,pending.length,headers.length).setValues(pending.map(function(row){return headers.map(function(key){return row[key]===undefined?'':row[key];});}));pending.forEach(function(row,index){row._row=start+index;});stats[pair[0]]=[];});}
 function inferMaterialMetadata_(path,name){
   var text=(path+' '+name).replace(/[_-]+/g,' '),subject='',classLevel='',subjects=[['Mathematics','maths?|mathematics'],['Science','science'],['English','english'],['Physics','physics'],['Chemistry','chemistry'],['Biology','biology'],['Social Science','social science|social studies|sst'],['Hindi','hindi']];
   subjects.some(function(item){if(new RegExp('\\b('+item[1]+')\\b','i').test(text)){subject=item[0];return true;}return false;});
