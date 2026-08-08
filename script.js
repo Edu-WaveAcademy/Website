@@ -1,6 +1,6 @@
 (() => {
 'use strict';
-const CONFIG={apiUrl:'https://script.google.com/macros/s/AKfycbz1LJHQEAZNk-ObztTPVjwwBcV5GZms1uP4AYDSmws1bK62JopArQMRqOy-SFLwQI4m/exec'};
+const CONFIG={apiUrl:'https://script.google.com/macros/s/AKfycbymM6uWOii_haTHKrprPLn0MXuGCIc2BP_Z8zowkT3LQ4yNBQYzBDId2_jVCf7dquA/exec'};
 const SESSION_KEYS={parent:'eduwave_parent_session',admin:'eduwave_admin_session'};
 const $=(s,p=document)=>p.querySelector(s),$$=(s,p=document)=>[...p.querySelectorAll(s)];
 const state={sessionId:'',parent:null,dashboard:null,activeChild:'',admin:null,driveItems:[],auth:{parentEmail:'',adminEmail:''}};
