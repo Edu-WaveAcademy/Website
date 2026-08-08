@@ -121,7 +121,7 @@ const context = vm.createContext({
       setProperty: (key, value) => properties.set(key, value)
     })
   },
-  LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) },
+  LockService: { getScriptLock: () => ({ waitLock() {}, tryLock() { return true; }, releaseLock() {} }) },
   MailApp: {
     getRemainingDailyQuota: () => 100,
     sendEmail: message => emails.push(message)
@@ -149,7 +149,8 @@ const context = vm.createContext({
     newTrigger: handler => ({
       timeBased() { return this; },
       everyHours(hours) { this.hours = hours; return this; },
-      create() { const trigger = { getHandlerFunction: () => handler, hours: this.hours }; projectTriggers.push(trigger); return trigger; }
+      everyMinutes(minutes) { this.minutes = minutes; return this; },
+      create() { const trigger = { getHandlerFunction: () => handler, hours: this.hours, minutes: this.minutes }; projectTriggers.push(trigger); return trigger; }
     })
   },
   ContentService: { MimeType: { JSON: 'json' }, createTextOutput: text => ({ text, setMimeType() { return this; } }) },
@@ -247,11 +248,17 @@ assert.equal(projectTriggers.length, 1, 'hourly material refresh trigger must be
 context.installMaterialRefreshTrigger();
 assert.equal(projectTriggers.length, 1, 'material refresh trigger installation must be idempotent');
 context.startMaterialSync_(true);
+context.installMaterialRefreshTrigger();
+assert.equal(projectTriggers.length, 2, 'a temporary catch-up trigger must be installed while folders remain');
+context.installMaterialRefreshTrigger();
+assert.equal(projectTriggers.length, 2, 'catch-up trigger installation must be idempotent');
 const materialSync = context.refreshMaterialLibrary_({ maxMs: 5000, maxFolders: 20 });
 const automaticMaterial = rows('Portal_Resources').find(row => row.drive_id === driveScan.files[0].drive_id);
 assert.equal(automaticMaterial.auto_added, 'true');
 assert.equal(automaticMaterial.library_path, 'Academy Worksheets');
 assert.equal(materialSync.pendingFolders, 0);
+context.ensureMaterialImportTrigger_();
+assert.equal(projectTriggers.length, 1, 'temporary catch-up trigger must remove itself when import completes');
 assert.ok(materialSync.issues.some(issue => issue.name === 'old-material.zip' && /Unsupported format/.test(issue.reason)));
 assert.equal(context.materialSupport_('shared-owner@gmail.com', 'application/pdf', 'shared.pdf', 100, 'pdf', 'studywitheduwaveacademy@gmail.com').allowed, true, 'readable files inside the master archive should not be rejected only because another account owns them');
 folderPicker = context.adminDriveFolders_({ sessionId: adminLogin.sessionId });

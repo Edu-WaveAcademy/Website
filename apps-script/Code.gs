@@ -34,8 +34,9 @@ function setupMaterialLibraryAutomation(){
   setConfigDefault_('material_root_id',ACADEMY_MATERIAL_ROOT_ID);
   if(!getConfig_('material_root_id'))throw new Error('Configure the academy master Drive folder first.');
   setConfig_('material_refresh_enabled','true');
-  ensureMaterialRefreshTrigger_();
   startMaterialSync_(true);
+  ensureMaterialRefreshTrigger_();
+  ensureMaterialImportTrigger_();
   var result=refreshMaterialLibrary_({maxMs:150000,maxFolders:250});
   logMaterialSyncResult_(result);
   try{SpreadsheetApp.getActive().toast('Automatic material library is active. Ready: '+result.ready+', skipped: '+result.skipped+'.','Eduwave Portal',8);}catch(_){ }
@@ -45,10 +46,13 @@ function refreshMaterialLibrary(){
   [PORTAL.driveIndex,PORTAL.driveSync,PORTAL.resources,PORTAL.config].forEach(ensureHeaders_);
   var result=refreshMaterialLibrary_({maxMs:150000,maxFolders:250});
   logMaterialSyncResult_(result);
+  ensureMaterialImportTrigger_();
   return result;
 }
-function installMaterialRefreshTrigger(){var trigger=ensureMaterialRefreshTrigger_();setConfig_('material_refresh_enabled','true');try{SpreadsheetApp.getActive().toast('Hourly material refresh is active.','Eduwave Portal',5);}catch(_){ }return{installed:true,handler:trigger.getHandlerFunction()};}
+function continueMaterialLibraryImport(){var result=refreshMaterialLibrary_({maxMs:150000,maxFolders:250});logMaterialSyncResult_(result);ensureMaterialImportTrigger_();return result;}
+function installMaterialRefreshTrigger(){ensureHeaders_(PORTAL.driveSync);var trigger=ensureMaterialRefreshTrigger_(),catchUp=ensureMaterialImportTrigger_();setConfig_('material_refresh_enabled','true');try{SpreadsheetApp.getActive().toast('Automatic material refresh is active.','Eduwave Portal',5);}catch(_){ }return{installed:true,handler:trigger.getHandlerFunction(),catchUp:!!catchUp};}
 function ensureMaterialRefreshTrigger_(){var matches=ScriptApp.getProjectTriggers().filter(function(trigger){return trigger.getHandlerFunction()==='refreshMaterialLibrary';});while(matches.length>1)ScriptApp.deleteTrigger(matches.pop());return matches[0]||ScriptApp.newTrigger('refreshMaterialLibrary').timeBased().everyHours(1).create();}
+function ensureMaterialImportTrigger_(){ensureHeaders_(PORTAL.driveSync);var pending=rows_(PORTAL.driveSync).some(function(row){return row.status==='pending';}),matches=ScriptApp.getProjectTriggers().filter(function(trigger){return trigger.getHandlerFunction()==='continueMaterialLibraryImport';});if(!pending){matches.forEach(function(trigger){ScriptApp.deleteTrigger(trigger);});return null;}while(matches.length>1)ScriptApp.deleteTrigger(matches.pop());return matches[0]||ScriptApp.newTrigger('continueMaterialLibraryImport').timeBased().everyMinutes(5).create();}
 function logMaterialSyncResult_(result){console.log(JSON.stringify({status:result.status,rootName:result.rootName,ready:result.ready,skipped:result.skipped,pendingFolders:result.pendingFolders,folderErrors:result.folderErrors,processedFolders:result.processedFolders||0,processedFiles:result.processedFiles||0,addedThisRun:result.addedThisRun||0,skippedThisRun:result.skippedThisRun||0}));}
 function startMaterialSync_(force){
   [PORTAL.driveIndex,PORTAL.driveSync,PORTAL.resources,PORTAL.config].forEach(ensureHeaders_);
@@ -68,7 +72,7 @@ function startMaterialSync_(force){
 function refreshMaterialLibrary_(options){
   options=options||{};
   var lock=LockService.getScriptLock();
-  lock.waitLock(10000);
+  if(!lock.tryLock(1000)){var busy=materialSyncStatus_();busy.busy=true;return busy;}
   try{
     [PORTAL.driveIndex,PORTAL.driveSync,PORTAL.resources,PORTAL.config].forEach(ensureHeaders_);
     var maxMs=Math.min(270000,Math.max(5000,Number(options.maxMs)||240000)),maxFolders=Math.min(500,Math.max(1,Number(options.maxFolders)||250)),lastComplete=Date.parse(getConfig_('material_sync_completed_at')||''),pending=rows_(PORTAL.driveSync).filter(function(row){return row.status==='pending';});
