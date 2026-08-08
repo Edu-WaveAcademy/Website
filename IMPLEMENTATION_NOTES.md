@@ -1,18 +1,24 @@
-# Eduwave Portal Status
+# Eduwave Email Authentication Migration
 
-## Live backend
-The Google Apps Script web app is deployed at the URL in `script.js`. The portal schema is present in the existing spreadsheet as `Portal_*` tabs. The old `Settings` tab was not changed.
+## What changed
 
-## Completed verification
-- Parent demo dashboard: assignment, exam, and fee notifications appear on login.
-- Resource preview: an assigned Google Sheet renders as a watermarked table in the portal.
-- Admin demo: Drive index, resource publishing, and child assignment complete through the GUI.
+- Removed Google Sign-In and all local demo-login behavior.
+- Added parent account requests with `pending`, `active`, and `denied` states.
+- Added email one-time codes through Apps Script `MailApp`.
+- Added HMAC-protected login-code and session records.
+- Added one-active-session enforcement for parent and academy accounts.
+- Restricted Academy Login to `admin_email` in `Portal_Config`.
+- Added parent approval and denial controls to the Families admin screen.
+- Preserved the existing student, fee, resource, Drive index, assignment, attendance, progress, reminder, and audit records.
 
-## Before production parent/admin Google login
-1. Create a Google OAuth Web client ID in the Google Cloud project owned by `studywitheduwaveacademy@gmail.com`.
-2. Add `https://edu-waveacademy.github.io` as an authorised JavaScript origin.
-3. Set Apps Script property `GOOGLE_CLIENT_ID` to that client ID.
-4. Replace `YOUR_GOOGLE_CLIENT_ID` in `script.js` with the same client ID.
-5. Deploy the GitHub Pages branch only after the above is configured.
+## Required migration
 
-The Apps Script URL is public by design; it is not a secret. Google ID-token validation and the parent-to-child mapping enforce access.
+Replace both files under `apps-script`, run `setupEduwave`, and deploy a new Apps Script Web app version. The existing website cannot send login codes until the new backend version and mail permission are active.
+
+See `SETUP_STEPS.md` for the exact sequence.
+
+## Important behavior
+
+Submitting **Create account** records a parent request but does not send an OTP or grant access. The academy approves the request first. Only approved parent emails and the allowlisted academy email receive login codes.
+
+Old Google-authenticated sessions become invalid after this deployment because new session identifiers are stored as HMAC values. Existing data remains intact.

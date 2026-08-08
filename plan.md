@@ -7,23 +7,24 @@ Run a professional parent portal without paid hosting, databases, or messaging s
 ## Architecture
 
 ```text
-Parent or academy Google account
+Parent or academy email code
              |
 GitHub Pages website -> Apps Script web app -> Portal_* tabs in Google Sheets
                                       |
                                Private academy Drive
 ```
 
-The portal never adds parents as Drive viewers and never exposes permanent Drive links. Apps Script verifies an approved Google ID token, creates a short-lived session, checks the parent-child link, then returns an in-portal preview.
+The portal never adds parents as Drive viewers and never exposes permanent Drive links. Apps Script sends a one-time code only to an approved email, creates a short-lived session, checks the parent-child link, then returns an in-portal preview.
 
 ## Spreadsheet Migration
 
 Run `setupEduwave()` from the Apps Script editor. It creates the following tabs without deleting or changing the legacy `Settings` tab:
 
-- `Portal_Parents`: approved parent identity and contact details
+- `Portal_Parents`: pending and approved parent identity and contact details
 - `Portal_Students`: child profile, fee amount, due day
 - `Portal_ParentStudents`: family-to-child links
-- `Portal_Sessions`: max-two-device session policy
+- `Portal_Sessions`: HMAC-protected parent and admin sessions
+- `Portal_LoginCodes`: single-use login-code HMACs, expiry, and attempt count
 - `Portal_Trials`: public trial requests
 - `Portal_Fees`: monthly fee rows and parent payment references
 - `Portal_DriveIndex`: metadata-only import of the academy master folder
@@ -35,16 +36,17 @@ Run `setupEduwave()` from the Apps Script editor. It creates the following tabs 
 
 ## Parent Experience
 
-1. The academy adds and approves a parent Gmail address.
-2. The parent signs in with that same Google account.
-3. The dashboard opens linked children only.
-4. A login notification tray shows current assignments, exam notices, and unpaid fees.
-5. Materials render in the portal: Sheets as tables, Docs as text, PDFs and images as protected previews with an identity watermark.
-6. The parent submits a UPI reference; the academy verifies it manually.
+1. A parent requests access with their email, or the academy creates the parent directly.
+2. The academy approves the request and links the child.
+3. The parent signs in using a one-time code sent to the approved email.
+4. The dashboard opens linked children only.
+5. A login notification tray shows current assignments, exam notices, and unpaid fees.
+6. Materials render in the portal: Sheets as tables, Docs as text, PDFs and images as protected previews with an identity watermark.
+7. The parent submits a UPI reference; the academy verifies it manually.
 
 ## Academy Experience
 
-1. Use the single academy Google account to open Academy Login.
+1. Request an Academy Login code for the single allowlisted academy email.
 2. Add a parent, then add and link a child.
 3. Scan the master Drive folder from Library. Only academy-owned, non-video files become publish candidates.
 4. Publish an item, then assign it to a child.
@@ -53,11 +55,12 @@ Run `setupEduwave()` from the Apps Script editor. It creates the following tabs 
 
 ## Security Boundaries
 
-- Google ID tokens are verified by Apps Script.
+- Login codes expire after 10 minutes, are single-use, and are stored only as HMAC values.
 - Admin access is limited to `studywitheduwaveacademy@gmail.com` in `Portal_Config`.
-- Parent accounts are Gmail-based; there is no password sheet or hardcoded admin key.
-- A third device sign-in revokes the oldest active session.
+- Parent accounts can use any valid email provider; there is no password sheet or hardcoded admin key.
+- A new login revokes the previous session for that account.
 - Sessions expire after 60 minutes idle or 12 hours absolute.
+- Admin sessions expire after 30 minutes idle or 8 hours absolute.
 - The Drive importer records metadata first and excludes externally owned content from publishing.
 - Browser screenshot prevention is not technically reliable. Portal previews display a parent/time watermark and log opens instead.
 
@@ -65,17 +68,16 @@ Run `setupEduwave()` from the Apps Script editor. It creates the following tabs 
 
 1. Copy `apps-script/Code.gs` and `apps-script/appsscript.json` into the Apps Script project bound to the academy spreadsheet.
 2. Run `setupEduwave()` once and authorize it.
-3. Add `GOOGLE_CLIENT_ID` in Apps Script Project Settings > Script properties.
-4. Deploy as a web app: execute as academy account, access for anyone. Keep the Sheet and Drive private.
-5. Put the deployment URL and Google client ID into `script.js`.
-6. Push the `codex/parent-admin-portal` branch for review. Publish to GitHub Pages only after the live acceptance check.
+3. Deploy as a web app: execute as academy account, access for anyone. Keep the Sheet and Drive private.
+4. Put the deployment URL into `script.js` if it changed.
+5. Publish the GitHub Pages branch only after the live acceptance check.
 
 ## Verification Checklist
 
-- Parent Gmail denied before approval and accepted after approval.
-- Third parent device revokes the oldest session.
+- Parent email receives no code before approval and can sign in after approval.
+- A second login revokes the older session.
 - Parent can see only linked children and assigned items.
-- Admin can scan, publish, and assign a demo Drive file.
+- Admin can scan, publish, and assign a Drive file.
 - Parent login notification tray includes assignment, exam, and fee updates.
 - Payment note changes fee status to `pending_verification`.
 - Admin can mark paid and produce a WhatsApp click-to-chat reminder.
