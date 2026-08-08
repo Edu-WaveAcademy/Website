@@ -3024,6 +3024,128 @@ dialog[open] {
   border-color: rgba(25, 81, 64, 0.25);
 }
 
+.folder-picker-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.8rem;
+}
+
+.folder-picker-toolbar .text-button {
+  margin-bottom: 0.75rem;
+}
+
+.drive-folder-list {
+  max-height: 320px;
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.4rem;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  scrollbar-color: var(--forest) transparent;
+}
+
+.drive-folder-option {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid transparent;
+  border-radius: 0.7rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.drive-folder-option:hover {
+  background: #f7f8ef;
+  border-color: rgba(25, 81, 64, 0.28);
+  transform: translateY(-1px);
+}
+
+.drive-folder-option.selected {
+  background: #edf3e8;
+  border-color: var(--forest);
+}
+
+.drive-folder-option b,
+.drive-folder-option small {
+  display: block;
+}
+
+.drive-folder-option small {
+  margin-top: 0.12rem;
+  color: var(--ink-muted);
+  font-size: 0.58rem;
+}
+
+.folder-glyph {
+  position: relative;
+  width: 2rem;
+  height: 1.4rem;
+  background: var(--lime);
+  border-radius: 0.2rem 0.3rem 0.3rem 0.3rem;
+}
+
+.folder-glyph::before {
+  content: "";
+  position: absolute;
+  top: -0.3rem;
+  left: 0;
+  width: 0.85rem;
+  height: 0.4rem;
+  background: var(--lime);
+  border-radius: 0.2rem 0.2rem 0 0;
+}
+
+.folder-choice {
+  color: var(--forest);
+  font: 700 0.58rem DM Mono, monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.selected-folder {
+  margin: 0;
+  padding: 0.65rem 0.8rem;
+  color: var(--forest-dark);
+  background: #edf3e8;
+  border-left: 3px solid var(--lime);
+  border-radius: 0.35rem;
+  font-size: 0.68rem;
+}
+
+.scan-action {
+  display: flex;
+  align-items: end;
+  padding-bottom: 0.72rem;
+}
+
+.manual-folder {
+  padding: 0.7rem 0.8rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+}
+
+.manual-folder summary {
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+
+.manual-folder[open] {
+  display: grid;
+  gap: 0.6rem;
+}
+
 .teacher-feedback {
   padding: 0.8rem 0.9rem;
   color: var(--forest-dark);
@@ -3503,6 +3625,23 @@ dialog[open] {
   .submission-attachment {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .folder-picker-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .folder-picker-toolbar .text-button {
+    margin: 0;
+    justify-self: start;
+  }
+
+  .drive-folder-option {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .folder-choice {
+    grid-column: 2;
   }
 }
 

@@ -19,6 +19,8 @@ assert.match(script, /parentSubmitAssignment/, 'student worksheet submission flo
 assert.match(script, /adminReviewSubmission/, 'academy worksheet review flow must be present');
 assert.match(script, /adminUploadResource/, 'academy mixed-file upload flow must be present');
 assert.match(script, /adminSubmissionFile/, 'academy protected submission preview must be present');
+assert.match(script, /adminDriveFolders/, 'academy Drive folder picker must be present');
+assert.match(script, /drive-folder-list/, 'Drive folders must use a scrollable picker instead of an ID-first form');
 assert.match(script, /\.pdf,\.jpg,\.jpeg,\.png,\.doc,\.docx,\.xls,\.xlsx,\.ppt,\.pptx/, 'academy file picker must accept common teaching formats');
 assert.doesNotMatch(script, /drive\.google\.com\/.*(?:attachment|submission)|attachment_drive_id/, 'frontend must not expose uploaded Drive identifiers');
 

@@ -130,6 +130,7 @@ const context = vm.createContext({
   },
   DriveApp: {
     createFolder: name => driveRoot.createFolder(name),
+    getRootFolder: () => driveRoot,
     getFolderById: id => { if (!driveFolders.has(id)) throw new Error('Folder not found'); return driveFolders.get(id); },
     getFileById: id => { if (!driveFiles.has(id)) throw new Error('File not found'); return driveFiles.get(id); }
   },
@@ -197,6 +198,13 @@ const uploadedResource = context.adminUploadResource_({
 });
 assert.equal(uploadedResource.kind, 'office');
 assert.equal(uploadedResource.submission_type, 'file_upload');
+const worksheetFolder = driveRoot.createFolder('Academy Worksheets');
+let folderPicker = context.adminDriveFolders_({ sessionId: adminLogin.sessionId });
+assert.ok(folderPicker.folders.some(folder => folder.name === 'Academy Worksheets'));
+context.setConfig_('drive_root_id', worksheetFolder.getId());
+folderPicker = context.adminDriveFolders_({ sessionId: adminLogin.sessionId });
+assert.equal(folderPicker.currentFolderId, worksheetFolder.getId());
+assert.equal(folderPicker.folders[0].current, true, 'current master folder must appear first');
 context.adminAssignResource_({ sessionId: adminLogin.sessionId, studentId: student.student_id, resourceId: uploadedResource.resource_id, dueDate: '2026-08-20' });
 const fileAssignment = rows('Portal_Assignments').find(row => row.resource_id === uploadedResource.resource_id);
 const secureDownload = context.parentResource_({ sessionId: firstLogin.sessionId, studentId: student.student_id, resourceId: uploadedResource.resource_id });

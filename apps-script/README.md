@@ -56,12 +56,14 @@ No `GOOGLE_CLIENT_ID` property is needed. An old property can be deleted after t
 Use **Academy Login > Library**.
 
 1. For a new PDF, image, Word, Excel, PowerPoint, RTF, or text file, use **Upload new material**. Choose whether the child types answers, uploads a notebook scan, or only views the material.
-2. For an existing Google Sheet, Google Doc, PDF, or other file in the academy Drive, scan the master folder and publish only an academy-owned item.
+2. For an existing Google Sheet, Google Doc, PDF, or other file, choose its parent folder from the searchable My Drive folder list, scan it, and publish only an academy-owned item. The previously selected master folder appears first automatically.
 3. Use **Assign to a child**, add an optional due date, and save.
 4. For handwritten work, the child opens the assignment, answers in a notebook, and uploads one PDF, JPG, or PNG from the parent portal.
 5. The academy opens **Learning**, previews the protected upload, adds feedback, and marks it reviewed or requests changes.
 
 Apps Script creates `Eduwave Portal Uploads/Resources` and `Eduwave Portal Uploads/Student Submissions` in the academy account. Their IDs are stored in `Portal_Config`. Keep both folders private. Parents receive rendered previews or short-lived in-page file data; they are never added as Drive viewers and never receive a Drive ID.
+
+The folder picker lists up to 200 direct folders from the academy account's My Drive root. A compact manual-ID fallback remains available for older shared folders that are accessible to the account but do not appear directly under My Drive.
 
 ## Free-trial limits
 
