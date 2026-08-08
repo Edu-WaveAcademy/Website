@@ -21,6 +21,11 @@ assert.match(script, /adminUploadResource/, 'academy mixed-file upload flow must
 assert.match(script, /adminSubmissionFile/, 'academy protected submission preview must be present');
 assert.match(script, /adminDriveFolders/, 'academy Drive folder picker must be present');
 assert.match(script, /drive-folder-list/, 'Drive folders must use a scrollable picker instead of an ID-first form');
+assert.match(script, /Upload a new file/, 'material library must offer a clear upload route');
+assert.match(script, /Use a file already in Google Drive/, 'material library must offer a clear Drive route');
+assert.match(script, /Show files in this folder/, 'Drive discovery must use parent-friendly wording');
+assert.match(script, /drive-resource-file/, 'found Drive files must immediately populate a usable selector');
+assert.doesNotMatch(script, /Index selected folder|Publish an indexed file|Indexed academy file|Scan limit/, 'technical indexing language must not appear in the academy interface');
 assert.match(script, /Parents and enrolled students/, 'academy family directory must identify approved parents and their children');
 assert.match(script, /family-search/, 'academy family directory must be searchable');
 assert.match(script, /unlinkedStudents/, 'academy family directory must flag active students without a parent link');

@@ -212,8 +212,12 @@ const uploadedResource = context.adminUploadResource_({
 assert.equal(uploadedResource.kind, 'office');
 assert.equal(uploadedResource.submission_type, 'file_upload');
 const worksheetFolder = driveRoot.createFolder('Academy Worksheets');
+worksheetFolder.createFile(new DriveBlob(Buffer.from('existing worksheet'), 'application/pdf', 'existing-worksheet.pdf'));
 let folderPicker = context.adminDriveFolders_({ sessionId: adminLogin.sessionId });
 assert.ok(folderPicker.folders.some(folder => folder.name === 'Academy Worksheets'));
+const driveScan = context.adminScanDrive_({ sessionId: adminLogin.sessionId, rootFolderId: worksheetFolder.getId() });
+assert.equal(driveScan.found, 1, 'folder scan must report usable files rather than technical index rows');
+assert.equal(driveScan.files[0].name, 'existing-worksheet.pdf');
 context.setConfig_('drive_root_id', worksheetFolder.getId());
 folderPicker = context.adminDriveFolders_({ sessionId: adminLogin.sessionId });
 assert.equal(folderPicker.currentFolderId, worksheetFolder.getId());
