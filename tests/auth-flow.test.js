@@ -81,6 +81,7 @@ const context = vm.createContext({
 
 vm.runInContext(fs.readFileSync('apps-script/Code.gs', 'utf8'), context, { filename: 'Code.gs' });
 context.setupEduwave();
+assert.equal(context.authorizeEduwaveMail().remainingDailyQuota, 100);
 
 function rows(name) {
   const [headers, ...data] = sheets.get(name).data;

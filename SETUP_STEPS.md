@@ -26,6 +26,8 @@ Approve these permissions:
 - Read Google Docs used for portal previews
 - Send login-code emails as the academy account
 
+After setup, select `authorizeEduwaveMail` and click **Run**. Approve the email permission when Google prompts you. The helper checks the remaining mail quota but does not send an email.
+
 The function safely creates or extends:
 
 - `Portal_Parents`: adds `email_verified_at`
@@ -53,6 +55,8 @@ Both addresses can use Academy Login. The academy address is recorded as `admin`
 4. Set **Execute as** to `Me`.
 5. Set **Who has access** to `Anyone`.
 6. Deploy and finish the authorization prompt.
+
+Confirm **Execute as** is `Me`. If it is set to the visitor, parents would be asked for Google permissions and login emails cannot be sent anonymously.
 
 The `/exec` URL normally stays unchanged. If it changes, update `CONFIG.apiUrl` at the top of `script.js`.
 

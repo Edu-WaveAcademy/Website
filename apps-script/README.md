@@ -10,6 +10,7 @@ This folder contains the complete backend for the GitHub Pages website. It uses 
 4. Open **Project Settings**, enable **Show appsscript.json manifest file in editor**, and replace it with this folder's `appsscript.json`.
 5. Select `setupEduwave` and click **Run**.
 6. Approve the requested Sheets, Drive read-only, Docs read-only, and send-email permissions.
+7. Select `authorizeEduwaveMail`, click **Run**, and approve the email permission. This checks quota without sending an email.
 
 Running `setupEduwave` again is safe. It adds `Portal_LoginCodes`, extends `Portal_Parents` and `Portal_Sessions`, generates a private `AUTH_SECRET` Script Property, and preserves all existing portal and legacy data.
 
