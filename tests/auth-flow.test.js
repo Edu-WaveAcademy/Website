@@ -117,8 +117,10 @@ assert.equal(firstLogin.role, 'parent');
 assert.equal(firstLogin.parent.email_verified, true);
 
 const student = context.adminCreateStudent_({ sessionId: adminLogin.sessionId, parentId: rows('Portal_Parents')[0].parent_id, name: 'Test Student', classLevel: '8' });
-context.append_('Portal_Resources', { resource_id: 'RES-TEST', drive_id: 'DRIVE-TEST', title: 'Maths worksheet', subject: 'Maths', class_level: '8', kind: 'sheet', status: 'published', created_at: new Date().toISOString(), updated_at: new Date().toISOString() });
+context.append_('Portal_Resources', { resource_id: 'RES-TEST', drive_id: '', title: 'Maths worksheet', subject: 'Maths', class_level: '8', kind: 'worksheet', status: 'published', created_at: new Date().toISOString(), updated_at: new Date().toISOString() });
 context.append_('Portal_Assignments', { assignment_id: 'ASN-TEST', student_id: student.student_id, resource_id: 'RES-TEST', title_override: '', visible_from: new Date().toISOString().slice(0, 10), due_date: '', status: 'published', created_at: new Date().toISOString() });
+context.append_('Portal_WorksheetRows', { resource_id: 'RES-TEST', row_no: '1', question: '6 x 7', hint: 'Multiply' });
+assert.equal(context.parentResource_({ sessionId: firstLogin.sessionId, studentId: student.student_id, resourceId: 'RES-TEST' }).values[1][1], '6 x 7');
 context.parentSubmitAssignment_({ sessionId: firstLogin.sessionId, studentId: student.student_id, assignmentId: 'ASN-TEST', answers: [{ row: 2, question: '6 x 7', answer: '42' }], note: 'Completed independently.' });
 assert.equal(rows('Portal_Submissions')[0].status, 'submitted');
 assert.equal(context.parentDashboard_({ sessionId: firstLogin.sessionId }).dashboard.children[0].resources[0].submission_status, 'submitted');
