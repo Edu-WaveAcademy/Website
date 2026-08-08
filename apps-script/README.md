@@ -55,15 +55,17 @@ No `GOOGLE_CLIENT_ID` property is needed. An old property can be deleted after t
 
 Use **Academy Login > Library**.
 
-1. Choose **Upload a new file** for a PDF, image, Word, Excel, PowerPoint, RTF, or text file saved on the current phone or computer.
-2. Choose **Use a file already in Google Drive** for existing academy material. Select a folder, click **Show files in this folder**, choose one of the files shown, and click **Add selected file to Eduwave**. The previously selected folder appears first automatically.
-3. Use **Assign material to a child**, add an optional due date, and save. Only this assigned material appears to that family.
-4. For handwritten work, the child opens the assignment, answers in a notebook, and uploads one PDF, JPG, or PNG from the parent portal.
-5. The academy opens **Learning**, previews the protected upload, adds feedback, and marks it reviewed or requests changes.
+1. Run `setupMaterialLibraryAutomation` once after deploying this version. It upgrades the catalogue tabs, imports the configured master Drive folder, and installs one hourly refresh trigger.
+2. The Library reads its persistent catalogue from `Portal_Resources`; it does not load the full Drive tree whenever the page opens.
+3. Supported, academy-owned files are added automatically as unassigned material. Their Drive folder path is retained and subject/class are inferred from file and folder names when possible.
+4. Use **Assign material to a child**, add an optional due date, and save. Only this assigned material appears to that family.
+5. Use **Upload from this device** only for a new scan or file that is not already inside the configured master folder.
+6. For handwritten work, the child opens the assignment, answers in a notebook, and uploads one PDF, JPG, or PNG from the parent portal.
+7. The academy opens **Learning**, previews the protected upload, adds feedback, and marks it reviewed or requests changes.
 
 Apps Script creates `Eduwave Portal Uploads/Resources` and `Eduwave Portal Uploads/Student Submissions` in the academy account. Their IDs are stored in `Portal_Config`. Keep both folders private. Parents receive rendered previews or short-lived in-page file data; they are never added as Drive viewers and never receive a Drive ID.
 
-The folder picker lists up to 200 direct folders from the academy account's My Drive root. A compact manual-ID fallback remains available for older shared folders that are accessible to the account but do not appear directly under My Drive.
+The background import is resumable. `Portal_DriveSync` stores pending folders and Drive continuation tokens, so a large archive continues on the next run instead of starting again. The portal reports supported-material counts, folders remaining, and every skipped file with its full Drive path and reason. Typical skipped reasons are external ownership, unsupported archive/video format, Google Slides, or the 10 MB secure-delivery limit.
 
 ## View enrolled families
 

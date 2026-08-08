@@ -19,6 +19,14 @@ class Range {
       this.sheet.data[targetRow][this.column - 1 + x] = value;
     }));
   }
+  clearContent() {
+    for (let y = 0; y < this.rows; y += 1) {
+      for (let x = 0; x < this.columns; x += 1) {
+        const targetRow = this.row - 1 + y;
+        if (this.sheet.data[targetRow]) this.sheet.data[targetRow][this.column - 1 + x] = '';
+      }
+    }
+  }
 }
 
 class Sheet {
@@ -42,6 +50,7 @@ let uuidCounter = 0;
 const bytes = value => Buffer.isBuffer(value) ? value : Buffer.from(value);
 const driveFiles = new Map();
 const driveFolders = new Map();
+const projectTriggers = [];
 let driveCounter = 0;
 
 class DriveBlob {
@@ -134,6 +143,14 @@ const context = vm.createContext({
     getFolderById: id => { if (!driveFolders.has(id)) throw new Error('Folder not found'); return driveFolders.get(id); },
     getFileById: id => { if (!driveFiles.has(id)) throw new Error('File not found'); return driveFiles.get(id); }
   },
+  ScriptApp: {
+    getProjectTriggers: () => projectTriggers,
+    newTrigger: handler => ({
+      timeBased() { return this; },
+      everyHours(hours) { this.hours = hours; return this; },
+      create() { const trigger = { getHandlerFunction: () => handler, hours: this.hours }; projectTriggers.push(trigger); return trigger; }
+    })
+  },
   ContentService: { MimeType: { JSON: 'json' }, createTextOutput: text => ({ text, setMimeType() { return this; } }) },
   MimeType: { GOOGLE_SHEETS: 'application/vnd.google-apps.spreadsheet', GOOGLE_DOCS: 'application/vnd.google-apps.document', PDF: 'application/pdf' }
 });
@@ -213,12 +230,24 @@ assert.equal(uploadedResource.kind, 'office');
 assert.equal(uploadedResource.submission_type, 'file_upload');
 const worksheetFolder = driveRoot.createFolder('Academy Worksheets');
 worksheetFolder.createFile(new DriveBlob(Buffer.from('existing worksheet'), 'application/pdf', 'existing-worksheet.pdf'));
+worksheetFolder.createFile(new DriveBlob(Buffer.from('archive'), 'application/zip', 'old-material.zip'));
 let folderPicker = context.adminDriveFolders_({ sessionId: adminLogin.sessionId });
 assert.ok(folderPicker.folders.some(folder => folder.name === 'Academy Worksheets'));
 const driveScan = context.adminScanDrive_({ sessionId: adminLogin.sessionId, rootFolderId: worksheetFolder.getId() });
 assert.equal(driveScan.found, 1, 'folder scan must report usable files rather than technical index rows');
 assert.equal(driveScan.files[0].name, 'existing-worksheet.pdf');
 context.setConfig_('drive_root_id', worksheetFolder.getId());
+context.installMaterialRefreshTrigger_();
+assert.equal(projectTriggers.length, 1, 'hourly material refresh trigger must be installed once');
+context.installMaterialRefreshTrigger_();
+assert.equal(projectTriggers.length, 1, 'material refresh trigger installation must be idempotent');
+context.startMaterialSync_(true);
+const materialSync = context.refreshMaterialLibrary_({ maxMs: 5000, maxFolders: 20 });
+const automaticMaterial = rows('Portal_Resources').find(row => row.drive_id === driveScan.files[0].drive_id);
+assert.equal(automaticMaterial.auto_added, 'true');
+assert.equal(automaticMaterial.library_path, 'Academy Worksheets');
+assert.equal(materialSync.pendingFolders, 0);
+assert.ok(materialSync.issues.some(issue => issue.name === 'old-material.zip' && /Unsupported format/.test(issue.reason)));
 folderPicker = context.adminDriveFolders_({ sessionId: adminLogin.sessionId });
 assert.equal(folderPicker.currentFolderId, worksheetFolder.getId());
 assert.equal(folderPicker.folders[0].current, true, 'current master folder must appear first');
