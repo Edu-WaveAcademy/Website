@@ -17,5 +17,9 @@ const adminDialog = html.slice(html.indexOf('<dialog id="admin-dialog"'), html.i
 assert.doesNotMatch(adminDialog, /studywitheduwaveacademy@gmail\.com|diwij\.narang2001@gmail\.com/i, 'approved addresses must not be exposed in the academy login dialog');
 assert.match(script, /parentSubmitAssignment/, 'student worksheet submission flow must be present');
 assert.match(script, /adminReviewSubmission/, 'academy worksheet review flow must be present');
+assert.match(script, /adminUploadResource/, 'academy mixed-file upload flow must be present');
+assert.match(script, /adminSubmissionFile/, 'academy protected submission preview must be present');
+assert.match(script, /\.pdf,\.jpg,\.jpeg,\.png,\.doc,\.docx,\.xls,\.xlsx,\.ppt,\.pptx/, 'academy file picker must accept common teaching formats');
+assert.doesNotMatch(script, /drive\.google\.com\/.*(?:attachment|submission)|attachment_drive_id/, 'frontend must not expose uploaded Drive identifiers');
 
-console.log(`Site structure passed: ${ids.length} unique IDs, valid anchors, balanced CSS, no legacy login.`);
+console.log(`Site structure passed: ${ids.length} unique IDs, valid anchors, balanced CSS, secure mixed-file workflow, no legacy login.`);

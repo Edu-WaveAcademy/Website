@@ -40,6 +40,57 @@ const properties = new Map();
 const emails = [];
 let uuidCounter = 0;
 const bytes = value => Buffer.isBuffer(value) ? value : Buffer.from(value);
+const driveFiles = new Map();
+const driveFolders = new Map();
+let driveCounter = 0;
+
+class DriveBlob {
+  constructor(data, mimeType, name) { this.data = bytes(data); this.mimeType = mimeType; this.name = name; }
+  getBytes() { return this.data; }
+  getContentType() { return this.mimeType; }
+}
+
+class DriveFile {
+  constructor(blob, parent) {
+    this.id = `drive-file-${++driveCounter}`;
+    this.blob = blob;
+    this.parent = parent;
+    this.trashed = false;
+    driveFiles.set(this.id, this);
+  }
+  getId() { return this.id; }
+  getName() { return this.blob.name; }
+  getMimeType() { return this.blob.mimeType; }
+  getSize() { return this.blob.data.length; }
+  getBlob() { return this.blob; }
+  getOwner() { return { getEmail: () => 'studywitheduwaveacademy@gmail.com' }; }
+  getLastUpdated() { return new Date(); }
+  getParents() { return iterator([this.parent]); }
+  setTrashed(value) { this.trashed = value; }
+}
+
+class DriveFolder {
+  constructor(name) {
+    this.id = `drive-folder-${++driveCounter}`;
+    this.name = name;
+    this.files = [];
+    this.folders = [];
+    driveFolders.set(this.id, this);
+  }
+  getId() { return this.id; }
+  getName() { return this.name; }
+  createFolder(name) { const folder = new DriveFolder(name); this.folders.push(folder); return folder; }
+  createFile(blob) { const file = new DriveFile(blob, this); this.files.push(file); return file; }
+  getFiles() { return iterator(this.files); }
+  getFolders() { return iterator(this.folders); }
+}
+
+function iterator(items) {
+  let index = 0;
+  return { hasNext: () => index < items.length, next: () => items[index++] };
+}
+
+const driveRoot = new DriveFolder('Drive root');
 
 const context = vm.createContext({
   console,
@@ -73,10 +124,17 @@ const context = vm.createContext({
     computeDigest: (_algorithm, value) => crypto.createHash('sha256').update(String(value)).digest(),
     computeHmacSha256Signature: (value, key) => crypto.createHmac('sha256', String(key)).update(String(value)).digest(),
     base64Encode: value => bytes(value).toString('base64'),
-    base64EncodeWebSafe: value => bytes(value).toString('base64url')
+    base64EncodeWebSafe: value => bytes(value).toString('base64url'),
+    base64Decode: value => Buffer.from(value, 'base64'),
+    newBlob: (value, mimeType, name) => new DriveBlob(value, mimeType, name)
+  },
+  DriveApp: {
+    createFolder: name => driveRoot.createFolder(name),
+    getFolderById: id => { if (!driveFolders.has(id)) throw new Error('Folder not found'); return driveFolders.get(id); },
+    getFileById: id => { if (!driveFiles.has(id)) throw new Error('File not found'); return driveFiles.get(id); }
   },
   ContentService: { MimeType: { JSON: 'json' }, createTextOutput: text => ({ text, setMimeType() { return this; } }) },
-  MimeType: { GOOGLE_SHEETS: 'sheet', GOOGLE_DOCS: 'doc', PDF: 'pdf' }
+  MimeType: { GOOGLE_SHEETS: 'application/vnd.google-apps.spreadsheet', GOOGLE_DOCS: 'application/vnd.google-apps.document', PDF: 'application/pdf' }
 });
 
 vm.runInContext(fs.readFileSync('apps-script/Code.gs', 'utf8'), context, { filename: 'Code.gs' });
@@ -128,9 +186,56 @@ context.adminReviewSubmission_({ sessionId: adminLogin.sessionId, submissionId: 
 assert.equal(rows('Portal_Submissions')[0].status, 'reviewed');
 assert.throws(() => context.parentSubmitAssignment_({ sessionId: firstLogin.sessionId, studentId: student.student_id, assignmentId: 'ASN-TEST', answers: [{ row: 2, answer: '43' }] }), /reviewed and is now locked/i);
 
+const officeMime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+const uploadedResource = context.adminUploadResource_({
+  sessionId: adminLogin.sessionId,
+  title: 'Handwritten algebra practice',
+  subject: 'Maths',
+  classLevel: '8',
+  submissionType: 'file_upload',
+  file: { name: 'algebra-practice.docx', mimeType: officeMime, data: Buffer.from('test office file').toString('base64') }
+});
+assert.equal(uploadedResource.kind, 'office');
+assert.equal(uploadedResource.submission_type, 'file_upload');
+context.adminAssignResource_({ sessionId: adminLogin.sessionId, studentId: student.student_id, resourceId: uploadedResource.resource_id, dueDate: '2026-08-20' });
+const fileAssignment = rows('Portal_Assignments').find(row => row.resource_id === uploadedResource.resource_id);
+const secureDownload = context.parentResource_({ sessionId: firstLogin.sessionId, studentId: student.student_id, resourceId: uploadedResource.resource_id });
+assert.equal(secureDownload.kind, 'download');
+assert.match(secureDownload.data_url, /^data:/);
+assert.equal(secureDownload.submissionType, 'file_upload');
+
+context.parentSubmitAssignment_({
+  sessionId: firstLogin.sessionId,
+  studentId: student.student_id,
+  assignmentId: fileAssignment.assignment_id,
+  note: 'Completed in my notebook.',
+  attachment: { name: 'answers.pdf', mimeType: 'application/pdf', data: Buffer.from('scanned answer pages').toString('base64') }
+});
+const fileSubmission = rows('Portal_Submissions').find(row => row.assignment_id === fileAssignment.assignment_id);
+const firstAttachmentId = fileSubmission.attachment_drive_id;
+assert.ok(firstAttachmentId);
+const publicSubmission = context.adminData_({ email: 'studywitheduwaveacademy@gmail.com', access_role: 'admin' }).submissions.find(row => row.submission_id === fileSubmission.submission_id);
+assert.equal(publicSubmission.has_attachment, true);
+assert.equal('attachment_drive_id' in publicSubmission, false, 'Drive IDs must not be exposed in dashboard payloads');
+assert.equal(context.adminSubmissionFile_({ sessionId: adminLogin.sessionId, submissionId: fileSubmission.submission_id }).kind, 'pdf');
+
+context.adminReviewSubmission_({ sessionId: adminLogin.sessionId, submissionId: fileSubmission.submission_id, status: 'needs_changes', feedback: 'Please scan the final page again.' });
+context.parentSubmitAssignment_({
+  sessionId: firstLogin.sessionId,
+  studentId: student.student_id,
+  assignmentId: fileAssignment.assignment_id,
+  note: 'Added the final page.',
+  attachment: { name: 'answers-final.png', mimeType: 'image/png', data: Buffer.from('replacement page').toString('base64') }
+});
+assert.equal(driveFiles.get(firstAttachmentId).trashed, true, 'replaced scans must be moved to trash');
+const replacedSubmission = rows('Portal_Submissions').find(row => row.submission_id === fileSubmission.submission_id);
+assert.equal(context.adminSubmissionFile_({ sessionId: adminLogin.sessionId, submissionId: replacedSubmission.submission_id }).kind, 'image');
+context.adminReviewSubmission_({ sessionId: adminLogin.sessionId, submissionId: replacedSubmission.submission_id, status: 'reviewed', feedback: 'Complete.' });
+assert.throws(() => context.parentSubmitAssignment_({ sessionId: firstLogin.sessionId, studentId: student.student_id, assignmentId: fileAssignment.assignment_id, note: 'Another update.' }), /reviewed and is now locked/i);
+
 context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', deviceId: 'second-device' });
 const secondCode = emails.at(-1).body.match(/\b(\d{6})\b/)[1];
 context.verifyLoginCode_({ role: 'parent', email: 'parent@example.com', code: secondCode, deviceId: 'second-device', deviceLabel: 'Second browser' });
 assert.throws(() => context.parentDashboard_({ sessionId: firstLogin.sessionId }), /session has ended/i, 'new login must revoke the previous session');
 
-console.log('Auth flow passed: signup, approval, OTP, worksheet submission/review, hashed storage, and session revocation.');
+console.log('Auth flow passed: login, worksheet answers, mixed-file assignment, scanned submission/review, private Drive metadata, and session revocation.');

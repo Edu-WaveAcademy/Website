@@ -9,10 +9,10 @@ This folder contains the complete backend for the GitHub Pages website. It uses 
 3. Replace the existing `Code.gs` with this folder's `Code.gs`.
 4. Open **Project Settings**, enable **Show appsscript.json manifest file in editor**, and replace it with this folder's `appsscript.json`.
 5. Select `setupEduwave` and click **Run**.
-6. Approve the requested Sheets, Drive read-only, Docs read-only, and send-email permissions.
+6. Approve the requested Sheets, Drive, Docs read-only, and send-email permissions. Drive write access is required only for the private resource and student-submission upload folders.
 7. Select `authorizeEduwaveMail`, click **Run**, and approve the email permission. This checks quota without sending an email.
 
-Running `setupEduwave` again is safe. It adds `Portal_LoginCodes`, extends `Portal_Parents` and `Portal_Sessions`, generates a private `AUTH_SECRET` Script Property, and preserves all existing portal and legacy data.
+Running `setupEduwave` again is safe. It adds any missing portal columns, including assignment type and protected-submission metadata, generates a private `AUTH_SECRET` Script Property, and preserves all existing portal and legacy data.
 
 Click **Run**, not **Debug**. If an earlier setup reached the six-minute limit, its blocking completion alert may have been waiting in the spreadsheet window. The current setup uses a non-blocking notification, so replace `Code.gs` and rerun it; completed tabs and records are preserved.
 
@@ -23,7 +23,7 @@ Click **Run**, not **Debug**. If an earlier setup reached the six-minute limit, 
 3. Choose **New version**.
 4. Use **Execute as: Me**.
 5. Use **Who has access: Anyone**.
-6. Deploy and authorize the new mail scope when prompted.
+6. Deploy and authorize the Drive and mail scopes when prompted.
 7. Keep the existing `/exec` URL. If Google issues a different URL, replace `CONFIG.apiUrl` in `../script.js`.
 
 No `GOOGLE_CLIENT_ID` property is needed. An old property can be deleted after the email-code deployment is working.
@@ -49,10 +49,18 @@ No `GOOGLE_CLIENT_ID` property is needed. An old property can be deleted after t
 - The browser stores the active opaque session in `sessionStorage`, not a reusable password.
 - The master Sheet and Drive folder must remain private.
 
-## Drive import
+## Add and assign learning material
 
-Use **Academy Login > Library**. Paste the master folder ID, scan it, publish only academy-owned files, and assign resources to children. Parents receive rendered portal previews; they are not added as Drive viewers.
+Use **Academy Login > Library**.
+
+1. For a new PDF, image, Word, Excel, PowerPoint, RTF, or text file, use **Upload new material**. Choose whether the child types answers, uploads a notebook scan, or only views the material.
+2. For an existing Google Sheet, Google Doc, PDF, or other file in the academy Drive, scan the master folder and publish only an academy-owned item.
+3. Use **Assign to a child**, add an optional due date, and save.
+4. For handwritten work, the child opens the assignment, answers in a notebook, and uploads one PDF, JPG, or PNG from the parent portal.
+5. The academy opens **Learning**, previews the protected upload, adds feedback, and marks it reviewed or requests changes.
+
+Apps Script creates `Eduwave Portal Uploads/Resources` and `Eduwave Portal Uploads/Student Submissions` in the academy account. Their IDs are stored in `Portal_Config`. Keep both folders private. Parents receive rendered previews or short-lived in-page file data; they are never added as Drive viewers and never receive a Drive ID.
 
 ## Free-trial limits
 
-Apps Script mail quotas apply to login emails. Google consumer accounts currently have a daily recipient limit, so keep sessions active instead of requesting a code repeatedly. PDFs and images must be at most 10 MB for portal preview. Convert DOCX files to Google Docs or PDF before publishing; videos remain excluded.
+Apps Script mail quotas apply to login emails. Google consumer accounts have daily recipient limits, so keep sessions active instead of requesting a code repeatedly. New uploads must be at most 8 MB; portal previews are capped at 10 MB. PDFs and images preview in the portal. Native Google Docs and Sheets render as controlled views. Word, Excel, and PowerPoint files are delivered as authenticated downloads. Videos and executable/archive formats remain excluded.

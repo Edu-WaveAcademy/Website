@@ -2928,6 +2928,102 @@ dialog[open] {
   width: fit-content;
 }
 
+.upload-field {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  color: var(--forest-dark);
+  background: #f3f6ec;
+  border: 1px dashed rgba(25, 81, 64, 0.45);
+  border-radius: 0.8rem;
+}
+
+.upload-field > span:not(.upload-icon),
+.upload-field b,
+.upload-field small,
+.upload-field em {
+  display: block;
+}
+
+.upload-field small,
+.upload-field em,
+.field-help {
+  margin-top: 0.25rem;
+  color: var(--ink-muted);
+  font-size: 0.62rem;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.upload-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  color: var(--white);
+  background: var(--forest);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.upload-field input[type="file"] {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 0.65rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+}
+
+.submission-attachment,
+.download-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem;
+  margin: 0.8rem 0;
+  background: #edf3e8;
+  border: 1px solid rgba(25, 81, 64, 0.16);
+  border-radius: 0.8rem;
+}
+
+.submission-attachment b,
+.submission-attachment small {
+  display: block;
+}
+
+.submission-attachment small {
+  margin-top: 0.2rem;
+  color: var(--ink-muted);
+  font-size: 0.62rem;
+}
+
+.submission-attachment .button {
+  flex: 0 0 auto;
+}
+
+.download-card {
+  max-width: 720px;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 1.3rem;
+  background: var(--white);
+}
+
+.download-card p,
+.assignment-note {
+  margin: 0;
+}
+
+.admin-card-accent {
+  background: linear-gradient(145deg, #fffdf7, #f2f6e9);
+  border-color: rgba(25, 81, 64, 0.25);
+}
+
 .teacher-feedback {
   padding: 0.8rem 0.9rem;
   color: var(--forest-dark);
@@ -3402,6 +3498,11 @@ dialog[open] {
 
   .viewer-pdf {
     min-height: 520px;
+  }
+
+  .submission-attachment {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 
