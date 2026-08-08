@@ -9,11 +9,14 @@
 - Added one-active-session enforcement for parent and academy accounts.
 - Restricted Academy Login to `admin_email` and `developer_email` in `Portal_Config` without exposing either address in the dialog.
 - Added parent approval and denial controls to the Families admin screen.
-- Preserved the existing student, fee, resource, Drive index, assignment, attendance, progress, reminder, and audit records.
+- Preserved family, student, fee, attendance, progress, reminder, current portal-upload, and audit records.
+- Retired the obsolete Drive archive importer after the syllabus changed.
+- Removed automatic scanning, folder selection, hourly refresh jobs, and archive-only permissions.
+- Kept manual current-material uploads and secure student-submission storage.
 
 ## Required migration
 
-Replace both files under `apps-script`, run `setupEduwave`, and deploy a new Apps Script Web app version. The existing website cannot send login codes until the new backend version and mail permission are active.
+Replace both files under `apps-script`, remove the old scanner triggers, run `retireLegacyDriveArchive` once, run `setupEduwave`, and deploy a new Apps Script Web app version.
 
 See `SETUP_STEPS.md` for the exact sequence.
 

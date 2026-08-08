@@ -15,15 +15,21 @@ If the manifest is hidden, open **Project Settings** and enable **Show appsscrip
 
 ## 2. Upgrade the Sheet schema
 
-Select `setupEduwave` in the Apps Script function list and click **Run**.
+Before running setup, open **Triggers** in Apps Script and delete these old archive jobs if present:
+
+- `refreshMaterialLibrary`
+- `continueMaterialLibraryImport`
+
+Select `retireLegacyDriveArchive` and click **Run** once. This disconnects the obsolete syllabus archive, removes its portal resources and assignments, and preserves files uploaded directly through Eduwave.
+
+Then select `setupEduwave` in the Apps Script function list and click **Run**.
 
 Use **Run**, not **Debug**. The function is safe to rerun and now finishes without waiting for a blocking spreadsheet alert. If an older copy timed out after six minutes, check whether `Portal_LoginCodes` was already created, replace `Code.gs` with the current file, and run `setupEduwave` again.
 
 Approve these permissions:
 
 - View and update the academy spreadsheet
-- Read academy Drive files
-- Read Google Docs used for portal previews
+- Create and read files in the private `Eduwave Portal Uploads` folder
 - Send login-code emails as the academy account
 
 After setup, select `authorizeEduwaveMail` and click **Run**. Approve the email permission when Google prompts you. The helper checks the remaining mail quota but does not send an email.
@@ -85,7 +91,8 @@ The Google Cloud OAuth client is no longer used. Leave it untouched until email 
 ## Operational rules
 
 - Do not manually add parents as Drive viewers.
-- Do not make the master Sheet or Drive folder public.
+- Do not make the operational Sheet or `Eduwave Portal Uploads` folder public.
+- Add teaching material only through **Academy Login > Library > Upload current material**.
 - Approve signup requests only after confirming they belong to a real enrolled family.
 - Ask the academy Gmail account owner to enable Google two-step verification.
 - Never use a shared admin password. Academy access is controlled by the allowlisted email plus a one-time code.

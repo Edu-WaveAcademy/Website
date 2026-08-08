@@ -42,7 +42,9 @@ const sheets = new Map();
 const spreadsheet = {
   getId: () => 'test-sheet',
   getSheetByName: name => sheets.get(name) || null,
-  insertSheet: name => { const sheet = new Sheet(name); sheets.set(name, sheet); return sheet; }
+  insertSheet: name => { const sheet = new Sheet(name); sheets.set(name, sheet); return sheet; },
+  deleteSheet: sheet => sheets.delete(sheet.name),
+  toast() {}
 };
 const properties = new Map();
 const emails = [];
@@ -50,7 +52,6 @@ let uuidCounter = 0;
 const bytes = value => Buffer.isBuffer(value) ? value : Buffer.from(value);
 const driveFiles = new Map();
 const driveFolders = new Map();
-const projectTriggers = [];
 let driveCounter = 0;
 
 class DriveBlob {
@@ -143,31 +144,24 @@ const context = vm.createContext({
     getFolderById: id => { if (!driveFolders.has(id)) throw new Error('Folder not found'); return driveFolders.get(id); },
     getFileById: id => { if (!driveFiles.has(id)) throw new Error('File not found'); return driveFiles.get(id); }
   },
-  ScriptApp: {
-    getProjectTriggers: () => projectTriggers,
-    deleteTrigger: trigger => { const index = projectTriggers.indexOf(trigger); if (index >= 0) projectTriggers.splice(index, 1); },
-    newTrigger: handler => ({
-      timeBased() { return this; },
-      everyHours(hours) { this.hours = hours; return this; },
-      everyMinutes(minutes) { this.minutes = minutes; return this; },
-      create() { const trigger = { getHandlerFunction: () => handler, hours: this.hours, minutes: this.minutes }; projectTriggers.push(trigger); return trigger; }
-    })
-  },
   ContentService: { MimeType: { JSON: 'json' }, createTextOutput: text => ({ text, setMimeType() { return this; } }) },
-  MimeType: { GOOGLE_SHEETS: 'application/vnd.google-apps.spreadsheet', GOOGLE_DOCS: 'application/vnd.google-apps.document', PDF: 'application/pdf' }
 });
 
 const backendCode = fs.readFileSync('apps-script/Code.gs', 'utf8');
 const manifest = JSON.parse(fs.readFileSync('apps-script/appsscript.json', 'utf8'));
-assert.match(backendCode, /ScriptApp\.newTrigger\('refreshMaterialLibrary'\)/, 'backend must install the hourly Drive refresh trigger');
-assert.ok(manifest.oauthScopes.includes('https://www.googleapis.com/auth/script.scriptapp'), 'manifest must authorize trigger management');
+assert.match(backendCode, /retireLegacyDriveArchive/, 'backend must include the one-time legacy archive cleanup');
+assert.doesNotMatch(backendCode, /ScriptApp|refreshMaterialLibrary|adminScanDrive|adminDriveFolders/, 'legacy Drive scanning and trigger code must stay removed');
+assert.ok(!manifest.oauthScopes.includes('https://www.googleapis.com/auth/script.scriptapp'), 'trigger-management permission must be removed');
+assert.ok(!manifest.oauthScopes.includes('https://www.googleapis.com/auth/documents.readonly'), 'Google Docs archive permission must be removed');
 vm.runInContext(backendCode, context, { filename: 'Code.gs' });
 context.setupEduwave();
 assert.equal(context.authorizeEduwaveMail().remainingDailyQuota, 100);
 
 function rows(name) {
   const [headers, ...data] = sheets.get(name).data;
-  return data.map(row => Object.fromEntries(headers.map((header, index) => [header, String(row[index] ?? '')])));
+  return data
+    .filter(row => row.some(value => value !== ''))
+    .map(row => Object.fromEntries(headers.map((header, index) => [header, String(row[index] ?? '')])));
 }
 
 context.signupParent_({ name: 'Test Parent', email: 'parent@example.com', phone: '9876543210' });
@@ -234,36 +228,29 @@ const uploadedResource = context.adminUploadResource_({
 });
 assert.equal(uploadedResource.kind, 'office');
 assert.equal(uploadedResource.submission_type, 'file_upload');
-const worksheetFolder = driveRoot.createFolder('Academy Worksheets');
-worksheetFolder.createFile(new DriveBlob(Buffer.from('existing worksheet'), 'application/pdf', 'existing-worksheet.pdf'));
-worksheetFolder.createFile(new DriveBlob(Buffer.from('archive'), 'application/zip', 'old-material.zip'));
-let folderPicker = context.adminDriveFolders_({ sessionId: adminLogin.sessionId });
-assert.ok(folderPicker.folders.some(folder => folder.name === 'Academy Worksheets'));
-const driveScan = context.adminScanDrive_({ sessionId: adminLogin.sessionId, rootFolderId: worksheetFolder.getId() });
-assert.equal(driveScan.found, 1, 'folder scan must report usable files rather than technical index rows');
-assert.equal(driveScan.files[0].name, 'existing-worksheet.pdf');
-context.setConfig_('drive_root_id', worksheetFolder.getId());
-context.installMaterialRefreshTrigger();
-assert.equal(projectTriggers.length, 1, 'hourly material refresh trigger must be installed once');
-context.installMaterialRefreshTrigger();
-assert.equal(projectTriggers.length, 1, 'material refresh trigger installation must be idempotent');
-context.startMaterialSync_(true);
-context.installMaterialRefreshTrigger();
-assert.equal(projectTriggers.length, 2, 'a temporary catch-up trigger must be installed while folders remain');
-context.installMaterialRefreshTrigger();
-assert.equal(projectTriggers.length, 2, 'catch-up trigger installation must be idempotent');
-const materialSync = context.refreshMaterialLibrary_({ maxMs: 5000, maxFolders: 20 });
-const automaticMaterial = rows('Portal_Resources').find(row => row.drive_id === driveScan.files[0].drive_id);
-assert.equal(automaticMaterial.auto_added, 'true');
-assert.equal(automaticMaterial.library_path, 'Academy Worksheets');
-assert.equal(materialSync.pendingFolders, 0);
-context.ensureMaterialImportTrigger_();
-assert.equal(projectTriggers.length, 1, 'temporary catch-up trigger must remove itself when import completes');
-assert.ok(materialSync.issues.some(issue => issue.name === 'old-material.zip' && /Unsupported format/.test(issue.reason)));
-assert.equal(context.materialSupport_('shared-owner@gmail.com', 'application/pdf', 'shared.pdf', 100, 'pdf', 'studywitheduwaveacademy@gmail.com').allowed, true, 'readable files inside the master archive should not be rejected only because another account owns them');
-folderPicker = context.adminDriveFolders_({ sessionId: adminLogin.sessionId });
-assert.equal(folderPicker.currentFolderId, worksheetFolder.getId());
-assert.equal(folderPicker.folders[0].current, true, 'current master folder must appear first');
+const legacyFile = driveRoot.createFile(new DriveBlob(Buffer.from('old syllabus'), 'application/pdf', 'old-syllabus.pdf'));
+context.append_('Portal_Resources', { resource_id: 'RES-OLD', drive_id: legacyFile.getId(), title: 'Old syllabus worksheet', subject: 'Maths', class_level: '8', kind: 'pdf', status: 'published', created_at: new Date().toISOString(), updated_at: new Date().toISOString(), submission_type: 'file_upload', library_path: 'Classroom / Old Syllabus', source: 'drive_auto', auto_added: 'true' });
+context.append_('Portal_DriveIndex', { drive_id: legacyFile.getId(), parent_drive_id: driveRoot.getId(), path: 'Classroom / Old Syllabus', name: 'old-syllabus.pdf', mime_type: 'application/pdf', kind: 'pdf', ownership: 'academy', size_bytes: String(legacyFile.getSize()), safe_candidate: 'true', resource_id: 'RES-OLD', sync_run_id: 'SYNC-OLD' });
+context.append_('Portal_Assignments', { assignment_id: 'ASN-OLD', student_id: student.student_id, resource_id: 'RES-OLD', visible_from: new Date().toISOString().slice(0, 10), status: 'published', created_at: new Date().toISOString() });
+context.append_('Portal_Submissions', { submission_id: 'SUB-OLD', assignment_id: 'ASN-OLD', student_id: student.student_id, resource_id: 'RES-OLD', responses_json: '[]', status: 'submitted', submitted_at: new Date().toISOString(), updated_at: new Date().toISOString() });
+context.setConfig_('drive_root_id', driveRoot.getId());
+context.setConfig_('material_refresh_enabled', 'true');
+const syncSheet = spreadsheet.insertSheet('Portal_DriveSync');
+syncSheet.appendRow(['folder_id', 'path', 'status']);
+syncSheet.appendRow([driveRoot.getId(), 'Classroom', 'pending']);
+
+const cleanup = context.retireLegacyDriveArchive();
+assert.equal(cleanup.removedResources, 1);
+assert.equal(cleanup.removedAssignments, 1);
+assert.equal(cleanup.removedSubmissions, 1);
+assert.equal(sheets.has('Portal_DriveSync'), false, 'legacy sync tab must be deleted');
+assert.equal(rows('Portal_Resources').some(row => row.resource_id === 'RES-OLD'), false);
+assert.equal(rows('Portal_Assignments').some(row => row.assignment_id === 'ASN-OLD'), false);
+assert.equal(rows('Portal_Submissions').some(row => row.submission_id === 'SUB-OLD'), false);
+assert.equal(rows('Portal_Resources').some(row => row.resource_id === uploadedResource.resource_id), true, 'portal uploads must be preserved');
+assert.equal(rows('Portal_Resources').some(row => row.resource_id === 'RES-TEST'), true, 'standalone portal worksheets must be preserved');
+assert.equal(rows('Portal_DriveIndex').every(row => row.sync_run_id === 'upload'), true, 'only uploaded-file metadata may remain');
+assert.equal(rows('Portal_Config').some(row => row.key === 'drive_root_id' || row.key === 'material_refresh_enabled'), false, 'legacy archive configuration must be removed');
 context.adminAssignResource_({ sessionId: adminLogin.sessionId, studentId: student.student_id, resourceId: uploadedResource.resource_id, dueDate: '2026-08-20' });
 const fileAssignment = rows('Portal_Assignments').find(row => row.resource_id === uploadedResource.resource_id);
 const secureDownload = context.parentResource_({ sessionId: firstLogin.sessionId, studentId: student.student_id, resourceId: uploadedResource.resource_id });

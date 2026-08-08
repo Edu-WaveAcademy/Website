@@ -2,7 +2,7 @@
 
 ## Goal
 
-Run a professional parent portal without paid hosting, databases, or messaging services during the trial. GitHub Pages hosts the website. Google Apps Script runs the protected API. One private Google Sheet is the operational database and the academy Drive remains the private content store.
+Run a professional parent portal without paid hosting, databases, or messaging services during the trial. GitHub Pages hosts the website. Google Apps Script runs the protected API. One private Google Sheet is the operational database and a private portal-created Drive folder stores only current manual uploads and student submissions.
 
 ## Architecture
 
@@ -11,7 +11,7 @@ Parent or academy email code
              |
 GitHub Pages website -> Apps Script web app -> Portal_* tabs in Google Sheets
                                       |
-                               Private academy Drive
+                         Private portal upload folder
 ```
 
 The portal never adds parents as Drive viewers and never exposes permanent Drive links. Apps Script sends a one-time code only to an approved email, creates a short-lived session, checks the parent-child link, then returns an in-portal preview.
@@ -27,12 +27,12 @@ Run `setupEduwave()` from the Apps Script editor. It creates the following tabs 
 - `Portal_LoginCodes`: single-use login-code HMACs, expiry, and attempt count
 - `Portal_Trials`: public trial requests
 - `Portal_Fees`: monthly fee rows and parent payment references
-- `Portal_DriveIndex`: metadata-only import of the academy master folder
+- `Portal_DriveIndex`: internal metadata for files uploaded through Eduwave only
 - `Portal_Resources` and `Portal_Assignments`: approved material and child visibility
 - `Portal_Attendance`, `Portal_Progress`, `Portal_Announcements`: learning updates
 - `Portal_Reminders`: WhatsApp click-to-chat queue
 - `Portal_AuditLogs`: login, content, admin, and session activity
-- `Portal_Config`: academy email, Drive root ID, UPI ID, academy name
+- `Portal_Config`: academy email, private upload-folder IDs, UPI ID, academy name
 
 ## Parent Experience
 
@@ -41,15 +41,15 @@ Run `setupEduwave()` from the Apps Script editor. It creates the following tabs 
 3. The parent signs in using a one-time code sent to the approved email.
 4. The dashboard opens linked children only.
 5. A login notification tray shows current assignments, exam notices, and unpaid fees.
-6. Materials render in the portal: Sheets as tables, Docs as text, PDFs and images as protected previews with an identity watermark.
+6. Uploaded PDFs and images render as protected previews; Office files use authenticated downloads.
 7. The parent submits a UPI reference; the academy verifies it manually.
 
 ## Academy Experience
 
 1. Request an Academy Login code for the single allowlisted academy email.
 2. Add a parent, then add and link a child.
-3. Scan the master Drive folder from Library. Only academy-owned, non-video files become publish candidates.
-4. Publish an item, then assign it to a child.
+3. Upload one current-syllabus file from Library and add its title, subject, and class.
+4. Assign the uploaded item to a child.
 5. Add attendance, progress notes, and an exam notice.
 6. Generate monthly fee rows, verify payments, and create a prefilled WhatsApp reminder link.
 
@@ -61,7 +61,7 @@ Run `setupEduwave()` from the Apps Script editor. It creates the following tabs 
 - A new login revokes the previous session for that account.
 - Sessions expire after 60 minutes idle or 12 hours absolute.
 - Admin sessions expire after 30 minutes idle or 8 hours absolute.
-- The Drive importer records metadata first and excludes externally owned content from publishing.
+- No existing Drive folder is scanned. Only files deliberately uploaded through the academy portal enter the material library.
 - Browser screenshot prevention is not technically reliable. Portal previews display a parent/time watermark and log opens instead.
 
 ## Deployment Sequence
@@ -77,7 +77,7 @@ Run `setupEduwave()` from the Apps Script editor. It creates the following tabs 
 - Parent email receives no code before approval and can sign in after approval.
 - A second login revokes the older session.
 - Parent can see only linked children and assigned items.
-- Admin can scan, publish, and assign a Drive file.
+- Admin can upload and assign a current PDF, image, Word, Excel, PowerPoint, RTF, or text file.
 - Parent login notification tray includes assignment, exam, and fee updates.
 - Payment note changes fee status to `pending_verification`.
 - Admin can mark paid and produce a WhatsApp click-to-chat reminder.
