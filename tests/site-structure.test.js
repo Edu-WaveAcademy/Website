@@ -15,5 +15,7 @@ assert.equal([...css].reduce((balance, character) => balance + (character === '{
 assert.doesNotMatch(html + script, /demo(?:Login|Mode|-parent|-admin)|googleLogin|idToken/i, 'legacy login code must stay removed');
 const adminDialog = html.slice(html.indexOf('<dialog id="admin-dialog"'), html.indexOf('<dialog id="viewer-dialog"'));
 assert.doesNotMatch(adminDialog, /studywitheduwaveacademy@gmail\.com|diwij\.narang2001@gmail\.com/i, 'approved addresses must not be exposed in the academy login dialog');
+assert.match(script, /parentSubmitAssignment/, 'student worksheet submission flow must be present');
+assert.match(script, /adminReviewSubmission/, 'academy worksheet review flow must be present');
 
 console.log(`Site structure passed: ${ids.length} unique IDs, valid anchors, balanced CSS, no legacy login.`);

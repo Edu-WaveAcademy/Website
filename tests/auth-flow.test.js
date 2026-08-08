@@ -116,9 +116,19 @@ const firstLogin = context.verifyLoginCode_({ role: 'parent', email: 'parent@exa
 assert.equal(firstLogin.role, 'parent');
 assert.equal(firstLogin.parent.email_verified, true);
 
+const student = context.adminCreateStudent_({ sessionId: adminLogin.sessionId, parentId: rows('Portal_Parents')[0].parent_id, name: 'Test Student', classLevel: '8' });
+context.append_('Portal_Resources', { resource_id: 'RES-TEST', drive_id: 'DRIVE-TEST', title: 'Maths worksheet', subject: 'Maths', class_level: '8', kind: 'sheet', status: 'published', created_at: new Date().toISOString(), updated_at: new Date().toISOString() });
+context.append_('Portal_Assignments', { assignment_id: 'ASN-TEST', student_id: student.student_id, resource_id: 'RES-TEST', title_override: '', visible_from: new Date().toISOString().slice(0, 10), due_date: '', status: 'published', created_at: new Date().toISOString() });
+context.parentSubmitAssignment_({ sessionId: firstLogin.sessionId, studentId: student.student_id, assignmentId: 'ASN-TEST', answers: [{ row: 2, question: '6 x 7', answer: '42' }], note: 'Completed independently.' });
+assert.equal(rows('Portal_Submissions')[0].status, 'submitted');
+assert.equal(context.parentDashboard_({ sessionId: firstLogin.sessionId }).dashboard.children[0].resources[0].submission_status, 'submitted');
+context.adminReviewSubmission_({ sessionId: adminLogin.sessionId, submissionId: rows('Portal_Submissions')[0].submission_id, status: 'reviewed', feedback: 'Correct.' });
+assert.equal(rows('Portal_Submissions')[0].status, 'reviewed');
+assert.throws(() => context.parentSubmitAssignment_({ sessionId: firstLogin.sessionId, studentId: student.student_id, assignmentId: 'ASN-TEST', answers: [{ row: 2, answer: '43' }] }), /reviewed and is now locked/i);
+
 context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', deviceId: 'second-device' });
 const secondCode = emails.at(-1).body.match(/\b(\d{6})\b/)[1];
 context.verifyLoginCode_({ role: 'parent', email: 'parent@example.com', code: secondCode, deviceId: 'second-device', deviceLabel: 'Second browser' });
 assert.throws(() => context.parentDashboard_({ sessionId: firstLogin.sessionId }), /session has ended/i, 'new login must revoke the previous session');
 
-console.log('Auth flow passed: signup, approval, OTP, hashed storage, and session revocation.');
+console.log('Auth flow passed: signup, approval, OTP, worksheet submission/review, hashed storage, and session revocation.');

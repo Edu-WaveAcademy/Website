@@ -2395,9 +2395,17 @@ dialog[open] {
 }
 
 .status-pill.paid,
-.status-pill.present {
+.status-pill.present,
+.status-pill.submitted,
+.status-pill.reviewed {
   color: var(--forest);
   background: #e7f1e8;
+}
+
+.status-pill.pending,
+.status-pill.needs_changes {
+  color: #895207;
+  background: #fff0d2;
 }
 
 .status-pill.absent {
@@ -2578,6 +2586,65 @@ dialog[open] {
   border-radius: var(--radius);
 }
 
+.admin-card-wide {
+  grid-column: 1 / -1;
+}
+
+.submission-review-list {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.submission-review-form {
+  padding: 1rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+}
+
+.submission-review-head,
+.submission-heading,
+.viewer-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.submission-review-head b,
+.submission-review-head small {
+  display: block;
+}
+
+.submission-review-head small {
+  margin-top: 0.2rem;
+  color: var(--ink-muted);
+  font-size: 0.6rem;
+}
+
+.answer-preview {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.8rem;
+  margin: 0.8rem 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+}
+
+.answer-preview p {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.65fr) 1fr;
+  gap: 0.7rem;
+  margin: 0;
+  font-size: 0.65rem;
+}
+
+.answer-preview span {
+  overflow-wrap: anywhere;
+  color: var(--ink-muted);
+}
+
 .admin-card h4 {
   margin: 0 0 1rem;
   padding-bottom: 0.7rem;
@@ -2747,11 +2814,24 @@ dialog[open] {
   padding: clamp(1.5rem, 4vw, 3rem);
 }
 
-.viewer-frame > h2 {
+.viewer-frame > h2,
+.viewer-title-row h2 {
   max-width: 800px;
   margin: 1.5rem 0;
   font: 700 clamp(2rem, 4vw, 3.8rem)/1 Fraunces, serif;
   letter-spacing: -0.05em;
+}
+
+.viewer-title-row {
+  margin: 1.4rem 0;
+}
+
+.viewer-title-row h2 {
+  margin: 0.3rem 0 0;
+}
+
+.viewer-title-row .eyebrow {
+  margin: 0;
 }
 
 .watermark {
@@ -2776,6 +2856,15 @@ dialog[open] {
   font-size: 0.72rem;
 }
 
+.worksheet-table-wrap {
+  overflow-x: auto;
+  border-radius: 0.8rem;
+}
+
+.worksheet-table {
+  min-width: 680px;
+}
+
 .viewer-table td,
 .viewer-table th {
   padding: 0.7rem;
@@ -2784,9 +2873,72 @@ dialog[open] {
   text-align: left;
 }
 
-.viewer-table tr:first-child {
+.viewer-table thead {
   background: var(--lime);
   font-weight: 800;
+}
+
+.worksheet-answer {
+  width: min(260px, 32vw);
+  min-height: 2.6rem;
+  padding: 0.55rem 0.65rem;
+  color: var(--ink);
+  background: #fffdf7;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  font: 600 0.7rem/1.4 Manrope, sans-serif;
+}
+
+.worksheet-answer:focus {
+  border-color: var(--forest);
+  outline: 3px solid rgba(25, 81, 64, 0.14);
+}
+
+.submission-card {
+  max-width: 900px;
+  padding: clamp(1.1rem, 3vw, 1.7rem);
+  margin-top: 1.2rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.submission-heading h3 {
+  margin: 0.3rem 0 0;
+  font: 700 1.35rem/1.1 Fraunces, serif;
+}
+
+.submission-card > p {
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+}
+
+.submission-card form {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.submission-card textarea {
+  min-height: 5rem;
+}
+
+.submission-card .button {
+  width: fit-content;
+}
+
+.teacher-feedback {
+  padding: 0.8rem 0.9rem;
+  color: var(--forest-dark);
+  background: #edf3e8;
+  border-left: 4px solid var(--lime);
+  border-radius: 0.5rem;
+}
+
+.teacher-feedback p {
+  margin: 0.25rem 0 0;
+  font-size: 0.7rem;
 }
 
 .viewer-text {
