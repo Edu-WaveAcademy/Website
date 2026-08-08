@@ -1,83 +1,363 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Eduwave Academy: clear teaching, practical practice, and a parent-first learning portal.">
-  <title>Eduwave Academy | Learning With a Clear Path</title>
+  <meta name="description" content="Eduwave Academy offers thoughtful tuition, tailored practice, and a secure parent portal for assignments, updates, and fee status.">
+  <meta name="theme-color" content="#17352c">
+  <title>Eduwave Academy | Clear Teaching, Steady Progress</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="page-texture" aria-hidden="true"></div>
+
   <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="Eduwave Academy home"><span class="brand-orbit">e</span><span><b>eduwave</b><small>Academy</small></span></a>
-    <nav class="site-nav" aria-label="Main navigation">
-      <a href="#programs">Programs</a><a href="#approach">How it works</a><a href="#parents">For parents</a><a href="#contact">Contact</a>
+    <a class="brand" href="#top" aria-label="Eduwave Academy home">
+      <span class="brand-mark" aria-hidden="true">e</span>
+      <span class="brand-copy"><b>eduwave</b><small>Academy</small></span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+      <a href="#programs">Programs</a>
+      <a href="#approach">How it works</a>
+      <a href="#results">Results</a>
+      <a href="#parents">For parents</a>
+      <a href="#trial">Trial class</a>
     </nav>
-    <div class="header-actions"><button class="text-button" type="button" data-open-admin>Academy login</button><button class="button button-dark" type="button" data-open-portal>Parent portal</button></div>
+
+    <div class="header-actions">
+      <button class="text-button" type="button" data-open-admin>Academy login</button>
+      <button class="button button-ink button-compact" type="button" data-open-portal>Parent portal</button>
+    </div>
   </header>
 
-  <main>
-    <section class="hero section-shell">
+  <main id="main-content">
+    <section class="hero section-shell" aria-labelledby="hero-title">
       <div class="hero-copy reveal">
-        <p class="eyebrow">Focused learning. Visible progress.</p>
-        <h1>Give every child a <em>clearer</em> way to learn.</h1>
-        <p class="hero-lede">Personal tuition, thoughtful practice, and one calm portal where parents can see what matters: assignments, class updates, and fee status.</p>
-        <div class="hero-actions"><a class="button button-coral" href="#trial">Book a trial class</a><button class="button button-light" type="button" data-open-portal>Open parent portal <span aria-hidden="true">-></span></button></div>
-        <div class="hero-proof"><span><strong>1:1 attention</strong><small>Teaching matched to pace</small></span><span><strong>One parent view</strong><small>Updates without chasing links</small></span><span><strong>Years of materials</strong><small>Curated for each child</small></span></div>
+        <div class="hero-kicker"><span aria-hidden="true"></span> Tuition built around the child</div>
+        <h1 id="hero-title">A clearer path from <em>confusion</em> to confidence.</h1>
+        <p class="hero-lede">Personal teaching, purposeful practice, and one secure parent space for assignments, class updates, progress, and fees.</p>
+        <div class="hero-actions">
+          <a class="button button-coral" href="#trial">Book a trial class <span aria-hidden="true">&rarr;</span></a>
+          <button class="button button-paper" type="button" data-open-portal>Open parent portal</button>
+        </div>
+        <div class="hero-proof" aria-label="Eduwave highlights">
+          <div><strong>Personal attention</strong><span>Teaching matched to pace</span></div>
+          <div><strong>4+ years</strong><span>Of curated practice material</span></div>
+          <div><strong>One parent view</strong><span>No scattered Drive links</span></div>
+        </div>
       </div>
-      <div class="hero-art reveal delay-1">
-        <div class="sun">Learn<br>with<br>ease</div>
-        <div class="hero-photo"><img src="images/hero-study.png" alt="Student studying at a desk"><span class="floating-note note-top">Good work is built in small steps.</span><span class="floating-note note-bottom">Parent portal<br><b>now ready</b></span></div>
-        <div class="scribble" aria-hidden="true">+ + +</div>
+
+      <div class="hero-visual reveal delay-1">
+        <div class="hero-photo-frame">
+          <img src="images/gallery-3.jpeg" alt="An Eduwave teacher guiding a young student through an exercise" loading="eager">
+          <div class="photo-caption"><span>01</span><p>Small steps.<br><strong>Real understanding.</strong></p></div>
+        </div>
+        <div class="hero-float hero-float-top"><span class="float-icon" aria-hidden="true">A+</span><p><small>LEARNING STYLE</small><strong>Patient and personal</strong></p></div>
+        <div class="hero-float hero-float-bottom"><span class="float-icon folder-icon" aria-hidden="true"></span><p><small>RESOURCE LIBRARY</small><strong>Assigned with care</strong></p></div>
+        <span class="hero-loop" aria-hidden="true"></span>
       </div>
     </section>
 
-    <section class="marquee" aria-label="Eduwave qualities"><div>Trust &nbsp; / &nbsp; Practice &nbsp; / &nbsp; Clarity &nbsp; / &nbsp; Progress &nbsp; / &nbsp; Trust &nbsp; / &nbsp; Practice &nbsp; / &nbsp; Clarity &nbsp; / &nbsp; Progress</div></section>
+    <section class="principles" aria-label="Eduwave values">
+      <div class="principles-track">
+        <span>Clarity first</span><i></i><span>Practice with purpose</span><i></i><span>Parents in the loop</span><i></i><span>Progress without pressure</span><i></i>
+        <span aria-hidden="true">Clarity first</span><i aria-hidden="true"></i><span aria-hidden="true">Practice with purpose</span><i aria-hidden="true"></i><span aria-hidden="true">Parents in the loop</span><i aria-hidden="true"></i><span aria-hidden="true">Progress without pressure</span><i aria-hidden="true"></i>
+      </div>
+    </section>
 
-    <section id="programs" class="section-shell section programs">
-      <div class="section-heading reveal"><p class="eyebrow">Programs</p><h2>Support that meets them where they are.</h2><p>Simple, structured learning for school students who need better explanations, steady practice, or the confidence to ask questions.</p></div>
+    <section id="programs" class="section section-shell" aria-labelledby="programs-title">
+      <div class="section-intro reveal">
+        <p class="eyebrow">Programs / 01</p>
+        <h2 id="programs-title">Support for every stage of school.</h2>
+        <p>Each plan begins with what the student needs now, then builds steady routines around schoolwork, revision, and confidence.</p>
+      </div>
+
       <div class="program-grid">
-        <article class="program-card reveal"><span>01</span><h3>Foundation</h3><p>Clear concepts and study habits for younger learners.</p><ul><li>Classes 2-5</li><li>Core subjects</li><li>Confidence first</li></ul></article>
-        <article class="program-card feature reveal delay-1"><span>02</span><h3>Academic growth</h3><p>Regular teaching and targeted worksheets for strong school performance.</p><ul><li>Classes 6-10</li><li>Practice plans</li><li>Parent updates</li></ul></article>
-        <article class="program-card reveal delay-2"><span>03</span><h3>Exam support</h3><p>Focused revision and problem-solving when the stakes feel higher.</p><ul><li>Classes 11-12</li><li>Topic revision</li><li>Progress tracking</li></ul></article>
+        <article class="program-card reveal">
+          <div class="program-top"><span>01</span><span class="program-age">Classes 2-5</span></div>
+          <div class="program-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 12h24a4 4 0 0 1 4 4v22H14a4 4 0 0 1-4-4V12Z"/><path d="M14 8h24v30M18 18h12M18 24h14M18 30h8"/></svg></div>
+          <h3>Foundation</h3>
+          <p>Clear explanations, stronger basics, and study habits that make everyday schoolwork feel manageable.</p>
+          <ul><li>Core subjects</li><li>Homework support</li><li>Confidence building</li></ul>
+          <a href="#trial" class="card-link">Find the right start <span aria-hidden="true">&rarr;</span></a>
+        </article>
+
+        <article class="program-card program-featured reveal delay-1">
+          <div class="program-top"><span>02</span><span class="program-age">Classes 6-10</span></div>
+          <div class="program-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="m10 34 9-11 7 6 12-16"/><path d="M30 13h8v8"/><path d="M8 40h32"/></svg></div>
+          <h3>Academic growth</h3>
+          <p>Regular teaching and targeted worksheets that turn difficult topics into a practical weekly plan.</p>
+          <ul><li>Concept clarity</li><li>Practice plans</li><li>Parent updates</li></ul>
+          <a href="#trial" class="card-link">Build a learning plan <span aria-hidden="true">&rarr;</span></a>
+        </article>
+
+        <article class="program-card reveal delay-2">
+          <div class="program-top"><span>03</span><span class="program-age">Classes 11-12</span></div>
+          <div class="program-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M14 7h16l7 7v27H14z"/><path d="M30 7v8h7M20 23h11M20 29h11M20 35h7"/></svg></div>
+          <h3>Exam support</h3>
+          <p>Focused revision, problem solving, and progress notes when the syllabus and stakes become more demanding.</p>
+          <ul><li>Topic revision</li><li>Exam practice</li><li>Progress tracking</li></ul>
+          <a href="#trial" class="card-link">Plan exam support <span aria-hidden="true">&rarr;</span></a>
+        </article>
       </div>
     </section>
 
-    <section id="approach" class="section-shell section split-section">
-      <div class="approach-photo reveal"><img src="images/friendly-teacher.jpeg" alt="Teacher supporting a student"><div class="stamp">Built for<br>real families</div></div>
-      <div class="approach-copy reveal delay-1"><p class="eyebrow">How it works</p><h2>A simple rhythm that makes learning feel possible.</h2><ol class="steps"><li><b>01</b><div><h3>Start with a trial</h3><p>Tell us about the child, class, and subject needs. We confirm the right slot.</p></div></li><li><b>02</b><div><h3>Learn with a plan</h3><p>Classes and practice materials are tailored to what needs attention now.</p></div></li><li><b>03</b><div><h3>See the learning</h3><p>Parents can use one sign-in to view children, assignments, notices, and fees.</p></div></li></ol></div>
+    <section id="approach" class="section approach" aria-labelledby="approach-title">
+      <div class="section-shell approach-grid">
+        <div class="approach-media reveal">
+          <div class="approach-photo"><img src="images/gallery-4.jpeg" alt="Students practising mathematics with abacuses at Eduwave" loading="lazy"></div>
+          <div class="approach-note"><strong>Practice should feel possible.</strong><span>Not overwhelming.</span></div>
+          <div class="approach-stamp" aria-hidden="true"><span>Learn</span><i></i><span>Practise</span><i></i><span>Grow</span></div>
+        </div>
+
+        <div class="approach-copy reveal delay-1">
+          <p class="eyebrow">The Eduwave rhythm / 02</p>
+          <h2 id="approach-title">Simple enough for a child. Clear enough for a parent.</h2>
+          <ol class="steps-list">
+            <li><span>01</span><div><h3>Start with a conversation</h3><p>Share the class, subject, current challenge, and the best time for a trial.</p></div></li>
+            <li><span>02</span><div><h3>Learn with a focused plan</h3><p>Lessons and worksheets are selected for what needs attention now.</p></div></li>
+            <li><span>03</span><div><h3>See what is moving</h3><p>Parents view assigned materials, notices, attendance, progress, and fees in one place.</p></div></li>
+          </ol>
+          <a class="button button-ink" href="#trial">Start with a trial <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
     </section>
 
-    <section id="parents" class="section-shell section portal-promo">
-      <div class="portal-promo-copy reveal"><p class="eyebrow light">For parents</p><h2>No more searching through chats, folders, or old links.</h2><p>Eduwave keeps the important things in one private place. Your approved Google account opens only your children’s materials and updates.</p><button class="button button-paper" type="button" data-open-portal>Explore the parent portal</button></div>
-      <div class="portal-window reveal delay-1" aria-hidden="true"><div class="window-bar"><i></i><i></i><i></i><span>eduwave / parent space</span></div><div class="window-body"><div class="mini-welcome"><small>GOOD EVENING, PRIYA</small><b>Everything for Aarav is in one place.</b></div><div class="mini-alert"><span>3</span><p><b>New updates</b><br>1 assignment, 1 exam notice, 1 fee update</p></div><div class="mini-grid"><div><small>ASSIGNMENTS</small><b>2 ready</b></div><div><small>FEE STATUS</small><b>Due Jul 10</b></div></div></div></div>
+    <section id="parents" class="section parent-section" aria-labelledby="parent-portal-title">
+      <div class="section-shell parent-layout">
+        <div class="parent-copy reveal">
+          <p class="eyebrow eyebrow-light">Parent portal / 03</p>
+          <h2 id="parent-portal-title">Everything important. Nothing scattered.</h2>
+          <p>Your approved email opens a private dashboard for your own child. The academy's master Drive and Sheets stay hidden.</p>
+          <ul class="portal-benefits">
+            <li><span aria-hidden="true">01</span> Assigned worksheets and secure previews</li>
+            <li><span aria-hidden="true">02</span> Exam, assignment, and class notifications</li>
+            <li><span aria-hidden="true">03</span> Fee status and payment reference submission</li>
+          </ul>
+          <button class="button button-lime" type="button" data-open-portal>Open the parent portal <span aria-hidden="true">&rarr;</span></button>
+        </div>
+
+        <div class="portal-mockup reveal delay-1" aria-hidden="true">
+          <div class="mockup-topbar"><span></span><span></span><span></span><small>EDUWAVE / PARENT SPACE</small></div>
+          <div class="mockup-body">
+            <div class="mockup-greeting"><small>GOOD EVENING, PRIYA</small><strong>Aarav's learning space</strong><span>Class 8</span></div>
+            <div class="mockup-alert"><i>3</i><p><strong>You have new updates</strong><small>Assignment, exam notice, and fee status</small></p></div>
+            <div class="mockup-grid">
+              <div><span class="mockup-icon file"></span><small>ASSIGNMENTS</small><strong>2 ready</strong></div>
+              <div><span class="mockup-icon bell"></span><small>ATTENDANCE</small><strong>Up to date</strong></div>
+              <div><span class="mockup-icon progress"></span><small>PROGRESS</small><strong>New note</strong></div>
+              <div><span class="mockup-icon wallet"></span><small>FEE STATUS</small><strong>Due 10 Jul</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="trial" class="section-shell section trial-section">
-      <div class="trial-copy reveal"><p class="eyebrow">Trial class</p><h2>Let’s find the right starting point.</h2><p>A trial is the easiest way to see whether the class style and subject support fit your child.</p><p class="trial-note">No payment gateway is needed for the trial. The academy confirms the schedule directly.</p></div>
-      <form id="trial-form" class="trial-form reveal delay-1" novalidate>
-        <div class="form-row"><label>Child's name<input required name="childName" autocomplete="name" placeholder="e.g. Aarav Sharma"></label><label>Class<select required name="classLevel"><option value="">Select class</option><option>Class 2-5</option><option>Class 6-8</option><option>Class 9-10</option><option>Class 11-12</option></select></label></div>
-        <div class="form-row"><label>Parent's name<input required name="parentName" placeholder="Your name"></label><label>Phone<input required name="phone" inputmode="tel" placeholder="10 digit mobile number"></label></div>
-        <label>Email<input required name="email" type="email" placeholder="parent@gmail.com"></label>
-        <div class="form-row"><label>Subject need<input required name="subjects" placeholder="e.g. Maths, Science"></label><label>Preferred time<input required name="preferredSlot" placeholder="e.g. Weekday evenings"></label></div>
-        <label>Anything we should know?<textarea name="notes" rows="3" placeholder="Learning goal, exam, or topic that needs help"></textarea></label>
-        <button class="button button-dark" type="submit">Request a trial <span aria-hidden="true">-></span></button><p id="trial-status" class="form-status" role="status"></p>
-      </form>
+    <section id="results" class="section section-shell results-section" aria-labelledby="results-title">
+      <div class="section-intro reveal">
+        <p class="eyebrow">Inside Eduwave / 04</p>
+        <h2 id="results-title">Years of teaching, practice, and proud moments.</h2>
+        <p>The portal is new. The care, classroom routines, and growing archive behind it have been built over years.</p>
+      </div>
+
+      <div class="results-gallery">
+        <figure class="result-photo result-photo-large reveal"><img src="images/gallery-1.jpeg" alt="Students attending an Eduwave class" loading="lazy"><figcaption><span>In the classroom</span><strong>Questions are welcome here.</strong></figcaption></figure>
+        <figure class="result-photo reveal delay-1"><img src="images/gallery-2.jpeg" alt="Eduwave students displaying their creative projects" loading="lazy"><figcaption><span>Beyond worksheets</span><strong>Learning can be joyful.</strong></figcaption></figure>
+        <figure class="result-photo result-photo-wide reveal delay-2"><img src="images/gallery-5.jpeg" alt="Eduwave students celebrating an academic milestone" loading="lazy"><figcaption><span>Student milestones</span><strong>Progress worth celebrating.</strong></figcaption></figure>
+      </div>
+    </section>
+
+    <section id="trial" class="section trial-section" aria-labelledby="trial-title">
+      <div class="section-shell trial-layout">
+        <div class="trial-copy reveal">
+          <p class="eyebrow">Trial class / 05</p>
+          <h2 id="trial-title">Let us find the right starting point.</h2>
+          <p>A short first conversation helps the academy understand the child, the subject, and the support that would be most useful.</p>
+          <div class="trial-points">
+            <div><span>01</span><p><strong>Tell us what feels difficult</strong><small>A topic, exam, routine, or confidence gap.</small></p></div>
+            <div><span>02</span><p><strong>We confirm a suitable slot</strong><small>The academy contacts you directly.</small></p></div>
+            <div><span>03</span><p><strong>No online payment required</strong><small>The trial flow stays simple during this phase.</small></p></div>
+          </div>
+        </div>
+
+        <form id="trial-form" class="surface-form trial-form reveal delay-1" novalidate>
+          <div class="form-heading"><span class="form-number">01</span><div><p class="eyebrow">Trial request</p><h3>Tell us about the learner.</h3></div></div>
+          <div class="form-grid">
+            <label class="field"><span>Child's name</span><input required name="childName" autocomplete="name" placeholder="e.g. Aarav Sharma"></label>
+            <label class="field"><span>Class</span><select required name="classLevel"><option value="">Select class</option><option>Class 2-5</option><option>Class 6-8</option><option>Class 9-10</option><option>Class 11-12</option></select></label>
+            <label class="field"><span>Parent's name</span><input required name="parentName" autocomplete="name" placeholder="Your name"></label>
+            <label class="field"><span>Phone</span><input required name="phone" autocomplete="tel" inputmode="tel" pattern="[0-9 +()-]{8,15}" placeholder="10 digit mobile number"></label>
+            <label class="field field-wide"><span>Email</span><input required name="email" autocomplete="email" type="email" placeholder="parent@example.com"></label>
+            <label class="field"><span>Subject need</span><input required name="subjects" placeholder="e.g. Maths, Science"></label>
+            <label class="field"><span>Preferred time</span><input required name="preferredSlot" placeholder="e.g. Weekday evenings"></label>
+            <label class="field field-wide"><span>Anything we should know?</span><textarea name="notes" rows="3" placeholder="Learning goal, exam, or topic that needs help"></textarea></label>
+          </div>
+          <button class="button button-ink form-submit" type="submit">Request a trial <span aria-hidden="true">&rarr;</span></button>
+          <p id="trial-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section section-shell faq-section" aria-labelledby="faq-title">
+      <div class="faq-intro reveal"><p class="eyebrow">Good to know / 06</p><h2 id="faq-title">Before you begin.</h2><p>Simple answers for parents using the trial-phase portal.</p></div>
+      <div class="faq-list reveal delay-1">
+        <details><summary>Will I need access to Google Drive or Sheets?<span aria-hidden="true">+</span></summary><p>No. You sign in with a one-time code sent to your approved email, and the portal shows only the resources assigned to your child.</p></details>
+        <details><summary>Can one parent view more than one child?<span aria-hidden="true">+</span></summary><p>Yes. Children linked to the same approved parent account appear as separate tabs inside the parent dashboard.</p></details>
+        <details><summary>Can I pay through the website?<span aria-hidden="true">+</span></summary><p>During the free trial phase, the portal shows UPI instructions and lets you submit the payment reference for academy verification.</p></details>
+        <details><summary>How will reminders work?<span aria-hidden="true">+</span></summary><p>Pending assignments, exams, and fee updates appear after login. The academy can also send a prepared WhatsApp reminder using the admin dashboard.</p></details>
+      </div>
     </section>
   </main>
 
-  <footer id="contact" class="site-footer"><div><a class="brand brand-inverse" href="#top"><span class="brand-orbit">e</span><span><b>eduwave</b><small>Academy</small></span></a><p>Thoughtful tuition for steady growth.</p></div><div><p class="footer-label">START A CONVERSATION</p><a href="mailto:studywitheduwaveacademy@gmail.com">studywitheduwaveacademy@gmail.com</a><a href="#trial">Request a trial class</a></div><div><p class="footer-label">PARENT ACCESS</p><button class="footer-button" type="button" data-open-portal>Parent portal</button><button class="footer-button" type="button" data-open-admin>Academy login</button></div><small class="copyright">© <span id="year"></span> Eduwave Academy. Built for the trial phase.</small></footer>
+  <footer id="contact" class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <a class="brand brand-inverse" href="#top"><span class="brand-mark" aria-hidden="true">e</span><span class="brand-copy"><b>eduwave</b><small>Academy</small></span></a>
+          <h2>Clear teaching.<br><em>Steady growth.</em></h2>
+        </div>
+        <div class="footer-column"><p class="footer-label">EXPLORE</p><a href="#programs">Programs</a><a href="#approach">How it works</a><a href="#results">Results</a><a href="#trial">Trial class</a></div>
+        <div class="footer-column"><p class="footer-label">ACCESS</p><button class="footer-button" type="button" data-open-portal>Parent portal</button><button class="footer-button" type="button" data-open-admin>Academy login</button></div>
+        <div class="footer-column footer-contact"><p class="footer-label">START A CONVERSATION</p><a href="mailto:studywitheduwaveacademy@gmail.com">studywitheduwaveacademy@gmail.com</a><a class="button button-lime button-compact" href="#trial">Book a trial</a></div>
+      </div>
+      <div class="footer-bottom"><small>&copy; <span id="year"></span> Eduwave Academy</small><small>Built for a thoughtful trial phase.</small></div>
+    </div>
+  </footer>
 
-  <dialog id="portal-dialog" class="app-dialog" aria-labelledby="portal-title"><button class="dialog-close" data-close-dialog aria-label="Close parent portal">×</button><section id="portal-auth" class="auth-view"><p class="eyebrow">Parent portal</p><h2 id="portal-title">A single place for your child’s learning.</h2><p>Use the Google account approved by the academy. It does not grant access to the academy’s Drive or Sheets.</p><button id="google-parent-login" class="button button-dark" type="button">Continue with Google</button><button id="demo-parent-login" class="button button-link" type="button">Open parent demo</button><p id="portal-auth-status" class="form-status" role="status"></p><small>New to Eduwave? Request a trial and the academy will approve parent access when your child is enrolled.</small></section><section id="parent-app" class="app-view hidden"><header class="app-header"><div><p class="eyebrow">Parent space</p><h2 id="parent-greeting">Welcome</h2></div><div class="app-header-actions"><button class="icon-button" type="button" id="notification-button" aria-label="Open updates"><span aria-hidden="true">●</span><b id="notification-count">0</b></button><button class="text-button" type="button" id="parent-logout">Log out</button></div></header><div id="notification-panel" class="notification-panel hidden" role="status"></div><div id="child-tabs" class="child-tabs" role="tablist"></div><section id="parent-dashboard" class="parent-dashboard"></section></section></dialog>
+  <dialog id="portal-dialog" class="app-dialog portal-dialog" aria-labelledby="portal-dialog-title">
+    <div class="dialog-shell">
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close parent portal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
 
-  <dialog id="admin-dialog" class="app-dialog admin-dialog" aria-labelledby="admin-title"><button class="dialog-close" data-close-dialog aria-label="Close academy admin">×</button><section id="admin-auth" class="auth-view"><p class="eyebrow">Academy administration</p><h2 id="admin-title">The calm control room.</h2><p>For the academy’s approved Google account only.</p><button id="google-admin-login" class="button button-dark" type="button">Continue with Google</button><button id="demo-admin-login" class="button button-link" type="button">Open academy demo</button><p id="admin-auth-status" class="form-status" role="status"></p></section><section id="admin-app" class="app-view hidden"><header class="app-header"><div><p class="eyebrow">Eduwave administration</p><h2>Today at a glance</h2></div><button class="text-button" type="button" id="admin-logout">Log out</button></header><div id="admin-metrics" class="metric-grid"></div><nav id="admin-tabs" class="admin-tabs" aria-label="Admin areas"><button data-admin-tab="families" class="active">Families</button><button data-admin-tab="learning">Learning</button><button data-admin-tab="library">Library</button><button data-admin-tab="finance">Fees & reminders</button><button data-admin-tab="trials">Trials</button></nav><div id="admin-content"></div></section></dialog>
+      <section id="portal-auth" class="auth-view">
+        <aside class="auth-story auth-story-parent">
+          <a class="brand brand-inverse" href="#top" tabindex="-1"><span class="brand-mark" aria-hidden="true">e</span><span class="brand-copy"><b>eduwave</b><small>Parent space</small></span></a>
+          <div class="auth-story-copy"><p class="eyebrow eyebrow-light">Private by design</p><h2>One calm view of your child's learning.</h2><p>No raw Drive folders. No searching old messages. Only the updates and resources assigned to your family.</p></div>
+          <div class="auth-story-list"><span>Assignments and materials</span><span>Attendance and progress</span><span>Fee status and notices</span></div>
+        </aside>
 
-  <dialog id="viewer-dialog" class="viewer-dialog" aria-labelledby="viewer-title"><button class="dialog-close" data-close-viewer aria-label="Close resource viewer">×</button><div id="viewer-content"></div></dialog>
-  <template id="payment-template"><form class="payment-form"><label>UPI reference<input name="reference" required placeholder="Payment reference number"></label><label>Note (optional)<textarea name="note" rows="2" placeholder="Any helpful note for the academy"></textarea></label><button class="button button-dark" type="submit">Submit payment note</button><p class="form-status" role="status"></p></form></template>
+        <div class="auth-panel">
+          <div class="auth-panel-inner">
+            <span class="auth-role">PARENT ACCESS</span>
+            <h2 id="portal-dialog-title">Welcome to your parent space.</h2>
+            <p>Use your approved email. We will send a one-time code; there is no password to remember.</p>
+            <div class="auth-switch" role="tablist" aria-label="Parent account options">
+              <button type="button" class="active" role="tab" aria-selected="true" data-parent-auth="login">Sign in</button>
+              <button type="button" role="tab" aria-selected="false" data-parent-auth="signup">Create account</button>
+            </div>
+            <form id="parent-login-form" class="auth-form">
+              <label class="field"><span>Approved email</span><input name="email" type="email" autocomplete="email" required placeholder="parent@example.com"></label>
+              <button class="button button-ink button-full" type="submit">Email me a secure code <span aria-hidden="true">&rarr;</span></button>
+            </form>
+            <form id="parent-signup-form" class="auth-form hidden">
+              <label class="form-honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+              <label class="field"><span>Parent name</span><input name="name" autocomplete="name" required placeholder="Your full name"></label>
+              <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required placeholder="parent@example.com"></label>
+              <label class="field"><span>WhatsApp number <small>optional</small></span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="10-digit mobile number"></label>
+              <button class="button button-ink button-full" type="submit">Request parent access <span aria-hidden="true">&rarr;</span></button>
+            </form>
+            <form id="parent-code-form" class="auth-form auth-code-form hidden">
+              <div class="code-sent"><span aria-hidden="true">&#10003;</span><p>Code sent to <strong id="parent-code-email"></strong></p></div>
+              <label class="field"><span>Six-digit code</span><input class="otp-input" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required placeholder="000000"></label>
+              <button class="button button-ink button-full" type="submit">Verify and continue</button>
+              <button class="auth-link" type="button" data-reset-auth="parent">Use a different email</button>
+            </form>
+            <p id="portal-auth-status" class="form-status" role="status" aria-live="polite"></p>
+            <p class="auth-footnote"><span aria-hidden="true"></span> New accounts require academy approval before login. Eduwave never shares the master Drive.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="parent-app" class="app-view hidden">
+        <header class="app-header">
+          <div class="app-brand-title"><span class="mini-brand" aria-hidden="true">e</span><div><p class="eyebrow">Parent space</p><h2 id="parent-greeting">Welcome</h2></div></div>
+          <div class="app-header-actions">
+            <button class="icon-button" type="button" id="notification-button" aria-label="Open updates" aria-controls="notification-panel" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M14 21h-4"/></svg><b id="notification-count" class="notification-badge">0</b></button>
+            <button class="text-button" type="button" id="parent-logout">Log out</button>
+          </div>
+        </header>
+        <div id="notification-panel" class="notification-panel hidden" role="status" aria-live="polite"></div>
+        <div class="app-tabbar"><div id="child-tabs" class="child-tabs" role="tablist"></div></div>
+        <section id="parent-dashboard" class="parent-dashboard"></section>
+      </section>
+    </div>
+  </dialog>
+
+  <dialog id="admin-dialog" class="app-dialog admin-dialog" aria-labelledby="admin-dialog-title">
+    <div class="dialog-shell">
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close academy administration"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+
+      <section id="admin-auth" class="auth-view">
+        <aside class="auth-story auth-story-admin">
+          <a class="brand brand-inverse" href="#top" tabindex="-1"><span class="brand-mark" aria-hidden="true">e</span><span class="brand-copy"><b>eduwave</b><small>Academy desk</small></span></a>
+          <div class="auth-story-copy"><p class="eyebrow eyebrow-light">Academy administration</p><h2>The calm control room.</h2><p>Families, learning updates, Drive resources, fees, reminders, and trial requests in one teacher-friendly workspace.</p></div>
+          <div class="auth-story-list"><span>Manage families</span><span>Assign learning material</span><span>Track fees and reminders</span></div>
+        </aside>
+
+        <div class="auth-panel">
+          <div class="auth-panel-inner">
+            <span class="auth-role">ACADEMY ACCESS</span>
+            <h2 id="admin-dialog-title">Welcome back to Eduwave.</h2>
+            <p>Enter an approved academy account. A one-time code will be sent to its inbox.</p>
+            <form id="admin-login-form" class="auth-form">
+              <label class="field"><span>Academy account</span><input name="email" type="email" autocomplete="email" required placeholder="Enter approved email"></label>
+              <button class="button button-ink button-full" type="submit">Email academy login code <span aria-hidden="true">&rarr;</span></button>
+            </form>
+            <form id="admin-code-form" class="auth-form auth-code-form hidden">
+              <div class="code-sent"><span aria-hidden="true">&#10003;</span><p>Code sent to <strong id="admin-code-email"></strong></p></div>
+              <label class="field"><span>Six-digit code</span><input class="otp-input" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required placeholder="000000"></label>
+              <button class="button button-ink button-full" type="submit">Open academy dashboard</button>
+              <button class="auth-link" type="button" data-reset-auth="admin">Request a new code</button>
+            </form>
+            <p id="admin-auth-status" class="form-status" role="status" aria-live="polite"></p>
+            <p class="auth-footnote"><span aria-hidden="true"></span> Only allowlisted academy and developer accounts can continue. Sessions expire after inactivity.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="admin-app" class="app-view admin-app hidden">
+        <header class="app-header admin-app-header">
+          <div class="app-brand-title"><span class="mini-brand" aria-hidden="true">e</span><div><p class="eyebrow">Eduwave administration</p><h2>Academy overview</h2></div></div>
+          <div class="app-header-actions"><span class="admin-live"><i></i> Live workspace</span><button class="text-button" type="button" id="admin-logout">Log out</button></div>
+        </header>
+        <div id="admin-metrics" class="metric-grid"></div>
+        <nav id="admin-tabs" class="admin-tabs" aria-label="Admin areas" role="tablist">
+          <button role="tab" aria-selected="true" data-admin-tab="families" class="active">Families</button>
+          <button role="tab" aria-selected="false" data-admin-tab="learning">Learning</button>
+          <button role="tab" aria-selected="false" data-admin-tab="library">Library</button>
+          <button role="tab" aria-selected="false" data-admin-tab="finance">Fees & reminders</button>
+          <button role="tab" aria-selected="false" data-admin-tab="trials">Trials</button>
+        </nav>
+        <div id="admin-content" class="admin-content"></div>
+      </section>
+    </div>
+  </dialog>
+
+  <dialog id="viewer-dialog" class="viewer-dialog" aria-label="Secure resource preview">
+    <div class="viewer-shell">
+      <header class="viewer-header"><div><span class="viewer-lock" aria-hidden="true"></span><p>Secure Eduwave preview</p></div><button class="dialog-close dialog-close-inline" type="button" data-close-viewer aria-label="Close resource viewer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>
+      <div id="viewer-content" class="viewer-content"></div>
+    </div>
+  </dialog>
+
+  <template id="payment-template">
+    <form class="surface-form payment-form">
+      <label class="field"><span>UPI reference</span><input name="reference" required placeholder="Payment reference number"></label>
+      <label class="field"><span>Note (optional)</span><textarea name="note" rows="2" placeholder="Any helpful note for the academy"></textarea></label>
+      <button class="button button-ink" type="submit">Submit payment note</button>
+      <p class="form-status" role="status" aria-live="polite"></p>
+    </form>
+  </template>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
   <script src="script.js"></script>
 </body>
 </html>
