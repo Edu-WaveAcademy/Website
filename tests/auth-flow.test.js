@@ -199,6 +199,7 @@ assert.equal(approvedFamily.name, 'Test Parent');
 assert.equal(approvedFamily.email_verified, true);
 assert.equal(approvedFamily.children[0].student_id, student.student_id);
 assert.equal(approvedFamily.children[0].enrollment_status, 'active');
+assert.equal(approvedFamily.children[0].link_active, true);
 assert.equal(familyDashboard.unlinkedStudents.length, 0);
 const directoryWithUnlinkedStudent = context.adminFamilyDirectory_(
   rows('Portal_Parents'),
@@ -287,9 +288,31 @@ assert.equal(context.adminSubmissionFile_({ sessionId: adminLogin.sessionId, sub
 context.adminReviewSubmission_({ sessionId: adminLogin.sessionId, submissionId: replacedSubmission.submission_id, status: 'reviewed', feedback: 'Complete.' });
 assert.throws(() => context.parentSubmitAssignment_({ sessionId: firstLogin.sessionId, studentId: student.student_id, assignmentId: fileAssignment.assignment_id, note: 'Another update.' }), /reviewed and is now locked/i);
 
+context.adminRevokeAssignment_({ sessionId: adminLogin.sessionId, assignmentId: fileAssignment.assignment_id });
+assert.equal(rows('Portal_Assignments').find(row => row.assignment_id === fileAssignment.assignment_id).status, 'revoked');
+assert.throws(() => context.parentResource_({ sessionId: firstLogin.sessionId, studentId: student.student_id, resourceId: uploadedResource.resource_id }), /not assigned/i, 'revoked material must be blocked immediately');
+assert.equal(rows('Portal_Submissions').some(row => row.submission_id === fileSubmission.submission_id), true, 'revoking access must preserve the submission');
+
+const reassigned = context.adminAssignResource_({ sessionId: adminLogin.sessionId, studentId: student.student_id, resourceId: uploadedResource.resource_id, dueDate: '2026-09-20' });
+assert.notEqual(reassigned.assignmentId, fileAssignment.assignment_id, 'reassigning revoked material must create a fresh assignment');
+const departure = context.adminSetStudentStatus_({ sessionId: adminLogin.sessionId, studentId: student.student_id, status: 'left' });
+assert.equal(rows('Portal_Students').find(row => row.student_id === student.student_id).enrollment_status, 'left');
+assert.equal(rows('Portal_ParentStudents').find(row => row.student_id === student.student_id).active, 'false');
+assert.ok(departure.revokedAssignments >= 1, 'student departure must revoke active assignments');
+assert.equal(context.parentDashboard_({ sessionId: firstLogin.sessionId }).dashboard.children.length, 0, 'former students must disappear from the parent portal');
+assert.equal(context.adminData_({ email: 'studywitheduwaveacademy@gmail.com', access_role: 'admin' }).submissions.some(row => row.submission_id === fileSubmission.submission_id), true, 'former student submissions must remain in the admin archive');
+assert.throws(() => context.adminAssignResource_({ sessionId: adminLogin.sessionId, studentId: student.student_id, resourceId: uploadedResource.resource_id }), /currently enrolled/i);
+const departedFamily = context.adminData_({ email: 'studywitheduwaveacademy@gmail.com', access_role: 'admin' }).families.find(family => family.children.some(child => child.student_id === student.student_id));
+assert.equal(departedFamily.children[0].link_active, false);
+context.adminSetStudentStatus_({ sessionId: adminLogin.sessionId, studentId: student.student_id, status: 'active' });
+assert.equal(rows('Portal_ParentStudents').find(row => row.student_id === student.student_id).active, 'true');
+const restoredDashboard = context.parentDashboard_({ sessionId: firstLogin.sessionId }).dashboard;
+assert.equal(restoredDashboard.children.length, 1);
+assert.equal(restoredDashboard.children[0].resources.length, 0, 'restoring a student must not silently restore revoked materials');
+
 context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', deviceId: 'second-device' });
 const secondCode = emails.at(-1).body.match(/\b(\d{6})\b/)[1];
 context.verifyLoginCode_({ role: 'parent', email: 'parent@example.com', code: secondCode, deviceId: 'second-device', deviceLabel: 'Second browser' });
 assert.throws(() => context.parentDashboard_({ sessionId: firstLogin.sessionId }), /session has ended/i, 'new login must revoke the previous session');
 
-console.log('Auth flow passed: login, worksheet answers, mixed-file assignment, scanned submission/review, private Drive metadata, and session revocation.');
+console.log('Auth flow passed: login, student departure/restore, assignment revocation, submission retention, protected uploads, and session revocation.');

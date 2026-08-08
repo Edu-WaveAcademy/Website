@@ -29,7 +29,9 @@ There is no demo login, Google OAuth client, parent password sheet, or hardcoded
 - Assignment, exam, fee, attendance, and progress notifications
 - Watermarked previews for uploaded PDFs and images, plus authenticated Office-file downloads
 - Manual UPI payment-reference submission and verification
-- Admin GUI for families, children, learning updates, resources, fees, reminders, and trials
+- Admin GUI for families, children, submissions, learning updates, resources, fees, reminders, and trials
+- Reversible student departure controls and immediate per-assignment access revocation
+- Searchable submission archive with student/month filters and ten records per page
 - Manual current-syllabus uploads without exposing permanent Drive links to parents
 - Audit records for authentication, access, and administrative actions
 

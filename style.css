@@ -430,6 +430,30 @@ h3 {
   border-color: var(--ink);
 }
 
+.button-danger {
+  color: var(--white);
+  background: #b94b38;
+  border-color: #b94b38;
+}
+
+.button-danger:hover {
+  color: var(--white);
+  background: #953827;
+  border-color: #953827;
+}
+
+.button-danger-quiet {
+  color: #983d2c;
+  background: #fff3ee;
+  border: 1px solid rgba(185, 75, 56, 0.3);
+}
+
+.button-danger-quiet:hover {
+  color: var(--white);
+  background: #b94b38;
+  border-color: #b94b38;
+}
+
 .button-compact {
   min-height: 2.65rem;
   padding: 0.68rem 1rem;
@@ -2413,6 +2437,12 @@ dialog[open] {
   background: #fce5e2;
 }
 
+.status-pill.left,
+.status-pill.revoked {
+  color: #7a4840;
+  background: #f4e7e3;
+}
+
 .notice {
   padding: 1rem;
   color: var(--ink-muted);
@@ -2736,6 +2766,18 @@ dialog[open] {
   border-radius: 0.65rem;
 }
 
+.student-directory-row.is-former {
+  background: #f6f2ec;
+  border-style: dashed;
+}
+
+.student-directory-row > .button {
+  min-height: 2.2rem;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.56rem;
+  white-space: nowrap;
+}
+
 .student-directory-row strong,
 .student-directory-row small {
   display: block;
@@ -2755,6 +2797,26 @@ dialog[open] {
   display: grid;
   justify-items: end;
   text-align: right;
+}
+
+.former-students {
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.former-students summary {
+  padding: 0.7rem 0 0.2rem;
+  color: var(--ink-muted);
+  cursor: pointer;
+  font: 700 0.57rem DM Mono, monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.former-students > div {
+  display: grid;
+  gap: 0.5rem;
+  padding-top: 0.45rem;
 }
 
 .family-alert,
@@ -2783,10 +2845,119 @@ dialog[open] {
 }
 
 .submission-review-form {
+  display: grid;
+  gap: 0.8rem;
   padding: 1rem;
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 0.8rem;
+}
+
+.submissions-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.submissions-heading h3,
+.submissions-heading p {
+  margin: 0;
+}
+
+.submissions-heading h3 {
+  margin-top: 0.25rem;
+}
+
+.submissions-heading > div > p:last-child {
+  max-width: 680px;
+  margin-top: 0.45rem;
+  color: var(--ink-muted);
+  font-size: 0.7rem;
+}
+
+.submission-total,
+.access-count {
+  flex: 0 0 auto;
+  padding: 0.55rem 0.7rem;
+  color: var(--forest-dark);
+  background: var(--lime);
+  border-radius: 0.65rem;
+  font: 700 0.55rem DM Mono, monospace;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.submission-total b {
+  display: block;
+  font: 700 1.35rem Fraunces, serif;
+}
+
+.submission-filters {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(170px, 0.7fr) auto;
+  align-items: end;
+  gap: 0.7rem;
+  padding: 0.9rem;
+  margin: 1rem 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+}
+
+.submission-filters select,
+.submission-filters input,
+.submission-review-form select,
+.submission-review-form textarea {
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.72rem;
+}
+
+.submission-review-fields {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.55fr) minmax(260px, 1fr);
+  gap: 0.7rem;
+}
+
+.submission-review-form > .button {
+  width: fit-content;
+}
+
+.submission-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  margin-top: 0.8rem;
+  border-top: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-size: 0.63rem;
+}
+
+.submission-pagination > div {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.submission-pagination button {
+  min-height: 2.25rem;
+  padding: 0.45rem 0.65rem;
+  color: var(--forest-dark);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  font-size: 0.58rem;
+  font-weight: 800;
+}
+
+.submission-pagination button:disabled {
+  opacity: 0.38;
+  cursor: default;
 }
 
 .submission-review-head,
@@ -2993,6 +3164,55 @@ dialog[open] {
 .viewer-content {
   overflow: auto;
   background: var(--paper);
+}
+
+.confirm-dialog {
+  width: min(470px, calc(100vw - 2rem));
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 1.2rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.confirm-shell {
+  position: relative;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 100% 0, rgba(246, 111, 82, 0.14), transparent 35%),
+    var(--white);
+}
+
+.confirm-mark {
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1rem;
+  color: var(--white);
+  background: var(--coral);
+  border-radius: 50%;
+  font: 800 1rem DM Mono, monospace;
+}
+
+.confirm-shell h2 {
+  margin: 0.3rem 0 0.6rem;
+  color: var(--forest-dark);
+  font: 700 2rem/1 Fraunces, serif;
+  letter-spacing: -0.035em;
+}
+
+.confirm-shell > p:not(.eyebrow) {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
 }
 
 .viewer-frame {
@@ -3340,6 +3560,53 @@ dialog[open] {
   gap: 0.45rem;
   margin-top: 0.9rem;
   overflow-y: auto;
+}
+
+.access-directory-card > p {
+  margin: 0.7rem 0 0;
+}
+
+.assignment-access-list {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.9rem;
+}
+
+.assignment-access-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.8rem;
+  background: var(--paper);
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+}
+
+.assignment-access-row:hover {
+  background: var(--white);
+  border-color: var(--line);
+}
+
+.assignment-access-row b,
+.assignment-access-row small {
+  display: block;
+}
+
+.assignment-access-row b {
+  font-size: 0.68rem;
+}
+
+.assignment-access-row small {
+  margin-top: 0.15rem;
+  color: var(--ink-muted);
+  font-size: 0.55rem;
+}
+
+.assignment-access-row .button {
+  min-height: 2.35rem;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.57rem;
 }
 
 .material-directory-row {
@@ -3926,6 +4193,43 @@ dialog[open] {
   .student-directory-meta {
     justify-items: start;
     text-align: left;
+  }
+
+  .submissions-heading,
+  .submission-pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .submission-filters,
+  .submission-review-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .submission-filters .button,
+  .submission-review-form > .button {
+    width: 100%;
+  }
+
+  .submission-pagination > div {
+    justify-content: space-between;
+  }
+
+  .assignment-access-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .assignment-access-row .button {
+    width: fit-content;
+  }
+
+  .confirm-actions {
+    flex-direction: column-reverse;
+  }
+
+  .confirm-actions .button {
+    width: 100%;
   }
 }
 

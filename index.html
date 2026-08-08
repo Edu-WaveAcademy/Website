@@ -332,6 +332,7 @@
         <nav id="admin-tabs" class="admin-tabs" aria-label="Admin areas" role="tablist">
           <button role="tab" aria-selected="true" data-admin-tab="families" class="active">Families</button>
           <button role="tab" aria-selected="false" data-admin-tab="learning">Learning</button>
+          <button role="tab" aria-selected="false" data-admin-tab="submissions">Submissions</button>
           <button role="tab" aria-selected="false" data-admin-tab="library">Library</button>
           <button role="tab" aria-selected="false" data-admin-tab="finance">Fees & reminders</button>
           <button role="tab" aria-selected="false" data-admin-tab="trials">Trials</button>
@@ -345,6 +346,19 @@
     <div class="viewer-shell">
       <header class="viewer-header"><div><span class="viewer-lock" aria-hidden="true"></span><p>Secure Eduwave preview</p></div><button class="dialog-close dialog-close-inline" type="button" data-close-viewer aria-label="Close resource viewer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>
       <div id="viewer-content" class="viewer-content"></div>
+    </div>
+  </dialog>
+
+  <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-heading">
+    <div class="confirm-shell">
+      <span class="confirm-mark" aria-hidden="true">!</span>
+      <p class="eyebrow">Confirm academy change</p>
+      <h2 id="confirm-heading">Remove access?</h2>
+      <p id="confirm-message">This change takes effect immediately.</p>
+      <div class="confirm-actions">
+        <button class="button button-outline" id="confirm-cancel" type="button">Keep access</button>
+        <button class="button button-danger" id="confirm-accept" type="button">Remove access</button>
+      </div>
     </div>
   </dialog>
 

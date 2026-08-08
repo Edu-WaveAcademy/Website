@@ -20,9 +20,17 @@ assert.match(script, /parentSubmitAssignment/, 'student worksheet submission flo
 assert.match(script, /adminReviewSubmission/, 'academy worksheet review flow must be present');
 assert.match(script, /adminUploadResource/, 'academy mixed-file upload flow must be present');
 assert.match(script, /adminSubmissionFile/, 'academy protected submission preview must be present');
+assert.match(html, /data-admin-tab="submissions"/, 'academy dashboard must provide a dedicated submissions tab');
+assert.match(script, /adminSetStudentStatus/, 'academy dashboard must support removing and restoring students');
+assert.match(script, /adminRevokeAssignment/, 'academy dashboard must support revoking assignment access');
+assert.match(script, /submission-student-filter/, 'submissions must be filterable by student');
+assert.match(script, /submission-month-filter/, 'submissions must be filterable by month');
+assert.match(script, /slice\(start,start\+10\)/, 'submissions must render ten records per page');
+assert.match(script, /data-submission-page/, 'submissions must provide previous and next pagination controls');
+assert.match(html, /id="confirm-dialog"/, 'destructive academy actions must use the themed confirmation dialog');
 assert.match(script, /Current syllabus library/, 'material library must identify the current-syllabus workflow');
 assert.match(script, /Upload current material/, 'material library must make manual upload the primary route');
-assert.match(script, /Nothing is imported automatically/, 'material library must explain that old files are disconnected');
+assert.match(script, /The old archive is disconnected/, 'material library must explain that old files are disconnected');
 assert.match(script, /material-search/, 'current material list must be searchable');
 assert.doesNotMatch(manifest, /auth\/script\.scriptapp|documents\.readonly/, 'obsolete scanner and Google Docs permissions must stay removed');
 assert.doesNotMatch(script, /adminDriveFolders|adminScanDrive|drive-folder-list|Automatic material library|Hourly refresh|Files Eduwave skipped|Refresh Drive/, 'legacy Drive archive controls must stay removed');

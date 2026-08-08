@@ -62,13 +62,25 @@ Use **Academy Login > Library**.
 3. Add a clear title, subject, class, and expected submission method.
 4. Use **Assign it to a child**, add an optional due date, and save. Only this assigned material appears to that family.
 5. For handwritten work, the child opens the assignment, answers in a notebook, and uploads one PDF, JPG, or PNG from the parent portal.
-6. The academy opens **Learning**, previews the protected upload, adds feedback, and marks it reviewed or requests changes.
+6. The academy opens **Submissions**, previews the protected upload, adds feedback, and marks it reviewed or requests changes.
 
 Apps Script creates `Eduwave Portal Uploads/Resources` and `Eduwave Portal Uploads/Student Submissions` in the academy account. Their IDs are stored in `Portal_Config`. Keep both folders private. Parents receive rendered previews or authenticated in-page file data; they are never added as Drive viewers and never receive a Drive ID. No existing Drive folder is scanned or imported.
 
 ## View enrolled families
 
 Use **Academy Login > Families** to see the academy enrolment directory. Each approved parent card shows the saved name, email, WhatsApp number, login-verification state, and every linked child with class, enrolment state, monthly fee, and due day. The directory can be searched by parent, child, email, phone, or class. Active students without an active parent link are highlighted separately so they can be corrected before a parent tries to sign in.
+
+### When a child leaves
+
+Use **Mark as left** on the child's Families row. This removes the child from the parent portal, disables the active parent-child link, prevents new fee rows and assignments, and revokes every currently published assignment. Historical fees, progress, attendance, and submissions remain available to the academy. Use **Restore enrolment** under Former students if the child returns; previously revoked materials remain revoked and must be assigned again deliberately.
+
+### Revoke material access
+
+Use **Academy Login > Library > Live access**, find the child and material, then choose **Revoke access**. The item disappears from the parent portal immediately. Any work already submitted remains in the Submissions archive. Assigning the material again creates a new assignment record rather than reopening the completed one.
+
+### Find and review submissions
+
+Use **Academy Login > Submissions**. Filter by child, submission month, or both. Results show ten at a time with Previous and Next controls. Former students remain available in the filter so their historical work can still be found and reviewed.
 
 ## Free-trial limits
 

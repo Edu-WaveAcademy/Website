@@ -13,6 +13,9 @@
 - Retired the obsolete Drive archive importer after the syllabus changed.
 - Removed automatic scanning, folder selection, hourly refresh jobs, and archive-only permissions.
 - Kept manual current-material uploads and secure student-submission storage.
+- Added reversible student departure controls that disable parent access and revoke active assignments without deleting history.
+- Added per-assignment access revocation from the Library.
+- Moved submitted work into a dedicated archive with student/month filters and ten-item pagination.
 
 ## Required migration
 

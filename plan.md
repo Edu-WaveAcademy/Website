@@ -50,8 +50,11 @@ Run `setupEduwave()` from the Apps Script editor. It creates the following tabs 
 2. Add a parent, then add and link a child.
 3. Upload one current-syllabus file from Library and add its title, subject, and class.
 4. Assign the uploaded item to a child.
-5. Add attendance, progress notes, and an exam notice.
-6. Generate monthly fee rows, verify payments, and create a prefilled WhatsApp reminder link.
+5. Review uploaded work from Submissions, filtered by child or month in pages of ten.
+6. Revoke individual material access from Library when an assignment is finished.
+7. Mark a child as left from Families to remove portal access without deleting academy history.
+8. Add attendance, progress notes, and an exam notice.
+9. Generate monthly fee rows, verify payments, and create a prefilled WhatsApp reminder link.
 
 ## Security Boundaries
 
@@ -77,6 +80,9 @@ Run `setupEduwave()` from the Apps Script editor. It creates the following tabs 
 - Parent email receives no code before approval and can sign in after approval.
 - A second login revokes the older session.
 - Parent can see only linked children and assigned items.
+- Marking a child as left hides the child, revokes published assignments, and preserves submissions.
+- Revoking one assignment blocks the resource immediately and keeps its submitted work.
+- Submissions can be filtered by child and month and are paginated ten at a time.
 - Admin can upload and assign a current PDF, image, Word, Excel, PowerPoint, RTF, or text file.
 - Parent login notification tray includes assignment, exam, and fee updates.
 - Payment note changes fee status to `pending_verification`.
