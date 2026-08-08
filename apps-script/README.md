@@ -16,6 +16,8 @@ Running `setupEduwave` again is safe. It adds any missing portal columns, includ
 
 Click **Run**, not **Debug**. If an earlier setup reached the six-minute limit, its blocking completion alert may have been waiting in the spreadsheet window. The current setup uses a non-blocking notification, so replace `Code.gs` and rerun it; completed tabs and records are preserved.
 
+For an established Eduwave workbook where all portal tabs already exist, run `upgradeFileUploads` instead of the full setup. It updates only the resource, submission, and configuration headers needed by this release and is safe to rerun.
+
 ## Deploy the new backend version
 
 1. Select **Deploy > Manage deployments**.
