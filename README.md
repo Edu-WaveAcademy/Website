@@ -15,7 +15,7 @@ No paid host, database, payment gateway, or messaging provider is required for t
 
 ## Authentication
 
-Parents request an account using their email. The request remains pending until approved from **Academy Login > Families**. Approved parents and allowlisted academy users sign in with a six-digit, single-use email code.
+Parents request an account using their email and required 10-digit mobile number. The request remains pending until approved from **Academy Login > Families**. Approved parents sign in with the matching email and mobile number, then receive a six-digit, single-use email code. Existing approved records with no saved mobile capture it on their next code request. Allowlisted academy users continue to use email and the one-time code only.
 
 The backend stores HMAC values rather than raw codes or session tokens. One newer login revokes the previous session. Academy requests use the same passwordless flow but are accepted only for addresses listed under `admin_email` or `developer_email` in `Portal_Config`. Approved addresses are never shown in the public login dialog.
 
@@ -31,6 +31,7 @@ There is no demo login, Google OAuth client, parent password sheet, or hardcoded
 - Manual UPI payment-reference submission and verification
 - Admin GUI for families, children, submissions, learning updates, resources, fees, reminders, and trials
 - Reversible student departure controls and immediate per-assignment access revocation
+- Current/former filters and reversible departure controls for both parents and students
 - Searchable submission archive with student/month filters and ten records per page
 - Manual current-syllabus uploads without exposing permanent Drive links to parents
 - Audit records for authentication, access, and administrative actions

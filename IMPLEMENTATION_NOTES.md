@@ -16,6 +16,9 @@
 - Added reversible student departure controls that disable parent access and revoke active assignments without deleting history.
 - Added per-assignment access revocation from the Library.
 - Moved submitted work into a dedicated archive with student/month filters and ten-item pagination.
+- Required a validated mobile number for parent signup and sign-in while supporting first-login capture for older blank records.
+- Added independent current/former filters and reversible departure controls for parents and students.
+- Added live assigned/unassigned state to every reusable material row after access changes.
 
 ## Required migration
 

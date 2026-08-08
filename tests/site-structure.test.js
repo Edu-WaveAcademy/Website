@@ -15,7 +15,11 @@ assert.deepEqual(missingAnchors, [], `missing anchors: ${missingAnchors.join(', 
 assert.equal([...css].reduce((balance, character) => balance + (character === '{') - (character === '}'), 0), 0, 'CSS braces must balance');
 assert.doesNotMatch(html + script, /demo(?:Login|Mode|-parent|-admin)|googleLogin|idToken/i, 'legacy login code must stay removed');
 const adminDialog = html.slice(html.indexOf('<dialog id="admin-dialog"'), html.indexOf('<dialog id="viewer-dialog"'));
+const parentLoginForm = html.slice(html.indexOf('<form id="parent-login-form"'), html.indexOf('<form id="parent-signup-form"'));
+const parentSignupForm = html.slice(html.indexOf('<form id="parent-signup-form"'), html.indexOf('<form id="parent-code-form"'));
 assert.doesNotMatch(adminDialog, /studywitheduwaveacademy@gmail\.com|diwij\.narang2001@gmail\.com/i, 'approved addresses must not be exposed in the academy login dialog');
+assert.match(parentLoginForm, /name="phone"[^>]*required/, 'parent sign-in must require a mobile number');
+assert.match(parentSignupForm, /name="phone"[^>]*required/, 'parent signup must require a mobile number');
 assert.match(script, /parentSubmitAssignment/, 'student worksheet submission flow must be present');
 assert.match(script, /adminReviewSubmission/, 'academy worksheet review flow must be present');
 assert.match(script, /adminUploadResource/, 'academy mixed-file upload flow must be present');
@@ -23,6 +27,10 @@ assert.match(script, /adminSubmissionFile/, 'academy protected submission previe
 assert.match(html, /data-admin-tab="submissions"/, 'academy dashboard must provide a dedicated submissions tab');
 assert.match(script, /adminSetStudentStatus/, 'academy dashboard must support removing and restoring students');
 assert.match(script, /adminRevokeAssignment/, 'academy dashboard must support revoking assignment access');
+assert.match(script, /family-parent-filter/, 'academy directory must filter current and former parents');
+assert.match(script, /family-student-filter/, 'academy directory must filter current and former students');
+assert.match(script, /data-parent-directory-status/, 'academy directory must support parent departure and restoration');
+assert.match(script, /Not assigned to any student/, 'saved material must show its live assignment state after revocation');
 assert.match(script, /submission-student-filter/, 'submissions must be filterable by student');
 assert.match(script, /submission-month-filter/, 'submissions must be filterable by month');
 assert.match(script, /slice\(start,start\+10\)/, 'submissions must render ten records per page');

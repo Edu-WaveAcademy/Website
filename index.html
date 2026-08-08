@@ -248,20 +248,21 @@
           <div class="auth-panel-inner">
             <span class="auth-role">PARENT ACCESS</span>
             <h2 id="portal-dialog-title">Welcome to your parent space.</h2>
-            <p>Use your approved email. We will send a one-time code; there is no password to remember.</p>
+            <p>Use your approved email and registered mobile number. We will send a one-time code; there is no password to remember.</p>
             <div class="auth-switch" role="tablist" aria-label="Parent account options">
               <button type="button" class="active" role="tab" aria-selected="true" data-parent-auth="login">Sign in</button>
               <button type="button" role="tab" aria-selected="false" data-parent-auth="signup">Create account</button>
             </div>
             <form id="parent-login-form" class="auth-form">
               <label class="field"><span>Approved email</span><input name="email" type="email" autocomplete="email" required placeholder="parent@example.com"></label>
+              <label class="field"><span>Registered mobile number</span><input name="phone" type="tel" autocomplete="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" minlength="10" maxlength="10" required placeholder="10-digit mobile number"></label>
               <button class="button button-ink button-full" type="submit">Email me a secure code <span aria-hidden="true">&rarr;</span></button>
             </form>
             <form id="parent-signup-form" class="auth-form hidden">
               <label class="form-honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
               <label class="field"><span>Parent name</span><input name="name" autocomplete="name" required placeholder="Your full name"></label>
               <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required placeholder="parent@example.com"></label>
-              <label class="field"><span>WhatsApp number <small>optional</small></span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="10-digit mobile number"></label>
+              <label class="field"><span>WhatsApp mobile number</span><input name="phone" type="tel" autocomplete="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" minlength="10" maxlength="10" required placeholder="10-digit mobile number"></label>
               <button class="button button-ink button-full" type="submit">Request parent access <span aria-hidden="true">&rarr;</span></button>
             </form>
             <form id="parent-code-form" class="auth-form auth-code-form hidden">

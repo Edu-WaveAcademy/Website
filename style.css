@@ -2675,6 +2675,37 @@ dialog[open] {
   width: min(360px, 100%);
 }
 
+.family-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 0.7rem;
+  padding: 0.8rem;
+  margin-top: 0.9rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+.family-filters label {
+  color: var(--forest-dark);
+  font: 700 0.58rem DM Mono, monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.family-filters select {
+  width: 100%;
+  min-height: 2.65rem;
+  margin-top: 0.35rem;
+  padding: 0.6rem 0.7rem;
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  font: 600 0.68rem Manrope, sans-serif;
+  text-transform: none;
+}
+
 .family-directory {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2688,6 +2719,11 @@ dialog[open] {
   background: linear-gradient(145deg, #fffdf7, #f7f8ef);
   border: 1px solid var(--line);
   border-radius: 0.9rem;
+}
+
+.family-record.is-former-parent {
+  background: linear-gradient(145deg, #f7f3ec, #f0eee8);
+  border-style: dashed;
 }
 
 .family-record > header {
@@ -2723,6 +2759,18 @@ dialog[open] {
   font: 700 1rem Fraunces, serif;
 }
 
+.family-status-stack {
+  display: grid;
+  justify-items: end;
+  gap: 0.25rem;
+  text-align: right;
+}
+
+.family-status-stack small {
+  color: var(--ink-muted);
+  font-size: 0.52rem;
+}
+
 .parent-contact {
   display: flex;
   flex-wrap: wrap;
@@ -2742,6 +2790,22 @@ dialog[open] {
 
 .parent-contact span {
   color: var(--ink-muted);
+}
+
+.parent-record-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: -0.15rem 0 0.7rem;
+}
+
+.parent-record-actions:empty {
+  display: none;
+}
+
+.parent-record-actions .button {
+  min-height: 2.2rem;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.55rem;
 }
 
 .linked-students {
@@ -2801,7 +2865,17 @@ dialog[open] {
 
 .former-students {
   margin-top: 0.25rem;
+  padding-top: 0.65rem;
   border-top: 1px solid var(--line);
+}
+
+.former-students > b {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--ink-muted);
+  font: 700 0.57rem DM Mono, monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .former-students summary {
@@ -3625,10 +3699,19 @@ dialog[open] {
   border-color: var(--line);
 }
 
+.material-directory-row.is-unassigned {
+  border-color: rgba(137, 82, 7, 0.14);
+}
+
 .material-directory-row b,
 .material-directory-row small {
   display: block;
   overflow-wrap: anywhere;
+}
+
+.material-directory-row .material-assignment-copy {
+  color: var(--forest);
+  font-weight: 700;
 }
 
 .material-directory-row b {
@@ -3654,6 +3737,16 @@ dialog[open] {
   background: #edf3e8;
   border-radius: 999px;
   font: 700 0.5rem DM Mono, monospace;
+}
+
+.material-tags .material-live-state.assigned {
+  color: var(--forest-dark);
+  background: var(--lime);
+}
+
+.material-tags .material-live-state.unassigned {
+  color: #895207;
+  background: #fff0d2;
 }
 
 .teacher-feedback {
@@ -4172,6 +4265,10 @@ dialog[open] {
     width: 100%;
   }
 
+  .family-filters {
+    grid-template-columns: 1fr;
+  }
+
   .family-directory {
     grid-template-columns: 1fr;
   }
@@ -4183,6 +4280,17 @@ dialog[open] {
   .family-record > header .status-pill {
     grid-column: 2;
     justify-self: start;
+  }
+
+  .family-status-stack {
+    grid-column: 2;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .parent-record-actions,
+  .parent-record-actions .button {
+    width: 100%;
   }
 
   .student-directory-row {

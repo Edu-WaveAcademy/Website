@@ -164,9 +164,10 @@ function rows(name) {
     .map(row => Object.fromEntries(headers.map((header, index) => [header, String(row[index] ?? '')])));
 }
 
+assert.throws(() => context.signupParent_({ name: 'Missing Mobile', email: 'missing@example.com' }), /10-digit mobile/i);
 context.signupParent_({ name: 'Test Parent', email: 'parent@example.com', phone: '9876543210' });
 assert.equal(rows('Portal_Parents')[0].status, 'pending');
-context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', deviceId: 'parent-device' });
+context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', phone: '9876543210', deviceId: 'parent-device' });
 assert.equal(emails.length, 0, 'pending parents must not receive login codes');
 
 context.requestLoginCode_({ role: 'admin', email: 'studywitheduwaveacademy@gmail.com', deviceId: 'admin-device' });
@@ -186,7 +187,12 @@ assert.equal(developerLogin.dashboard.admin.access_role, 'developer');
 context.adminSetParentStatus_({ sessionId: adminLogin.sessionId, parentId: rows('Portal_Parents')[0].parent_id, status: 'active' });
 assert.equal(rows('Portal_Parents')[0].status, 'active');
 
-context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', deviceId: 'parent-device' });
+const emailsBeforeWrongPhone = emails.length;
+context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', phone: '9123456789', deviceId: 'parent-device' });
+assert.equal(emails.length, emailsBeforeWrongPhone, 'a mismatched parent mobile number must not receive a login code');
+context.update_('Portal_Parents', 2, { phone: '' });
+context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', phone: '9876543210', deviceId: 'parent-device' });
+assert.equal(rows('Portal_Parents')[0].phone, '9876543210', 'an existing approved parent with no saved mobile must capture it on the next code request');
 const firstCode = emails.at(-1).body.match(/\b(\d{6})\b/)[1];
 const firstLogin = context.verifyLoginCode_({ role: 'parent', email: 'parent@example.com', code: firstCode, deviceId: 'parent-device', deviceLabel: 'First browser' });
 assert.equal(firstLogin.role, 'parent');
@@ -310,9 +316,23 @@ const restoredDashboard = context.parentDashboard_({ sessionId: firstLogin.sessi
 assert.equal(restoredDashboard.children.length, 1);
 assert.equal(restoredDashboard.children[0].resources.length, 0, 'restoring a student must not silently restore revoked materials');
 
-context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', deviceId: 'second-device' });
+const parentId = rows('Portal_Parents')[0].parent_id;
+context.adminSetParentStatus_({ sessionId: adminLogin.sessionId, parentId, status: 'left' });
+assert.equal(rows('Portal_Parents')[0].status, 'left');
+assert.equal(rows('Portal_ParentStudents').find(row => row.student_id === student.student_id).active, 'false');
+assert.throws(() => context.parentDashboard_({ sessionId: firstLogin.sessionId }), /session has ended/i, 'former parent sessions must be revoked immediately');
+const emailsBeforeFormerLogin = emails.length;
+context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', phone: '9876543210', deviceId: 'former-parent-device' });
+assert.equal(emails.length, emailsBeforeFormerLogin, 'former parents must not receive login codes');
+context.adminSetStudentStatus_({ sessionId: adminLogin.sessionId, studentId: student.student_id, status: 'left' });
+context.adminSetStudentStatus_({ sessionId: adminLogin.sessionId, studentId: student.student_id, status: 'active' });
+assert.equal(rows('Portal_ParentStudents').find(row => row.student_id === student.student_id).active, 'false', 'restoring a child must not reconnect a former parent');
+context.adminSetParentStatus_({ sessionId: adminLogin.sessionId, parentId, status: 'active' });
+assert.equal(rows('Portal_ParentStudents').find(row => row.student_id === student.student_id).active, 'true', 'restoring the parent must reconnect currently enrolled children');
+
+context.requestLoginCode_({ role: 'parent', email: 'parent@example.com', phone: '9876543210', deviceId: 'second-device' });
 const secondCode = emails.at(-1).body.match(/\b(\d{6})\b/)[1];
 context.verifyLoginCode_({ role: 'parent', email: 'parent@example.com', code: secondCode, deviceId: 'second-device', deviceLabel: 'Second browser' });
 assert.throws(() => context.parentDashboard_({ sessionId: firstLogin.sessionId }), /session has ended/i, 'new login must revoke the previous session');
 
-console.log('Auth flow passed: login, student departure/restore, assignment revocation, submission retention, protected uploads, and session revocation.');
+console.log('Auth flow passed: required mobile login, parent/student departure and restore, assignment revocation, protected submissions, and session revocation.');

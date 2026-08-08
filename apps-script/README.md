@@ -43,7 +43,8 @@ No `GOOGLE_CLIENT_ID` property is needed. An old property can be deleted after t
 
 ## Security behavior
 
-- Signup creates a `pending` parent and never grants immediate access.
+- Signup requires a valid 10-digit mobile number, creates a `pending` parent, and never grants immediate access.
+- Parent code requests require the saved mobile number. A legacy approved record with no mobile captures it on the next eligible request.
 - Login codes are valid for 10 minutes, single-use, and limited to five attempts.
 - Only HMAC values are stored for login codes and sessions.
 - One newer login revokes the previous session for that email.
@@ -70,6 +71,8 @@ Apps Script creates `Eduwave Portal Uploads/Resources` and `Eduwave Portal Uploa
 
 Use **Academy Login > Families** to see the academy enrolment directory. Each approved parent card shows the saved name, email, WhatsApp number, login-verification state, and every linked child with class, enrolment state, monthly fee, and due day. The directory can be searched by parent, child, email, phone, or class. Active students without an active parent link are highlighted separately so they can be corrected before a parent tries to sign in.
 
+Use the **Parent status** and **Student status** filters to switch between current and former records. Marking a parent as left disables that parent's login and links but does not delete or change child enrolment. Marking a student as left remains a separate action and revokes that student's active assignments. Restoring either record reconnects access only when both the parent and student are current.
+
 ### When a child leaves
 
 Use **Mark as left** on the child's Families row. This removes the child from the parent portal, disables the active parent-child link, prevents new fee rows and assignments, and revokes every currently published assignment. Historical fees, progress, attendance, and submissions remain available to the academy. Use **Restore enrolment** under Former students if the child returns; previously revoked materials remain revoked and must be assigned again deliberately.
@@ -77,6 +80,8 @@ Use **Mark as left** on the child's Families row. This removes the child from th
 ### Revoke material access
 
 Use **Academy Login > Library > Live access**, find the child and material, then choose **Revoke access**. The item disappears from the parent portal immediately. Any work already submitted remains in the Submissions archive. Assigning the material again creates a new assignment record rather than reopening the completed one.
+
+The reusable file remains in **Current materials** after revocation. Its row changes to **Not assigned to any student**; this is intentional so the academy can assign the same worksheet again without re-uploading it.
 
 ### Find and review submissions
 

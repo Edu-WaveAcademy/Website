@@ -36,9 +36,9 @@ Run `setupEduwave()` from the Apps Script editor. It creates the following tabs 
 
 ## Parent Experience
 
-1. A parent requests access with their email, or the academy creates the parent directly.
+1. A parent requests access with their email and required mobile number, or the academy creates the parent directly.
 2. The academy approves the request and links the child.
-3. The parent signs in using a one-time code sent to the approved email.
+3. The parent enters the approved email and matching mobile number, then signs in using a one-time code sent to the approved email.
 4. The dashboard opens linked children only.
 5. A login notification tray shows current assignments, exam notices, and unpaid fees.
 6. Uploaded PDFs and images render as protected previews; Office files use authenticated downloads.
