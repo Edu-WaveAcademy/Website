@@ -17,6 +17,8 @@ If the manifest is hidden, open **Project Settings** and enable **Show appsscrip
 
 Select `setupEduwave` in the Apps Script function list and click **Run**.
 
+Use **Run**, not **Debug**. The function is safe to rerun and now finishes without waiting for a blocking spreadsheet alert. If an older copy timed out after six minutes, check whether `Portal_LoginCodes` was already created, replace `Code.gs` with the current file, and run `setupEduwave` again.
+
 Approve these permissions:
 
 - View and update the academy spreadsheet

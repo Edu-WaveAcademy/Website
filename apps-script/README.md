@@ -13,6 +13,8 @@ This folder contains the complete backend for the GitHub Pages website. It uses 
 
 Running `setupEduwave` again is safe. It adds `Portal_LoginCodes`, extends `Portal_Parents` and `Portal_Sessions`, generates a private `AUTH_SECRET` Script Property, and preserves all existing portal and legacy data.
 
+Click **Run**, not **Debug**. If an earlier setup reached the six-minute limit, its blocking completion alert may have been waiting in the spreadsheet window. The current setup uses a non-blocking notification, so replace `Code.gs` and rerun it; completed tabs and records are preserved.
+
 ## Deploy the new backend version
 
 1. Select **Deploy > Manage deployments**.
