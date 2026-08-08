@@ -21,7 +21,10 @@ assert.match(script, /adminUploadResource/, 'academy mixed-file upload flow must
 assert.match(script, /adminSubmissionFile/, 'academy protected submission preview must be present');
 assert.match(script, /adminDriveFolders/, 'academy Drive folder picker must be present');
 assert.match(script, /drive-folder-list/, 'Drive folders must use a scrollable picker instead of an ID-first form');
+assert.match(script, /Parents and enrolled students/, 'academy family directory must identify approved parents and their children');
+assert.match(script, /family-search/, 'academy family directory must be searchable');
+assert.match(script, /unlinkedStudents/, 'academy family directory must flag active students without a parent link');
 assert.match(script, /\.pdf,\.jpg,\.jpeg,\.png,\.doc,\.docx,\.xls,\.xlsx,\.ppt,\.pptx/, 'academy file picker must accept common teaching formats');
 assert.doesNotMatch(script, /drive\.google\.com\/.*(?:attachment|submission)|attachment_drive_id/, 'frontend must not expose uploaded Drive identifiers');
 
-console.log(`Site structure passed: ${ids.length} unique IDs, valid anchors, balanced CSS, secure mixed-file workflow, no legacy login.`);
+console.log(`Site structure passed: ${ids.length} unique IDs, valid anchors, balanced CSS, searchable family directory, secure mixed-file workflow, no legacy login.`);

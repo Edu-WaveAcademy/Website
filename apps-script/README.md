@@ -65,6 +65,10 @@ Apps Script creates `Eduwave Portal Uploads/Resources` and `Eduwave Portal Uploa
 
 The folder picker lists up to 200 direct folders from the academy account's My Drive root. A compact manual-ID fallback remains available for older shared folders that are accessible to the account but do not appear directly under My Drive.
 
+## View enrolled families
+
+Use **Academy Login > Families** to see the academy enrolment directory. Each approved parent card shows the saved name, email, WhatsApp number, login-verification state, and every linked child with class, enrolment state, monthly fee, and due day. The directory can be searched by parent, child, email, phone, or class. Active students without an active parent link are highlighted separately so they can be corrected before a parent tries to sign in.
+
 ## Free-trial limits
 
 Apps Script mail quotas apply to login emails. Google consumer accounts have daily recipient limits, so keep sessions active instead of requesting a code repeatedly. New uploads must be at most 8 MB; portal previews are capped at 10 MB. PDFs and images preview in the portal. Native Google Docs and Sheets render as controlled views. Word, Excel, and PowerPoint files are delivered as authenticated downloads. Videos and executable/archive formats remain excluded.

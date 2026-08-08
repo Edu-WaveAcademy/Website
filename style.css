@@ -2590,6 +2590,193 @@ dialog[open] {
   grid-column: 1 / -1;
 }
 
+.family-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 1rem 0;
+}
+
+.family-summary > div {
+  padding: 0.85rem 1rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+.family-summary small,
+.family-summary b {
+  display: block;
+}
+
+.family-summary small {
+  color: var(--ink-muted);
+  font: 600 0.58rem DM Mono, monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.family-summary b {
+  margin-top: 0.3rem;
+  color: var(--forest-dark);
+  font: 700 1.6rem Fraunces, serif;
+}
+
+.directory-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.directory-heading h4 {
+  margin: 0.2rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.directory-heading .eyebrow {
+  margin: 0;
+}
+
+.directory-heading label {
+  width: min(360px, 100%);
+}
+
+.family-directory {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.family-record {
+  min-width: 0;
+  padding: 1rem;
+  background: linear-gradient(145deg, #fffdf7, #f7f8ef);
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+}
+
+.family-record > header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.family-record h5,
+.family-record header p {
+  margin: 0;
+}
+
+.family-record h5 {
+  font: 700 1.05rem Fraunces, serif;
+}
+
+.family-record header p {
+  margin-top: 0.15rem;
+  color: var(--ink-muted);
+  font-size: 0.6rem;
+}
+
+.family-avatar {
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  color: var(--white);
+  background: var(--forest);
+  border-radius: 50%;
+  font: 700 1rem Fraunces, serif;
+}
+
+.parent-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.8rem;
+  padding: 0.7rem 0;
+  margin: 0.7rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.62rem;
+}
+
+.parent-contact a {
+  color: var(--forest);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.parent-contact span {
+  color: var(--ink-muted);
+}
+
+.linked-students {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.linked-students > b {
+  font: 700 0.58rem DM Mono, monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.student-directory-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem;
+  background: var(--white);
+  border: 1px solid rgba(25, 81, 64, 0.12);
+  border-radius: 0.65rem;
+}
+
+.student-directory-row strong,
+.student-directory-row small {
+  display: block;
+}
+
+.student-directory-row strong {
+  font-size: 0.7rem;
+}
+
+.student-directory-row small {
+  margin-top: 0.15rem;
+  color: var(--ink-muted);
+  font-size: 0.55rem;
+}
+
+.student-directory-meta {
+  display: grid;
+  justify-items: end;
+  text-align: right;
+}
+
+.family-alert,
+.unlinked-warning {
+  padding: 0.7rem 0.8rem;
+  color: #895207;
+  background: #fff0d2;
+  border-radius: 0.6rem;
+  font-size: 0.62rem;
+}
+
+.unlinked-warning {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.8rem;
+  margin-top: 0.9rem;
+}
+
+.unlinked-warning b {
+  width: 100%;
+}
+
 .submission-review-list {
   display: grid;
   gap: 0.8rem;
@@ -3643,6 +3830,42 @@ dialog[open] {
   .folder-choice {
     grid-column: 2;
   }
+
+  .family-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .directory-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .directory-heading label {
+    width: 100%;
+  }
+
+  .family-directory {
+    grid-template-columns: 1fr;
+  }
+
+  .family-record > header {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .family-record > header .status-pill {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .student-directory-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .student-directory-meta {
+    justify-items: start;
+    text-align: left;
+  }
 }
 
 @media (max-width: 430px) {
@@ -3689,6 +3912,10 @@ dialog[open] {
   }
 
   .admin-card .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .family-summary {
     grid-template-columns: 1fr;
   }
 }

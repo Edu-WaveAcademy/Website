@@ -176,6 +176,19 @@ assert.equal(firstLogin.role, 'parent');
 assert.equal(firstLogin.parent.email_verified, true);
 
 const student = context.adminCreateStudent_({ sessionId: adminLogin.sessionId, parentId: rows('Portal_Parents')[0].parent_id, name: 'Test Student', classLevel: '8' });
+const familyDashboard = context.adminData_({ email: 'studywitheduwaveacademy@gmail.com', access_role: 'admin' });
+const approvedFamily = familyDashboard.families.find(family => family.parent_id === rows('Portal_Parents')[0].parent_id);
+assert.equal(approvedFamily.name, 'Test Parent');
+assert.equal(approvedFamily.email_verified, true);
+assert.equal(approvedFamily.children[0].student_id, student.student_id);
+assert.equal(approvedFamily.children[0].enrollment_status, 'active');
+assert.equal(familyDashboard.unlinkedStudents.length, 0);
+const directoryWithUnlinkedStudent = context.adminFamilyDirectory_(
+  rows('Portal_Parents'),
+  rows('Portal_Students').concat([{ student_id: 'STU-UNLINKED', name: 'Unlinked Student', class_level: '7', enrollment_status: 'active' }]),
+  rows('Portal_ParentStudents')
+);
+assert.equal(directoryWithUnlinkedStudent.unlinkedStudents[0].student_id, 'STU-UNLINKED');
 context.append_('Portal_Resources', { resource_id: 'RES-TEST', drive_id: '', title: 'Maths worksheet', subject: 'Maths', class_level: '8', kind: 'worksheet', status: 'published', created_at: new Date().toISOString(), updated_at: new Date().toISOString() });
 context.append_('Portal_Assignments', { assignment_id: 'ASN-TEST', student_id: student.student_id, resource_id: 'RES-TEST', title_override: '', visible_from: new Date().toISOString().slice(0, 10), due_date: '', status: 'published', created_at: new Date().toISOString() });
 context.append_('Portal_WorksheetRows', { resource_id: 'RES-TEST', row_no: '1', question: '6 x 7', hint: 'Multiply' });
