@@ -103,7 +103,7 @@ test('submission filters clamp pages and preserve ten records per page', () => {
 test('worksheet presentation escapes content and retains saved answers', () => {
   const materials=require('../src/features/materials.cjs')({...format});
   const html=materials.worksheetTable({submissionType:'online_answers', values:[['Question'],['<script>']], submission:{answers:[{row:2,answer:'"<&'}]}});
-  assert.doesNotMatch(html, /<script>/);
+  assert.equal(html.toLowerCase().includes('<script'), false);
   assert.match(html, /&lt;script&gt;/);
   assert.match(html, /value="&quot;&lt;&amp;"/);
   assert.match(materials.submissionPanel({submissionType:'view_only'}), /Nothing needs to be submitted/);
