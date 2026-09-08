@@ -1,5 +1,6 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const path = require('node:path');
 const vm = require('node:vm');
 const http = require('node:http');
 const {execFileSync} = require('node:child_process');
@@ -58,10 +59,17 @@ const {check} = require('../ops/smoke');
 
   // Uptime must detect an HTTP-200 application failure and wrong deployed revision.
   let healthy=true;
+  const publicFiles = new Map([
+    ['/index.html', 'index.html'],
+    ['/script.js', 'script.js'],
+    ['/healthz', 'healthz'],
+    ['/release.json', 'release.json'],
+  ]);
   const server=http.createServer((request,response)=>{
     if(request.url==='/api') {response.setHeader('content-type','application/json');response.end(JSON.stringify({ok:healthy,data:{configured:true,auth:'email_otp'}}));return;}
-    const file='dist/'+request.url.split('?')[0].slice(1);
-    if(!fs.existsSync(file)){response.statusCode=404;response.end();return;}
+    const fileName=publicFiles.get(new URL(request.url,'http://127.0.0.1').pathname);
+    if(!fileName){response.statusCode=404;response.end();return;}
+    const file=path.join('dist',fileName);
     response.end(fs.readFileSync(file));
   });
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
