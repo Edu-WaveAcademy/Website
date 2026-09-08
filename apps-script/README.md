@@ -28,7 +28,7 @@ For an established Eduwave workbook where all portal tabs already exist, run `up
 4. Use **Execute as: Me**.
 5. Use **Who has access: Anyone**.
 6. Deploy and authorize the Drive and mail scopes when prompted.
-7. Keep the existing `/exec` URL. If Google issues a different URL, replace `CONFIG.apiUrl` in `../script.js`.
+7. Keep the existing `/exec` URL. If Google issues a different URL, replace `CONFIG.apiUrl` in `../src/config.cjs` and run `node tools/build.cjs` from the repository root.
 
 No `GOOGLE_CLIENT_ID` property is needed. An old property can be deleted after the email-code deployment is working.
 

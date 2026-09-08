@@ -38,7 +38,7 @@ There is no demo login, Google OAuth client, parent password sheet, or hardcoded
 
 ## Local preview
 
-Serve this folder with any static HTTP server, then open the local URL. Authentication requests use the deployed Apps Script URL configured at the top of `script.js`.
+Serve this folder with any static HTTP server, then open the local URL. Authentication requests use the deployed Apps Script URL configured in `src/config.cjs`. After source edits, run `node tools/build.cjs` to regenerate `script.js` and `apps-script/Code.gs`. See [ARCHITECTURE.md](ARCHITECTURE.md) for module ownership, build commands, and regression checks.
 
 Example:
 
@@ -56,14 +56,16 @@ Follow `SETUP_STEPS.md`. In summary:
 2. Run `setupEduwave` again to add the authentication schema safely.
 3. Authorize the email permission.
 4. Deploy a new Web app version as the academy account with access set to Anyone.
-5. Update `CONFIG.apiUrl` in `script.js` only if the `/exec` URL changes.
+5. Update `CONFIG.apiUrl` in `src/config.cjs` and rebuild only if the `/exec` URL changes.
 
 ## Important files
 
 - `index.html`: public site, parent login, and academy login markup
 - `style.css`: shared responsive design system
-- `script.js`: portal UI, sessions, API calls, parent and admin workflows
-- `apps-script/Code.gs`: complete API, authorization, Sheet operations, and protected file storage
+- `src/`: editable frontend feature modules, dependencies, state, and browser adapters
+- `script.js`: generated browser bundle; rebuild after editing `src/`
+- `apps-script/src/`: editable backend application, authorization, projections, and adapters
+- `apps-script/Code.gs`: generated backend deployment artifact
 - `apps-script/appsscript.json`: Apps Script runtime and permission scopes
 - `SETUP_STEPS.md`: deployment and acceptance test
 - `IMPLEMENTATION_NOTES.md`: email-login migration summary

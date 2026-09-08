@@ -1,0 +1,21 @@
+{
+  "name": "eduwave-portal",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "test": "node tools/build.cjs --check && node tests/site-structure.test.js && node tests/auth-flow.test.js && node --test tests/dashboard-refactor.test.js tests/backend-architecture.test.js tests/frontend-architecture.test.cjs",
+    "test:browser": "node tests/ui-browser.test.js && node tests/portal-browser.test.cjs",
+    "build": "node tools/build.cjs",
+    "build:source": "node tools/build.cjs",
+    "check:source": "node tools/build.cjs --check",
+    "test:architecture": "node tools/build.cjs --check && node tests/frontend-architecture.test.cjs && node tests/backend-architecture.test.js && node tests/dashboard-refactor.test.js && node tests/auth-flow.test.js && node tests/site-structure.test.js"
+  },
+  "devDependencies": {
+    "acorn": "^8.16.0",
+    "playwright": "1.63.0",
+    "prettier": "^3.6.2"
+  }
+}

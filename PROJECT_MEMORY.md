@@ -44,3 +44,11 @@ Product architecture and deployment: `README.md`, `plan.md`, `SETUP_STEPS.md`, `
 - Separate UI files became staged during preparation. Use an explicit path-limited commit so that their staging is preserved and they are not included accidentally.
 - Updated observation: the current local `package.json` now includes the dashboard regression test in `npm test`; the earlier integration gap has been addressed by separate work. No full `npm test`, deployment or live acceptance claim is made here.
 - Next test: private staging-workbook validation of headers, dashboard and file workflows; coordinate separate implementation commits before treating this evidence as a release. Push outcome must be verified from Git's response rather than inferred from a local commit.
+
+### 2026-09-08 — frontend/backend module extraction complete
+
+- Branch: codex/unified-portal-revamp; started at f7df4a3, final verification observed cf0bd02 after parallel task commits. This task made no commit, push, or deployment.
+- Editable code now lives in src/ and apps-script/src/. node tools/build.cjs produces script.js and apps-script/Code.gs; --check detects stale artifacts. ARCHITECTURE.md explains ownership and remaining coupling.
+- Verified all 70 extracted frontend function ASTs unchanged against the local pre-extraction snapshot. Mocked browser runs produced exact equal DOM for the parent dashboard and all six academy tabs; both session roles and independent logout passed. Existing UI browser suite passed in approved headless Chrome at four viewport widths.
+- Final npm test passed: freshness, structure, auth, 20 architecture/dashboard tests, and integrated production checks. No live Google-service or scale validation performed. Existing dashboard indexing and concurrent deployment changes were preserved, not attributed to this extraction.
+- Environment/test failures and fixes are recorded in change_audits/2026-09-08-modular-architecture.md. Next focused check: real login, file upload/submission, and revocation in a private staging workbook. Edit source modules and rebuild before any deployment.
