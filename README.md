@@ -13,6 +13,10 @@ Eduwave is a static GitHub Pages website with a private parent portal and an aca
 
 No paid host, database, payment gateway, or messaging provider is required for the trial phase.
 
+## Production operations
+
+See [the production architecture, release workflow, monitoring and launch checklist](docs/PRODUCTION.md). GitHub Actions validates source/tests, packages only public assets, tests and scans the non-root Docker image, and offers protected manual Pages promotion. Kubernetes manifests are a portable alternative requiring platform provisioning. Run `npm ci`, `npm test`, and `npm run build`; deploy the generated `dist/` artifact. Source modules are compiled before packaging. Production infrastructure, recovery and live acceptance remain launch gates; see the runbook for exact limitations.
+
 ## Authentication
 
 Parents request an account using their email and required 10-digit mobile number. The request remains pending until approved from **Academy Login > Families**. Approved parents sign in with the matching email and mobile number, then receive a six-digit, single-use email code. Existing approved records with no saved mobile capture it on their next code request. Allowlisted academy users continue to use email and the one-time code only.

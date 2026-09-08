@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eduwave-web
+spec:
+  # HPA owns replica count; do not reset it on every apply.
+  revisionHistoryLimit: 5
+  minReadySeconds: 10
+  progressDeadlineSeconds: 300
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxSurge: 1, maxUnavailable: 0}
+  selector:
+    matchLabels: {app: eduwave-web}
+  template:
+    metadata:
+      labels: {app: eduwave-web}
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
+        seccompProfile: {type: RuntimeDefault}
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels: {app: eduwave-web}
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels: {app: eduwave-web}
+      containers:
+        - name: web
+          image: eduwave-web
+          ports: [{name: http, containerPort: 8080}]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          resources:
+            requests: {cpu: 100m, memory: 64Mi}
+            limits: {cpu: 500m, memory: 128Mi}
+          startupProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 2
+            failureThreshold: 15
+          readinessProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 5
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 15
+            timeoutSeconds: 2
+          lifecycle:
+            preStop:
+              exec: {command: ["/bin/sh", "-c", "sleep 10; nginx -s quit"]}
+          volumeMounts: [{name: tmp, mountPath: /tmp}]
+      volumes:
+        - name: tmp
+          emptyDir: {medium: Memory, sizeLimit: 32Mi}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eduwave-web
+spec:
+  selector: {app: eduwave-web}
+  ports: [{name: http, port: 80, targetPort: http}]

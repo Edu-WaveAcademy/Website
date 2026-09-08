@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.kubeconfig
+.clasp.json
+.clasprc.json
+test-results/
+
+# Local build/refactor scratch data
+.tmp/

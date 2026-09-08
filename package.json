@@ -6,9 +6,10 @@
     "node": ">=24 <25"
   },
   "scripts": {
-    "test": "node tools/build.cjs --check && node tests/site-structure.test.js && node tests/auth-flow.test.js && node --test tests/dashboard-refactor.test.js tests/backend-architecture.test.js tests/frontend-architecture.test.cjs",
+    "test": "node tools/build.cjs --check && node tests/site-structure.test.js && node tests/auth-flow.test.js && node --test tests/dashboard-refactor.test.js tests/backend-architecture.test.js tests/frontend-architecture.test.cjs && node tests/production.test.js",
     "test:browser": "node tests/ui-browser.test.js && node tests/portal-browser.test.cjs",
-    "build": "node tools/build.cjs",
+    "build": "node ops/build.js",
+    "smoke": "node ops/smoke.js",
     "build:source": "node tools/build.cjs",
     "check:source": "node tools/build.cjs --check",
     "test:architecture": "node tools/build.cjs --check && node tests/frontend-architecture.test.cjs && node tests/backend-architecture.test.js && node tests/dashboard-refactor.test.js && node tests/auth-flow.test.js && node tests/site-structure.test.js"

@@ -1,0 +1,32 @@
+# Merge into the platform Prometheus configuration. Place alerts.yml beside it.
+# Replace URLs and exporter/Alertmanager service addresses before deployment.
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+rule_files: [alerts.yml]
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: [alertmanager.monitoring.svc:9093]
+scrape_configs:
+  - job_name: eduwave-site
+    metrics_path: /probe
+    params: {module: [frontend]}
+    static_configs:
+      - targets: [https://portal.example.invalid/]
+    relabel_configs:
+      - {source_labels: [__address__], target_label: __param_target}
+      - {source_labels: [__param_target], target_label: instance}
+      - {target_label: __address__, replacement: blackbox-exporter.monitoring.svc:9115}
+  - job_name: eduwave-api
+    # Reading config consumes Sheets/Apps Script capacity. Do not probe per pod.
+    scrape_interval: 60s
+    scrape_timeout: 25s
+    metrics_path: /probe
+    params: {module: [portal_api]}
+    static_configs:
+      - targets: [https://script.google.com/macros/s/REPLACE_WITH_DEPLOYMENT/exec]
+    relabel_configs:
+      - {source_labels: [__address__], target_label: __param_target}
+      - {source_labels: [__param_target], target_label: instance}
+      - {target_label: __address__, replacement: blackbox-exporter.monitoring.svc:9115}
