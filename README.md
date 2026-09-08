@@ -68,6 +68,8 @@ Follow `SETUP_STEPS.md`. In summary:
 - `SETUP_STEPS.md`: deployment and acceptance test
 - `IMPLEMENTATION_NOTES.md`: email-login migration summary
 - `plan.md`: product architecture and verification checklist
+- `ui/README.md`: reusable component architecture, APIs, examples, and validation commands
+- `ui/showcase.html`: interactive component reference (local examples; no API calls)
 
 ## Security boundaries
 
@@ -77,3 +79,13 @@ Follow `SETUP_STEPS.md`. In summary:
 - Enable two-step verification on `studywitheduwaveacademy@gmail.com`.
 - Treat screenshots and screen recording as unavoidable; watermarks and audit logs deter redistribution but are not DRM.
 - Apps Script mail quotas limit how many login emails can be sent each day.
+
+## Evidence log
+
+### 2026-09-08 — Shared UI foundation
+
+Branch `codex/unified-portal-revamp`, starting revision `f7df4a3`. Added dependency-free busy buttons, status messages, empty/loading/error states, keyboard tabs, toast behavior, and delegated form validation in `ui/`. Integrated the presentation layer into portal flows and added a runnable showcase and API documentation. Browser checks identified intrinsic grid overflow in the hero, parent section, and section introductions at 320px; shrinkable tracks and contained decorative overflow resolved it.
+
+Validation: `node tests/site-structure.test.js`, `node tests/auth-flow.test.js`, and `git diff --check` passed. `node tests/ui-browser.test.js` passed with bundled Playwright through `NODE_PATH` and `UI_BROWSER_CHANNEL=msedge`: loading restoration (including disabled buttons and original DOM nodes), repeated submission prevention, escaped markup, keyboard tabs, validation feedback, toast dismissal, dialog focus restoration, reduced motion, and 320/375/768/1440px layout checks. Default Chromium was unavailable; sandboxed Edge launch returned EPERM; approved headless Edge execution succeeded. Screenshots are in `tests/ui-showcase-*.png` and `tests/ui-site-mobile.png`.
+
+Status: local UI behavior verified; live authenticated dashboards, screen-reader output, other browser engines, and backend capacity remain unverified. Backend changes and dashboard-refactor tests appeared concurrently and were not authored by this UI task. Next focused check: staging parent/admin flows with representative data and assistive technology. No commit or deployment performed.
