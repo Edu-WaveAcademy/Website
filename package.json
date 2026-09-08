@@ -15,7 +15,7 @@
     "test:architecture": "node tools/build.cjs --check && node tests/frontend-architecture.test.cjs && node tests/backend-architecture.test.js && node tests/dashboard-refactor.test.js && node tests/auth-flow.test.js && node tests/site-structure.test.js"
   },
   "devDependencies": {
-    "acorn": "^8.16.0",
+    "acorn": "^8.18.0",
     "playwright": "1.63.0",
     "prettier": "^3.6.2"
   }
