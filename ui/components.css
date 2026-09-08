@@ -1,0 +1,35 @@
+/* Additive component layer; brand tokens come from style.css. */
+.ui-state { display: grid; justify-items: center; gap: .6rem; padding: clamp(1.25rem, 4vw, 2.5rem); text-align: center; border: 1px dashed var(--line); border-radius: var(--radius); background: var(--white); overflow-wrap: anywhere; }
+.ui-state strong { color: var(--ink); font-size: 1rem; }
+.ui-state p { margin: 0; max-width: 48ch; color: var(--ink-muted); font-size: .9rem; }
+.ui-state__mark { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--paper); color: var(--ink); }
+.ui-state--error { border-color: var(--red); }
+.ui-state--error .ui-state__mark { background: var(--red); color: white; }
+.ui-state--loading .ui-state__mark { background: transparent; border: 3px solid var(--line); border-top-color: var(--forest); animation: ui-spin .8s linear infinite; }
+@keyframes ui-spin { to { transform: rotate(360deg); } }
+:where(button, a, input, select, textarea, [tabindex]):focus-visible { outline: 3px solid var(--forest); outline-offset: 4px; }
+button[aria-busy="true"] { cursor: progress; }
+[aria-invalid="true"] { border-color: var(--red) !important; }
+.toast-region { max-height: calc(100dvh - 2rem); overflow-y: auto; }
+.toast { overflow-wrap: anywhere; }
+.toast button { min-width: 44px; min-height: 44px; flex-shrink: 0; }
+.form-status { overflow-wrap: anywhere; }
+[role="tab"] { min-height: 44px; }
+[role="tabpanel"] { min-width: 0; }
+.hero > * { min-width: 0; }
+/* Contain oversized decorative pseudo-elements without creating a scroll container. */
+#main-content { overflow-x: clip; }
+.hero-copy { overflow-wrap: anywhere; }
+.parent-layout > *, .trial-layout > *, .faq-section > *, .section-intro > * { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 860px) {
+  .hero, .parent-layout, .trial-layout, .faq-section { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 680px) { .section-intro { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+@media (forced-colors: active) {
+  .ui-state, .ui-state__mark, .toast { border: 1px solid CanvasText; }
+  :focus-visible { outline-color: Highlight; }
+}

@@ -33,7 +33,7 @@ assert.match(script, /data-parent-directory-status/, 'academy directory must sup
 assert.match(script, /Not assigned to any student/, 'saved material must show its live assignment state after revocation');
 assert.match(script, /submission-student-filter/, 'submissions must be filterable by student');
 assert.match(script, /submission-month-filter/, 'submissions must be filterable by month');
-assert.match(script, /slice\(start,start\+10\)/, 'submissions must render ten records per page');
+assert.match(script, /slice\(start,\s*start\s*\+\s*10\)/, 'submissions must render ten records per page');
 assert.match(script, /data-submission-page/, 'submissions must provide previous and next pagination controls');
 assert.match(html, /id="confirm-dialog"/, 'destructive academy actions must use the themed confirmation dialog');
 assert.match(script, /Current syllabus library/, 'material library must identify the current-syllabus workflow');

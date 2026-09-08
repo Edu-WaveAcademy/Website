@@ -1,0 +1,18 @@
+[
+  "src/config/schema.gs",
+  "src/projections/values.gs",
+  "src/projections/dashboard.gs",
+  "src/adapters/runtime.gs",
+  "src/adapters/sheets.gs",
+  "src/adapters/files.gs",
+  "src/adapters/mail.gs",
+  "src/auth/login.gs",
+  "src/auth/sessions.gs",
+  "src/application/setup.gs",
+  "src/application/families.gs",
+  "src/application/dashboard.gs",
+  "src/application/learning.gs",
+  "src/application/billing.gs",
+  "src/application/activity.gs",
+  "src/http/routes.gs"
+]

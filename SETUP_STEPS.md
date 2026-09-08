@@ -64,7 +64,7 @@ Both addresses can use Academy Login. The academy address is recorded as `admin`
 
 Confirm **Execute as** is `Me`. If it is set to the visitor, parents would be asked for Google permissions and login emails cannot be sent anonymously.
 
-The `/exec` URL normally stays unchanged. If it changes, update `CONFIG.apiUrl` at the top of `script.js`.
+The `/exec` URL normally stays unchanged. If it changes, update `CONFIG.apiUrl` in `src/config.cjs` and run `node tools/build.cjs` from the repository root. Source modules under `src/` and `apps-script/src/` generate the existing deployment files; do not edit generated files directly.
 
 ## 5. Publish the website
 

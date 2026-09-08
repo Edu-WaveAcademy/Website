@@ -1,0 +1,21 @@
+modules:
+  frontend:
+    prober: http
+    timeout: 10s
+    http:
+      method: GET
+      preferred_ip_protocol: ip4
+      valid_status_codes: [200]
+      fail_if_body_not_matches_regexp: ['(?i)<title>.*Eduwave']
+  portal_api:
+    prober: http
+    timeout: 20s
+    http:
+      method: GET
+      follow_redirects: true
+      preferred_ip_protocol: ip4
+      valid_status_codes: [200]
+      fail_if_body_not_matches_regexp:
+        - '"ok"\s*:\s*true'
+        - '"configured"\s*:\s*true'
+        - '"auth"\s*:\s*"email_otp"'

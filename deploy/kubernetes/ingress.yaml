@@ -1,0 +1,21 @@
+# Replace host, ingressClassName and TLS secret for your supported controller.
+# Provision the controller, certificate and HTTPS redirect before exposing traffic.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eduwave-web
+spec:
+  ingressClassName: REPLACE_WITH_SUPPORTED_CLASS
+  tls:
+    - hosts: [portal.example.invalid]
+      secretName: eduwave-tls
+  rules:
+    - host: portal.example.invalid
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: eduwave-web
+                port: {name: http}

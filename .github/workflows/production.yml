@@ -1,0 +1,110 @@
+name: Production readiness
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+    inputs:
+      deploy_pages:
+        description: Promote the validated frontend to production Pages
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: {node-version: '24', cache: npm}
+      - run: npm ci
+      - run: npm audit --audit-level=high
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - name: Browser regression (mock backend only)
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/eduwave-preview.log 2>&1 &
+          server=$!
+          trap 'kill "$server"' EXIT
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+          npm run test:browser
+      - name: Build public artifact
+        run: npm run build
+        env:
+          API_URL: ${{ vars.API_URL }}
+      - name: Production configuration preflight
+        if: github.event_name == 'workflow_dispatch' && inputs.deploy_pages
+        env:
+          API_URL: ${{ vars.API_URL }}
+        run: test -n "$API_URL"
+      - name: Container configuration and security smoke
+        run: |
+          docker build -t eduwave:${GITHUB_SHA} .
+          docker run --rm --read-only --tmpfs /tmp:uid=101,gid=101 --cap-drop ALL --security-opt no-new-privileges eduwave:${GITHUB_SHA} -t
+          docker run -d --name eduwave --read-only --tmpfs /tmp:uid=101,gid=101 --cap-drop ALL --security-opt no-new-privileges -p 127.0.0.1:8080:8080 eduwave:${GITHUB_SHA}
+          trap 'docker logs eduwave; docker rm -f eduwave' EXIT
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:8080/healthz && break; sleep 1; done
+          SITE_URL=http://127.0.0.1:8080 EXPECTED_REVISION="$GITHUB_SHA" npm run smoke
+          node tests/container.test.js
+      - name: Render Kubernetes resources
+        run: kubectl kustomize deploy/kubernetes > /tmp/eduwave-kubernetes.yaml
+      - name: Reject high and critical container vulnerabilities
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # 0.35.0
+        with:
+          image-ref: eduwave:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          ignore-unfixed: false
+          format: table
+      - name: Preserve matching backend deployment files
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: backend-${{ github.sha }}
+          path: |
+            apps-script/Code.gs
+            apps-script/appsscript.json
+          retention-days: 30
+      - name: Preserve the exact public release
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: public-${{ github.sha }}
+          path: dist/
+          include-hidden-files: true
+          retention-days: 30
+      - name: Package Pages release
+        if: github.event_name == 'workflow_dispatch' && inputs.deploy_pages
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with: {path: dist}
+  deploy:
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_pages
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: production-pages
+      cancel-in-progress: false
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - name: Promote tested artifact
+        id: pages
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: {node-version: '24'}
+      - name: Verify deployed release and backend
+        env:
+          SITE_URL: ${{ steps.pages.outputs.page_url }}
+          API_URL: ${{ vars.API_URL }}
+          EXPECTED_REVISION: ${{ github.sha }}
+        run: |
+          test -n "$API_URL" || { echo 'Configure repository API_URL before production deployment'; exit 1; }
+          for i in $(seq 1 6); do npm run smoke && exit 0; sleep 10; done
+          exit 1

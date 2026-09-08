@@ -1,0 +1,41 @@
+groups:
+  - name: eduwave
+    rules:
+      - alert: EduwaveSiteUnavailable
+        expr: probe_success{job="eduwave-site"} == 0
+        for: 2m
+        labels: {severity: critical, service: eduwave}
+        annotations:
+          summary: Eduwave public site is unavailable
+          runbook: docs/PRODUCTION.md#incident-response
+      - alert: EduwavePortalUnavailable
+        expr: probe_success{job="eduwave-api"} == 0
+        for: 3m
+        labels: {severity: critical, service: eduwave}
+        annotations:
+          summary: Portal HTTP or application health failed
+          runbook: docs/PRODUCTION.md#incident-response
+      - alert: EduwaveMonitoringBlind
+        expr: up{job=~"eduwave-site|eduwave-api"} == 0 or absent(up{job="eduwave-site"}) or absent(up{job="eduwave-api"})
+        for: 3m
+        labels: {severity: critical, service: eduwave}
+        annotations:
+          summary: A required probe is missing or its exporter is unreachable
+      - alert: EduwaveCertificateExpiring
+        expr: probe_ssl_earliest_cert_expiry{job="eduwave-site"} - time() < 14 * 86400
+        for: 1h
+        labels: {severity: warning, service: eduwave}
+        annotations:
+          summary: Frontend certificate expires within fourteen days
+      - alert: EduwaveLowReplicaAvailability
+        expr: kube_deployment_status_replicas_available{namespace="eduwave",deployment="eduwave-web"} < 2
+        for: 5m
+        labels: {severity: critical, service: eduwave}
+        annotations:
+          summary: Fewer than two frontend replicas are available
+      - alert: EduwaveAutoscalerAtLimit
+        expr: kube_horizontalpodautoscaler_status_current_replicas{namespace="eduwave",horizontalpodautoscaler="eduwave-web"} >= kube_horizontalpodautoscaler_spec_max_replicas{namespace="eduwave",horizontalpodautoscaler="eduwave-web"}
+        for: 15m
+        labels: {severity: warning, service: eduwave}
+        annotations:
+          summary: Frontend autoscaling has reached its configured limit

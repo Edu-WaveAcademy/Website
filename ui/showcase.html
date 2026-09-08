@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eduwave UI · Component reference</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="showcase.css">
+  <script defer src="components.js"></script>
+  <script defer src="showcase.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to components</a>
+  <main id="main" class="ui-showcase">
+    <header><a href="../index.html">← Eduwave Academy</a><p class="eyebrow">Interface foundations / 01</p><h1>Thoughtful by default.</h1><p>Shared components for clear, calm learning experiences. Built for touch, keyboard, and the moments between loading and done.</p></header>
+    <section class="ui-showcase-section" aria-labelledby="action-title"><p class="eyebrow">01 / Actions & feedback</p><h2 id="action-title">Every action has an answer.</h2>
+      <form id="example-form" class="surface-form">
+        <label class="field" for="example-name"><span>Student name</span><input id="example-name" name="student" required maxlength="100" autocomplete="off" aria-describedby="name-help"></label>
+        <small id="name-help">Enter a name to try the loading and success states. This example saves no data.</small>
+        <div class="ui-example-actions"><button class="button button-dark" type="submit">Save student</button><button class="button button-outline" type="button" disabled>Unavailable</button><button class="button button-outline" type="button" id="example-error">Show error</button></div>
+        <p id="example-status" class="form-status" role="status" aria-atomic="true"></p>
+      </form>
+    </section>
+    <section class="ui-showcase-section" aria-labelledby="states-title"><p class="eyebrow">02 / Content states</p><h2 id="states-title">Clarity, even before content.</h2><div id="example-states" class="ui-example-grid"></div></section>
+    <section class="ui-showcase-section" aria-labelledby="tabs-title"><p class="eyebrow">03 / Navigation</p><h2 id="tabs-title">A place for everything.</h2><p>Use Left / Right, Home, or End to change tabs. Tab moves into the selected panel.</p>
+      <div id="example-tabs" class="admin-tabs" role="tablist" aria-label="Learning overview"><button type="button" role="tab" aria-selected="true" class="active">Assignments</button><button type="button" role="tab" aria-selected="false">Attendance</button><button type="button" role="tab" aria-selected="false">Progress</button></div>
+      <div id="example-panel"></div>
+    </section>
+    <footer>Native HTML. Shared brand tokens. No runtime dependencies.</footer>
+  </main>
+  <div id="toast-region" class="toast-region" aria-label="Notifications"></div>
+</body>
+</html>
