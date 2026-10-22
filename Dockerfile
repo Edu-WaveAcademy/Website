@@ -1,7 +1,7 @@
 # Build dist with npm run build first. The same tested files go to Pages and Docker.
 # The slim Alpine variant contains no currently reported image vulnerabilities
 # in the official image scan while retaining the same nginx 1.30.4 runtime.
-FROM nginx:stable-alpine-slim@sha256:ddde39c6e51f02fde7410c2e9c234cf2d0a4c7bdbbe176aeb37d8ad7ab4eb58c
+FROM nginx:stable-alpine-slim@sha256:77da26c31397bf6694b4bf93275f5b40b0b120ba1b8f114264b603e592c561d6
 RUN apk add --no-cache --upgrade libcrypto3 libssl3
 COPY ops/nginx.conf /etc/nginx/nginx.conf
 COPY dist/ /usr/share/nginx/html/
